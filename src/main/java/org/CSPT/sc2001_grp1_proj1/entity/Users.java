@@ -22,7 +22,12 @@ public class Users {
 
     }
 
-    public static void login(String username, String password){
-
+    public String getPassword() {
+        return password;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
