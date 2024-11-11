@@ -22,12 +22,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
- * @author RajEs
+ * @author RajEstela
  */
-public class Admin {
 
+public class Admin {
     public static void main() {
+        
         HospitalStaffManager initHospitalStaffManager = null;
+        
         var hospitalStaff = hospitalStaffInit();
         if ( hospitalStaff != null)
         {
@@ -68,23 +70,24 @@ public class Admin {
         Scanner scanner = new Scanner(System.in);
         System.out.printf
         (
-            "\n 1 View and Manage Hospital Staff\n 2 View Appointments details\n 3 View and Manage Medication Inventory\n 4 Approve Replenishment Requests\n 5 Logout\n"
+            "\n 1 View and Manage Hospital Staff\n 2 View Appointments details\n 3 View and Manage Medication Inventory\n 4 Approve Replenishment Requests\n 5 Logout\n Enter Choice:"
         );
         return scanner.nextInt();
     }
 
     private static void hospitalStaff(HospitalStaffManager staff) {
+        
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
         while (inStaffMenu)
         {
             System.out.printf
             (
-                "\n 1 View Staff\n 2 Add Staff\n 3 Remove Staff\n 4 Update Staff\n 5 Administrator Main Menu\n"
+                "\n 1 View Staff\n 2 Add Staff\n 3 Remove Staff\n 4 Update Staff\n 5 Administrator Main Menu\n Enter Choice: "
             );
             switch (scanner.nextInt()) {
                 case 1 -> {
-                    staff.displayStaff();
+                    staff.displayStaff();                                     
                 }
                 case 2 -> {
                     staff.addStaffMember();
@@ -98,7 +101,7 @@ public class Admin {
                 default -> {
                     System.out.printf
                     (
-                        "Back\n"
+                        "\nBack\n"
                     );                    
                     inStaffMenu = false;
                 }
@@ -167,6 +170,5 @@ public class Admin {
         return hospitalStaffManager;
 
     }
-
 
 }

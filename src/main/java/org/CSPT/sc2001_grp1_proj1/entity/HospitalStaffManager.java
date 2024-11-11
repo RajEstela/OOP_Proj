@@ -1,25 +1,31 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class HospitalStaffManager{
-    protected List<HospitalStaff> staffList;
-    public Date lastUpdatedTime;
-    public String lastUpdatedBy;
+import org.CSPT.sc2001_grp1_proj1.interfaces.HospitalStaffManagerInterface;
 
-    public HospitalStaffManager(List<HospitalStaff> staffList, Date lastUpdatedTime, String lastUpdatedBy) {
-    this.staffList = staffList;
-    this.lastUpdatedTime = lastUpdatedTime;
-    this.lastUpdatedBy = lastUpdatedBy;
+public class HospitalStaffManager implements HospitalStaffManagerInterface {
+
+    protected List<HospitalStaff> staffList;
+    private Date lastUpdatedTime;
+    private String lastUpdatedBy;
+
+    public HospitalStaffManager(List<HospitalStaff> staffList1, Date date, String system) {
+        this.staffList = staffList1;
+        this.lastUpdatedTime = date;
+        this.lastUpdatedBy = system;
     }
- 
+
+
+    @Override
     public void addStaffMember() {
         Scanner scanner = new Scanner(System.in);
         System.out.printf
         (
-            "\n Enter Staff details: \n Enter Staff ID:"
+            "\nEnter Staff details \n Enter Staff ID:"
         );
         String staffID = scanner.nextLine();
 
@@ -43,14 +49,14 @@ public class HospitalStaffManager{
 
         HospitalStaff newStaff = new HospitalStaff(staffID,role,gender,age);
 
-        staffList.add(newStaff);
+        staffList.add(newStaff);    
     }
 
-    public void removeStaffMember(){
-        displayStaff();
+    @Override
+    public void removeStaffMember() {
         System.out.printf
         (
-            "\n Enter Staff ID To Remove:"
+            "\nEnter Staff ID To Remove:"
         );
         Scanner scanner = new Scanner(System.in);
         String idToremove = scanner.nextLine();
@@ -60,25 +66,25 @@ public class HospitalStaffManager{
                 staffList.remove(staff);  
                 break;          
             }
-        }
+        }    
     }
 
-    public void updateStaffMember(){
-        displayStaff();
+    @Override
+    public void updateStaffMember() {
         System.out.printf
         (
-            "\n Enter Staff ID To Update:"
+            "\nEnter Staff ID To Update:"
         );
         Scanner scanner = new Scanner(System.in);
         String idToUpdate = scanner.nextLine();
 
         HospitalStaff staffToUpdate = null;
-        
-        for (HospitalStaff staff : staffList) {
-            if (staff.hospitalStaffID.equals(idToUpdate))
+
+        for (var hStaff : this.staffList) {
+            if(hStaff.hospitalStaffID.equals(idToUpdate))
             {
-                staffToUpdate = staff;  
-                break;          
+                staffToUpdate = hStaff;
+                break;
             }
         }
 
@@ -89,7 +95,7 @@ public class HospitalStaffManager{
             {
                 System.out.printf
                 (
-                    "What would you like to update?\n 1 Staff ID?\n 2 Role?\n 3 Age?\n 4 Gender?\n 5 Cancel\n"
+                    "\nWhat would you like to update?\n 1 Staff ID?\n 2 Role?\n 3 Age?\n 4 Gender?\n 5 Cancel\n Enter Choice: "
                 );
                 int actionStaff = scanner.nextInt();
                 scanner.nextLine();
@@ -97,21 +103,21 @@ public class HospitalStaffManager{
                     case 1 -> {
                         System.out.printf
                         (
-                            "\nEnter new Staff ID:\n"
+                            "\nEnter new Staff ID: "
                         );
                         staffToUpdate.hospitalStaffID = scanner.nextLine();
                     }
                     case 2 -> {
                         System.out.printf
                         (
-                            "\nEnter new Role:\n"
+                            "\nEnter new Role: "
                         );            
                         staffToUpdate.role = scanner.nextLine();
                     }
                     case 3 -> {
                         System.out.printf
                         (
-                            "\nEnter new Age:\n"
+                            "\nEnter new Age: "
                         );            
                         staffToUpdate.age = scanner.nextInt();
                         scanner.nextLine();
@@ -120,27 +126,56 @@ public class HospitalStaffManager{
                     case 4 -> {
                         System.out.printf
                         (
-                            "\nEnter new Gender:\n"
+                            "\nEnter new Gender: "
                         );  
                         staffToUpdate.gender = scanner.nextLine();            
                     }
                     default -> {
                         System.out.printf
                         (
-                            "\nCancelled\n"
+                            "\nCancelled "
                         );   
                         updatingStaff = false;
                         break;                
                     }
                 } 
             }           
-        }
+        }    
     }
 
-    public void displayStaff(){
-        for (HospitalStaff staff : staffList) {
-            String printStaff = String.format("---------------\nStaff ID: %s\n Role: %s\n Gender: %s\n Age: %d\n---------------\n",staff.hospitalStaffID,staff.role,staff.gender,staff.age);
-            System.out.printf(printStaff);
+    @Override
+    public void displayStaff() {
+        Scanner scanner = new Scanner(System.in);
+        while(true)
+        {
+            System.out.printf
+            (
+                "\nOrder By?:\n 1 Staff ID\n 2 Age?\n 3 Gender?\n 4 Roles?\n 5 Back\n Enter Choice: "
+            );
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 2:   
+                    this.staffList.sort(Comparator.comparingInt(HospitalStaff::getAge));                 
+                    break;
+                case 1:
+                    this.staffList.sort(Comparator.comparing(HospitalStaff::gethospitalStaffID));                 
+                    break;
+                case 3:
+                    this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));                     
+                    break;
+                case 4:
+                    this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));                     
+                    break;
+                default:
+                    break;
+            }
+
+            for (HospitalStaff staff : staffList) {
+                String printStaff = String.format("\n---------------\nStaff ID: %s\n Role: %s\n Gender: %s\n Age: %d\n---------------\n",staff.hospitalStaffID,staff.role,staff.gender,staff.age);
+                System.out.printf(printStaff);
+            }   
+            break;
         }
     }
 }
