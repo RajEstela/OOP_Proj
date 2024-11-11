@@ -2,7 +2,7 @@ package org.CSPT.sc2001_grp1_proj1.entity;
 
 public class HospitalStaff{
     protected String hospitalStaffID;
-    protected  String role;
+    protected String role;
     protected String gender;
     protected int age;
 
@@ -13,5 +13,19 @@ public class HospitalStaff{
         this.role = role;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public String getrole() {
+        return role;
+    }
+
+    public String gethospitalStaffID() {
+        return hospitalStaffID;
+    }
+    public String getgender() {
+        return gender;
+    }
 }
 

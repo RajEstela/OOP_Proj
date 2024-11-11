@@ -74,13 +74,13 @@ public class UserLogin {
             try (Scanner scanner = new Scanner(System.in)) {
                 System.out.printf
                 (
-                    "\n Login\n Username:\n"
+                    "\n Login\n Username: "
                 );
                 String userName = scanner.nextLine();
 
                 System.out.printf
                 (
-                    "\n Password (Enter \"Forgot\" to reset password):\n"
+                    "\n Password (Enter \"Forgot\" to reset password): "
                 );
                 String pwd = scanner.nextLine();
    
