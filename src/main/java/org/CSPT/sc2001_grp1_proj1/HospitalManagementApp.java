@@ -72,9 +72,6 @@ public class HospitalManagementApp {
                 }
                 case Pharmacists -> System.out.println("This person is a Pharmacist.");
                 case Patient -> System.out.println("This person is a Patient.");
-                case SecurityGuard -> System.out.println("This person is a Security Guard.");
-                case Janitor -> System.out.println("This person is a Janitor.");
-                case Nurse -> System.out.println("This person is a Nurse.");
                 default -> throw new AssertionError("Unknown role: " + roleEnum);
             }
         } catch (IllegalArgumentException e) {
