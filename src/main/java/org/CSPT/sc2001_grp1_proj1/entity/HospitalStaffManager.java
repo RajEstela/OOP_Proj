@@ -1,7 +1,7 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,11 +9,11 @@ import org.CSPT.sc2001_grp1_proj1.interfaces.HospitalStaffManagerInterface;
 
 public class HospitalStaffManager implements HospitalStaffManagerInterface {
 
-    protected List<HospitalStaff> staffList;
-    private Date lastUpdatedTime;
+    public List<HospitalStaff> staffList;
+    private LocalDateTime lastUpdatedTime;
     private String lastUpdatedBy;
 
-    public HospitalStaffManager(List<HospitalStaff> staffList1, Date date, String system) {
+    public HospitalStaffManager(List<HospitalStaff> staffList1, LocalDateTime date, String system) {
         this.staffList = staffList1;
         this.lastUpdatedTime = date;
         this.lastUpdatedBy = system;
@@ -171,7 +171,7 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                     break;
             }
 
-            for (HospitalStaff staff : staffList) {
+            for (HospitalStaff staff : this.staffList) {
                 String printStaff = String.format("\n---------------\nStaff ID: %s\n Role: %s\n Gender: %s\n Age: %d\n---------------\n",staff.hospitalStaffID,staff.role,staff.gender,staff.age);
                 System.out.printf(printStaff);
             }   

@@ -4,43 +4,31 @@
 
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
-import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
+import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 /**
  *
  * @author RajEstela
  */
 
-public class Admin {
-    public static void main() {
-        
-        HospitalStaffManager initHospitalStaffManager = null;
-        
-        var hospitalStaff = hospitalStaffInit();
-        if ( hospitalStaff != null)
-        {
-            initHospitalStaffManager = hospitalStaff;
-        }
+ public class Admin {
 
+    private final HospitalStaffManager hospitalStaffManager;
+
+    public Admin(HospitalStaffManager hospitalStaffManager) {
+        this.hospitalStaffManager = hospitalStaffManager;
+    }
+
+    public void main() {
         boolean loggedIn = true;
         while(loggedIn){
             switch (administratorMenu()) {
                 case 1 -> {
-                    hospitalStaff(initHospitalStaffManager);
+                    hospitalStaff(hospitalStaffManager);  // Use the passed instance
                 }
                 case 2 -> {
                     appointmentDetails();
@@ -52,63 +40,68 @@ public class Admin {
                     approveRepReq();
                 }
                 case 5 -> {
-                    logout();
-                    System.out.printf
-                    (
-                    "Bye!"
-                    );
+                    HospitalManagementApp.logout();
+                    System.out.printf("Bye!");
                     loggedIn = false;
-
                     break;
                 }
             }
         }
-        
     }
 
     private static int administratorMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.printf
-        (
-            "\n 1 View and Manage Hospital Staff\n 2 View Appointments details\n 3 View and Manage Medication Inventory\n 4 Approve Replenishment Requests\n 5 Logout\n Enter Choice:"
-        );
-        return scanner.nextInt();
+        int choice = 0;
+    
+        while (true) {
+            System.out.printf(
+                "\n 1 View and Manage Hospital Staff\n 2 View Appointments details\n 3 View and Manage Medication Inventory\n 4 Approve Replenishment Requests\n 5 Logout\n Enter Choice: "
+            );
+            try {
+                choice = scanner.nextInt();
+                if (choice < 1 || choice > 5) {
+                    throw new IllegalArgumentException("Please enter a valid option (1-5).");
+                }
+                break; 
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+                scanner.nextLine(); 
+            }
+        }
+    
+        return choice;
     }
 
     private static void hospitalStaff(HospitalStaffManager staff) {
-        
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
-        while (inStaffMenu)
-        {
-            System.out.printf
-            (
+    
+        while (inStaffMenu) {
+            System.out.printf(
                 "\n 1 View Staff\n 2 Add Staff\n 3 Remove Staff\n 4 Update Staff\n 5 Administrator Main Menu\n Enter Choice: "
             );
-            switch (scanner.nextInt()) {
-                case 1 -> {
-                    staff.displayStaff();                                     
+    
+            try {
+                int choice = scanner.nextInt();
+    
+                switch (choice) {
+                    case 1 -> staff.displayStaff();
+                    case 2 -> staff.addStaffMember();
+                    case 3 -> staff.removeStaffMember();
+                    case 4 -> staff.updateStaffMember();
+                    case 5 -> {
+                        System.out.println("\nReturning to Administrator Main Menu");
+                        inStaffMenu = false;
+                    }
+                    default -> System.out.println("Invalid option. Please enter a number between 1 and 5.");
                 }
-                case 2 -> {
-                    staff.addStaffMember();
-                }
-                case 3 -> {
-                    staff.removeStaffMember();
-                }
-                case 4 -> {
-                    staff.updateStaffMember();
-                }
-                default -> {
-                    System.out.printf
-                    (
-                        "\nBack\n"
-                    );                    
-                    inStaffMenu = false;
-                }
-            }    
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); // Clear the invalid input to prevent infinite loop
+            }
         }
-        
     }
+    
 
     private static void appointmentDetails() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -120,55 +113,6 @@ public class Admin {
 
     private static void approveRepReq() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private static void logout() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private static HospitalStaffManager hospitalStaffInit() {
-        //Hospital Staff initialization
-        HospitalStaffManager hospitalStaffManager = null;
-        String excelFilePath = "./data/Staff_List.xlsx";  // Replace with your actual file path
-        List<HospitalStaff> staffList = new ArrayList<>(); // List to store HospitalStaff objects
-
-        try (FileInputStream file = new FileInputStream(new File(excelFilePath)); // Create Workbook instance holding reference to .xlsx file
-                Workbook workbook = new XSSFWorkbook(file)) {
-
-            // Get the first sheet
-            Sheet sheet = workbook.getSheetAt(0);
-
-            // Iterate through each row, skipping the header row
-            boolean isHeader = true;
-            for (Row row : sheet) {
-                if (isHeader) {
-                    isHeader = false;
-                    continue; // Skip header row
-                }
-
-                // Read each cell value for the columns in the row
-                String staffId = row.getCell(0).getStringCellValue();
-                String role = row.getCell(2).getStringCellValue();
-                String gender = row.getCell(3).getStringCellValue();
-                int age = (int) row.getCell(4).getNumericCellValue(); // Cast age to int
-
-                // Create a new HospitalStaff object and add it to the list
-                HospitalStaff staff = new HospitalStaff(staffId, role, gender, age);
-                staffList.add(staff);
-            }
-            // Close workbook           
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!staffList.isEmpty())
-        {
-            Date getDate = java.sql.Date.valueOf(LocalDate.now());
-            hospitalStaffManager = new HospitalStaffManager(staffList,getDate,"SYSTEM");
-            return hospitalStaffManager;
-        } 
-        return hospitalStaffManager;
-
     }
 
 }
