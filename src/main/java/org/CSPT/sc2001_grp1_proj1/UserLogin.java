@@ -33,11 +33,9 @@ public class UserLogin {
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
             System.out.println("\nLogin Successfully\n");
-            scanner.close();
             return userLogin;
         } else {
             System.out.println("Login Failed");
-            scanner.close();
             return null;
         }
     }
