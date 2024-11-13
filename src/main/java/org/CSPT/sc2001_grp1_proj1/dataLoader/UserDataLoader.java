@@ -47,7 +47,6 @@ public class UserDataLoader {
         }
     }
 
-    // Modify the resetPassword method to accept Scanner as a parameter
     public static boolean resetPassword(String userName, HashMap<String, Users> validUsers, Scanner scanner) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
