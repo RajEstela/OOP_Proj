@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.interfaces.InventoryManagerInterface;
 
 public class InventoryManager implements InventoryManagerInterface {
@@ -49,7 +50,6 @@ public class InventoryManager implements InventoryManagerInterface {
             (
                 "\nInvalid Medicine Name!\n"
             );
-            scanner.close();
             addStock();
         }          
     }
@@ -122,6 +122,7 @@ public class InventoryManager implements InventoryManagerInterface {
                     }  
                     meds.medicineStockCount += addStockCount;
                     meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
+                    MedicineDataLoader.updateStockCount(meds);
                     System.out.println("\nUpdated Successfully\n");
                     break;
                 }
@@ -181,12 +182,14 @@ public class InventoryManager implements InventoryManagerInterface {
 
     @Override
     public void displayStock() {
-        for (Medicine meds : this.totalMedicineInventoryList) {
-            String stockAlert = "Normal";
-            if(meds.lowStockLevelAlert)
-                stockAlert = "Low";           
-            String printStaff = String.format("\n---------------\nMedicine Name: %s\n Medicine Stock Count: %d\n Low Stock Level: %s\n---------------\n",meds.medicineName,meds.medicineStockCount,stockAlert);
-            System.out.printf(printStaff);
+        System.out.printf("\n%-20s %-20s %-20s%n", "Medicine Name", "Stock Count", "Low Stock Level");
+        System.out.println("-------------------------------------------------------------");
+
+        for (Medicine medicine : this.totalMedicineInventoryList) {
+            System.out.printf("%-20s %-20d %-20s%n", 
+                                medicine.medicineName, 
+                                medicine.medicineStockCount, 
+                                medicine.lowStockLevelAlert);
         }
     }
     @Override

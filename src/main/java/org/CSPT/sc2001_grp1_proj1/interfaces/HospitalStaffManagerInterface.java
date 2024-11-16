@@ -1,7 +1,12 @@
 package org.CSPT.sc2001_grp1_proj1.interfaces;
 
+import java.util.HashMap;
+
+import org.CSPT.sc2001_grp1_proj1.entity.Users;
+
 public interface HospitalStaffManagerInterface {
-    void addStaffMember();
+    void addUser();
+    void addStaffMember(HashMap<String, Users> users);
     void removeStaffMember();
     void updateStaffMember();
     void displayStaff();  

@@ -19,9 +19,15 @@ public class HospitalManagementApp {
     private static HospitalStaffManager hospitalStaffManager;
     private static InventoryManager medicalInventoryManager;
 
+    public static void refreshHashMaps(){
+        validUsersLogin.clear();
+        validUsers.clear();
+        UserDataLoader.populateUsers(validUsersLogin, validUsers);
+    }
+    
     public static void main(String[] args) {
         UserDataLoader.populateUsers(validUsersLogin, validUsers);
-        hospitalStaffManager = loadHospitalStaff();
+        hospitalStaffManager = loadHospitalStaff(validUsers);
         medicalInventoryManager = loadMedicalInventory();
         loginProcess();
     }
@@ -71,7 +77,7 @@ public class HospitalManagementApp {
                 case Doctor -> System.out.println("This person is a Doctor.");
                 case Administrator -> {
                     System.out.printf("\nWelcome %s\n", user.username);
-                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager);  
+                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager, validUsersLogin, validUsers);  
                     admin.main();
                 }
                 case Pharmacists -> System.out.println("This person is a Pharmacist.");
@@ -83,8 +89,8 @@ public class HospitalManagementApp {
         }
     }
 
-    private static HospitalStaffManager loadHospitalStaff() {
-        return StaffDataLoader.loadHospitalStaff("./data/Staff_List.xlsx");
+    private static HospitalStaffManager loadHospitalStaff(HashMap<String, Users> validUsers) {
+        return StaffDataLoader.loadHospitalStaff(validUsers);
     }
 
     private static InventoryManager loadMedicalInventory() {
