@@ -7,13 +7,10 @@ public class Pharmacist  extends HospitalStaff{
 //private AppointmentOutcomeRecord appointmentOutComeRecord;
 	private InventoryService inventoryService;
 	
-	public Pharmacist(String hospitalStaffID, String role,String gender,int age) 
-	{
-		super(hospitalStaffID, role, gender,age);
-		//this.appointmentOutComeRecord = appointmentOutComeRecord;
-		this.inventoryService = inventoryService;
-		
-	}
+    public Pharmacist(String hospitalStaffID, String name, String role, String gender, int age, InventoryService inventoryService) {
+        super(hospitalStaffID, name, role, gender, age); 
+        this.inventoryService = inventoryService; 
+    }
 	
 	public void viewAppointmentOutComeRecord(int appointmentID) 
 	{

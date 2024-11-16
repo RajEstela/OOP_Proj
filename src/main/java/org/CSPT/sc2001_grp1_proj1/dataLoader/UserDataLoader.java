@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import static org.CSPT.sc2001_grp1_proj1.HospitalManagementApp.refreshHashMaps;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -29,8 +30,9 @@ public class UserDataLoader {
                     isHeader = false;
                     continue;
                 }
-
-                String staffId = row.getCell(0).getStringCellValue();
+            
+                String userId = row.getCell(0).getStringCellValue();
+                String name = row.getCell(1).getStringCellValue();
                 String role = row.getCell(2).getStringCellValue();
                 String gender = row.getCell(3).getStringCellValue();
                 int age = (int) row.getCell(4).getNumericCellValue();
@@ -38,9 +40,8 @@ public class UserDataLoader {
                 String pwd = row.getCell(6).getStringCellValue();
                 String email = row.getCell(7).getStringCellValue();
                 int phoneNo = (int) row.getCell(8).getNumericCellValue();
-
                 validUsersLogin.put(username, pwd);
-                Users user = new Users(staffId, username, pwd, email, gender, age, phoneNo, role);
+                Users user = new Users(userId,name,role,gender,age,username,pwd,email,phoneNo);
                 validUsers.put(username, user);
             }
         } catch (IOException e) {
@@ -75,6 +76,60 @@ public class UserDataLoader {
         } catch (IOException e) {
         }
         return false;
+    }
+
+    public static void addUser(Users userToAdd) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+             Workbook workbook = new XSSFWorkbook(file)) {
+    
+            Sheet sheet = workbook.getSheetAt(0); 
+            int lastRowNum = sheet.getLastRowNum(); 
+            Row newRow = sheet.createRow(lastRowNum + 1);
+    
+            newRow.createCell(0).setCellValue(userToAdd.hospitalID); 
+            newRow.createCell(1).setCellValue(userToAdd.name);       
+            newRow.createCell(2).setCellValue(userToAdd.role);       
+            newRow.createCell(3).setCellValue(userToAdd.gender);     
+            newRow.createCell(4).setCellValue(userToAdd.age);        
+            newRow.createCell(5).setCellValue(userToAdd.username);   
+            newRow.createCell(6).setCellValue(userToAdd.password);   
+            newRow.createCell(7).setCellValue(userToAdd.email);      
+            newRow.createCell(8).setCellValue(userToAdd.phoneNo);    
+    
+            try (FileOutputStream fos = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(fos);
+            }
+            refreshHashMaps();
+            System.out.println("User added successfully!");
+        } catch (IOException e) {
+            System.err.println("Error while adding user: " + e.getMessage());
+        }
+    }
+
+    public static void updateRole(String userName, HashMap<String, Users> validUsers, String newRole) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (row.getCell(5).getStringCellValue().equals(userName)) {
+                    row.getCell(2).setCellValue(newRole);
+                    validUsers.get(userName).setRole(newRole); 
+                             
+                    try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                        workbook.write(outFile);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
     }
 
 }

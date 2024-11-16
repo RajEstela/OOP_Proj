@@ -1,16 +1,17 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
-public class HospitalStaff{
-    protected String hospitalStaffID;
-    protected String role;
-    protected String gender;
-    protected int age;
+public class HospitalStaff extends Users{
+    public String hospitalStaffID;
 
-    public HospitalStaff(String hospitalStaffID, String role,String gender,int age) {
-        this.age = age;
-        this.gender = gender;
+    public HospitalStaff(
+        String hospitalStaffID, 
+        String name, 
+        String role, 
+        String gender, 
+        int age
+    ) {
+        super(null, name, role, gender, age, null, null, null, 0); 
         this.hospitalStaffID = hospitalStaffID;
-        this.role = role;
     }
 
     public int getAge() {

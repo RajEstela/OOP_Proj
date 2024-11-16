@@ -3,13 +3,14 @@ package org.CSPT.sc2001_grp1_proj1;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import static org.CSPT.sc2001_grp1_proj1.HospitalManagementApp.refreshHashMaps;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
 public class UserLogin {
 
     private final HashMap<String, String> validUsersLogin;
-    private final HashMap<String, Users> validUsers;
+    public final HashMap<String, Users> validUsers;
 
     public UserLogin(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
         this.validUsersLogin = validUsersLogin;
@@ -52,15 +53,13 @@ public class UserLogin {
         String userName = scanner.nextLine();
     
         if (UserDataLoader.resetPassword(userName, validUsers, scanner)) {
-            System.out.println("Password reset successfully.");
-            
-            // Reload user data to refresh the hash maps
-            validUsersLogin.clear();
-            validUsers.clear();
-            UserDataLoader.populateUsers(validUsersLogin, validUsers);
+            System.out.println("Password reset successfully.");           
+            refreshHashMaps();
         } else {
             System.out.println("Username not found. Please try again.");
         }
     }
+
+
     
 }

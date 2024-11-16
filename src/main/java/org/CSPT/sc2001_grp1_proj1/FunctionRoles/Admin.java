@@ -4,11 +4,14 @@
 
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
+import org.CSPT.sc2001_grp1_proj1.UserLogin;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
+import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
 
 /**
@@ -16,12 +19,13 @@ import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
  * @author RajEstela
  */
 
- public class Admin {
+ public class Admin extends UserLogin {
 
     private final HospitalStaffManager hospitalStaffManager;
     private final InventoryManager medicalInventoryManager;
 
-    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager ) {
+    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager,HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers ) {
+        super(validUsersLogin, validUsers);
         this.hospitalStaffManager = hospitalStaffManager;
         this.medicalInventoryManager = medicalInventoryManager;
     }
@@ -31,7 +35,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
         while(loggedIn){
             switch (administratorMenu()) {
                 case 1 -> {
-                    hospitalStaff(hospitalStaffManager);  // Use the passed instance
+                    hospitalStaff(hospitalStaffManager,this.validUsers); 
                 }
                 case 2 -> {
                     appointmentDetails();
@@ -75,7 +79,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
         return choice;
     }
 
-    private static void hospitalStaff(HospitalStaffManager staff) {
+    private static void hospitalStaff(HospitalStaffManager staff,HashMap<String, Users> validUsers) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
     
@@ -89,7 +93,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
     
                 switch (choice) {
                     case 1 -> staff.displayStaff();
-                    case 2 -> staff.addStaffMember();
+                    case 2 -> staff.addStaffMember(validUsers);
                     case 3 -> staff.removeStaffMember();
                     case 4 -> staff.updateStaffMember();
                     case 5 -> {
