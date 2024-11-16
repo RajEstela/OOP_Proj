@@ -6,7 +6,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
 public interface HospitalStaffManagerInterface {
     void addUser();
-    void addStaffMember(HashMap<String, Users> users);
+    void addStaffMember(HashMap<String, Users> validUsers);
     void removeStaffMember();
     void updateStaffMember();
     void displayStaff();  
