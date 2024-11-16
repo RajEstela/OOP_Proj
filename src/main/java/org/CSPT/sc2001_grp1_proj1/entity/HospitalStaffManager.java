@@ -112,19 +112,29 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
 
     @Override
     public void removeStaffMember() {
+        boolean removedSuccessfully = false;
+        Scanner scanner = new Scanner(System.in);
+
         System.out.printf
         (
             "\nEnter Staff ID To Remove:"
         );
-        Scanner scanner = new Scanner(System.in);
         String idToremove = scanner.nextLine();
         for (HospitalStaff staff : staffList) {
             if (staff.hospitalStaffID.equals(idToremove))
             {
                 staffList.remove(staff);  
+                removedSuccessfully = UserDataLoader.removeUser(idToremove);
                 break;          
             }
-        }    
+        }  
+        if(removedSuccessfully)  
+        {
+            System.out.printf
+            (
+                "\nStaff Removed Successfully\n"
+            );
+        }
     }
 
     @Override
@@ -188,16 +198,24 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                         );  
                         staffToUpdate.gender = scanner.nextLine();            
                     }
-                    default -> {
+                    case 5 ->{
+                        UserDataLoader.updateStaff(staffToUpdate);                
                         System.out.printf
                         (
                             "\nCancelled "
                         );   
                         updatingStaff = false;
-                        break;                
+                        break;          
+                    }
+                    default -> {
+                        System.out.printf
+                        (
+                            "\nInvalid Selection "
+                        );        
                     }
                 } 
-            }           
+            } 
+
         }    
     }
 

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import static org.CSPT.sc2001_grp1_proj1.HospitalManagementApp.refreshHashMaps;
+import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -106,6 +107,65 @@ public class UserDataLoader {
         }
     }
 
+    public static void updateRole(String userName, String newRole) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (row.getCell(5).getStringCellValue().equals(userName)) {
+                    row.getCell(2).setCellValue(newRole);
+
+                    refreshHashMaps();                                                    
+                    try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                        workbook.write(outFile);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+    }
+
+    public static void updateStaff(HospitalStaff staff) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (row.getCell(5).getStringCellValue().equals(staff.username)) {
+                    row.getCell(0).setCellValue(staff.hospitalID); 
+                    row.getCell(1).setCellValue(staff.name);       
+                    row.getCell(2).setCellValue(staff.role);       
+                    row.getCell(3).setCellValue(staff.gender);     
+                    row.getCell(4).setCellValue(staff.age);        
+                    row.getCell(5).setCellValue(staff.username);   
+                    row.getCell(6).setCellValue(staff.password);   
+                    row.getCell(7).setCellValue(staff.email);      
+                    row.getCell(8).setCellValue(staff.phoneNo);                    
+                    refreshHashMaps();                                                    
+                    try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                        workbook.write(outFile);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+    }
+
     public static void updateRole(String userName, HashMap<String, Users> validUsers, String newRole) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -130,6 +190,34 @@ public class UserDataLoader {
             }
         } catch (IOException e) {
         }
+    }
+
+    public static boolean removeUser(String userName) {
+        boolean found = false;    
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (row.getCell(5).getStringCellValue().equals(userName)) {
+                    sheet.removeRow(row);                   
+                    found = true;      
+                    refreshHashMaps();                       
+                    try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                        workbook.write(outFile);
+                    }
+                }
+            }
+            return found;
+        } catch (IOException e) {
+        }
+        return found;
     }
 
 }
