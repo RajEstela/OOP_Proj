@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
+import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
@@ -15,10 +17,12 @@ public class HospitalManagementApp {
     private static HashMap<String, String> validUsersLogin = new HashMap<>();
     private static HashMap<String, Users> validUsers = new HashMap<>();
     private static HospitalStaffManager hospitalStaffManager;
+    private static InventoryManager medicalInventoryManager;
 
     public static void main(String[] args) {
         UserDataLoader.populateUsers(validUsersLogin, validUsers);
         hospitalStaffManager = loadHospitalStaff();
+        medicalInventoryManager = loadMedicalInventory();
         loginProcess();
     }
 
@@ -67,7 +71,7 @@ public class HospitalManagementApp {
                 case Doctor -> System.out.println("This person is a Doctor.");
                 case Administrator -> {
                     System.out.printf("\nWelcome %s\n", user.username);
-                    Admin admin = new Admin(hospitalStaffManager);  
+                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager);  
                     admin.main();
                 }
                 case Pharmacists -> System.out.println("This person is a Pharmacist.");
@@ -81,6 +85,10 @@ public class HospitalManagementApp {
 
     private static HospitalStaffManager loadHospitalStaff() {
         return StaffDataLoader.loadHospitalStaff("./data/Staff_List.xlsx");
+    }
+
+    private static InventoryManager loadMedicalInventory() {
+        return MedicineDataLoader.loadMedicalInventory("./data/MedicalInventory_List.xlsx");
     }
 
     public static void logout() {
