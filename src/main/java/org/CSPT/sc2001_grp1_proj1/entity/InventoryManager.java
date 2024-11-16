@@ -1,6 +1,6 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,8 +10,14 @@ public class InventoryManager implements InventoryManagerInterface {
 
     protected List<Medicine> totalMedicineInventoryList;
     //protected List<ReplenishmentRequests> replenishmentRequests;
+    protected LocalDateTime lastUpdatedTime;
     protected String lastUpdatedBy; 
-    protected Date lastUpdatedTime;
+
+    public InventoryManager(List<Medicine> totalMedicineInventoryList, LocalDateTime lastUpdatedTime, String system) {
+        this.totalMedicineInventoryList = totalMedicineInventoryList;
+        this.lastUpdatedTime = lastUpdatedTime;
+        this.lastUpdatedBy = system;
+    }
 
     @Override
     public void addStock() {

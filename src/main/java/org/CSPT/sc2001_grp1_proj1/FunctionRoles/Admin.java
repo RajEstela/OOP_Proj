@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
+import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 
 
 /**
@@ -18,9 +19,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
  public class Admin {
 
     private final HospitalStaffManager hospitalStaffManager;
+    private final InventoryManager medicalInventoryManager;
 
-    public Admin(HospitalStaffManager hospitalStaffManager) {
+    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager ) {
         this.hospitalStaffManager = hospitalStaffManager;
+        this.medicalInventoryManager = medicalInventoryManager;
     }
 
     public void main() {
@@ -34,7 +37,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
                     appointmentDetails();
                 }
                 case 3 -> {
-                    medicationInventory();
+                    medicationInventory(medicalInventoryManager);
                 }
                 case 4 -> {
                     approveRepReq();
@@ -107,9 +110,37 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private static void medicationInventory() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    private static void medicationInventory(InventoryManager medicalInventoryManager) {
+        Scanner scanner = new Scanner(System.in);
+        boolean inStaffMenu = true;
+    
+        while (inStaffMenu) {
+            System.out.printf(
+                "\n1 View Medical Inventory Stocks\n2 Add Medical Inventory Stock\n3 Remove Medical Inventory Stock\n4 Update Medical Inventory Stock Count\n5 Update Medical Inventory Stock Alert Level\n6 View Replenishment Requests\7 Administrator Main Menu\n Enter Choice: "
+            );
+    
+            try {
+                int choice = scanner.nextInt();
+    
+                switch (choice) {
+                    case 1 -> medicalInventoryManager.displayStock();
+                    case 2 -> medicalInventoryManager.addStock();
+                    case 3 -> medicalInventoryManager.removeStock();
+                    case 4 -> medicalInventoryManager.updateStockCount();
+                    case 5 -> medicalInventoryManager.updateStockAlertLevel();
+                    case 6 -> medicalInventoryManager.displayReplenishmentRequests();
+                    case 7 -> {
+                        System.out.println("\nReturning to Administrator Main Menu");
+                        inStaffMenu = false;
+                    }
+                    default -> System.out.println("Invalid option. Please enter a number between 1 and 5.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); 
+            }
+        }   
+     }
 
     private static void approveRepReq() {
         throw new UnsupportedOperationException("Not supported yet.");
