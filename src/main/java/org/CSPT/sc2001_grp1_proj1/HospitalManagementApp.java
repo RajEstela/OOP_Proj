@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
@@ -87,7 +88,11 @@ public class HospitalManagementApp {
                     admin.main();
                 }
                 case Pharmacists -> System.out.println("This person is a Pharmacist.");
-                case Patient -> System.out.println("This person is a Patient.");
+                case Patient -> {
+                    System.out.printf("\nWelcome %s\n", user.username);
+                    Patient patient = new Patient();
+                    patient.main();
+                }
                 default -> throw new AssertionError("Unknown role: " + roleEnum);
             }
         } catch (IllegalArgumentException e) {
