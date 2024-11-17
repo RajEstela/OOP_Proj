@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
@@ -26,55 +27,48 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
     public void addStaffMember(HashMap<String, Users> validUsers) {
         
         Scanner scanner = new Scanner(System.in);
-
-        while (true) { 
+        boolean selection = true;
+        while (selection) { 
             System.out.printf
             (
-                "\nPlease select your option:\n1 Add Existing User\n2 Add New User\nEnter Choice:"
+                "\nPlease select your option:\n1 Add Existing User\n2 Add New User\n3 Back\nEnter Choice:"
             );
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
-                case 1 :
+                case 1 -> {
+                    displayUser(validUsers);
                     System.out.printf
-                    (
-                        "\nEnter UserName:"
-                    );
+                            (
+                                    "\nEnter UserName:"
+                            );
                     String staffUserName = scanner.nextLine();
         
                     if(validUsers.containsKey(staffUserName))
                     {
-                        System.out.printf
-                        (
-                            "\nEnter StaffID:"
-                        );
-                        String StaffID = scanner.nextLine();
         
                         System.out.printf
-                        (
-                            "\nEnter Role:"
-                        );
+                                (
+                                        "\nEnter Role:"
+                                );
                         String role = scanner.nextLine();
-                        HospitalStaff staff = new HospitalStaff(StaffID, validUsers.get(staffUserName).name, role, validUsers.get(staffUserName).gender, validUsers.get(staffUserName).age);
+                        HospitalStaff staff = new HospitalStaff("x", validUsers.get(staffUserName).name, role, validUsers.get(staffUserName).gender, validUsers.get(staffUserName).age);
                         UserDataLoader.updateRole(validUsers.get(staffUserName).username,validUsers,role);
-                        staffList.add(staff);   
-        
+                        staffList.add(staff);
+                        
                         System.out.printf
-                        (
-                            "\nStaff successfully added"
-                        ); 
+                                (
+                                        "\nStaff successfully added"
+                                ); 
                     }
                     else{
                         System.out.printf
-                        (
-                            "\nUser does not exists!\n"
-                        );            
+                                (
+                                        "\nUser does not exists!\n"
+                                );            
                     }
-                        break;
-                case 2:
-                    System.out.printf("\nEnter Hospital Staff ID: ");
-                    String hospitalID = scanner.nextLine();
-                
+                }
+                case 2 -> {             
                     System.out.printf("\nEnter Name: ");
                     String name = scanner.nextLine();
                 
@@ -100,11 +94,11 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                     int phoneNo = Integer.parseInt(scanner.nextLine());
                 
                     // Create a new Users object with the entered details
-                    Users newUser = new Users(hospitalID, name, role, gender, age, username, password, email, phoneNo);
+                    Users newUser = new Users("x", name, role, gender, age, username, password, email, phoneNo);
                     UserDataLoader.addUser(newUser);
-                    break;
-                default:
-                    throw new AssertionError();
+                }
+                case 3 -> selection = false;
+                default -> throw new AssertionError();
             }
         }
     
@@ -163,7 +157,7 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
             {
                 System.out.printf
                 (
-                    "\nWhat would you like to update?\n 1 Staff ID?\n 2 Role?\n 3 Age?\n 4 Gender?\n 5 Cancel\n Enter Choice: "
+                    "\nWhat would you like to update:\n 1 Staff ID\n 2 Role\n 3 Age?\n 4 Gender\n 5 Cancel\n Enter Choice: "
                 );
                 int actionStaff = scanner.nextInt();
                 scanner.nextLine();
@@ -226,46 +220,53 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         {
             System.out.printf
             (
-                "\nOrder By?:\n 1 Staff ID\n 2 Age?\n 3 Gender?\n 4 Roles?\n 5 Back\n Enter Choice: "
+                "\nOrder By:\n1 Staff ID\n2 Age\n3 Gender?\n4 Roles\n5 Back\nEnter Choice: "
             );
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 2:   
-                    this.staffList.sort(Comparator.comparingInt(HospitalStaff::getAge));                 
-                    break;
-                case 1:
-                    this.staffList.sort(Comparator.comparing(HospitalStaff::gethospitalStaffID));                 
-                    break;
-                case 3:
-                    this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));                     
-                    break;
-                case 4:
-                    this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));                     
-                    break;
-                case 5:
-                    System.out.println("Returning to the previous menu...");
-                    break; 
-                default:
+                case 2 -> this.staffList.sort(Comparator.comparingInt(HospitalStaff::getAge));
+                case 1 -> this.staffList.sort(Comparator.comparing(HospitalStaff::gethospitalStaffID));
+                case 3 -> this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));
+                case 4 -> this.staffList.sort(Comparator.comparing(HospitalStaff::getrole));
+                case 5 -> System.out.println("Returning to the previous menu...");
+                default -> {
                     System.out.println("Invalid choice. Please try again.");
                     continue;
+                }
             }
             if (choice == 5) {
                 break;
             }
             
-            System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Staff ID", "Role", "Gender", "Age");
-            System.out.println("-------------------------------------------------------------");
+            System.out.printf("\n%-20s %-20s %-20s %-20s %-20s%n", "Staff ID", "Name","Role", "Gender", "Age");
+            System.out.println("------------------------------------------------------------------------------");
             
             for (HospitalStaff staff : this.staffList) {
                 System.out.printf(
-                    "%-20s %-20s %-20s %-20d%n", // Add %n for a new line and %d for the age (integer)
-                    staff.hospitalStaffID, 
+                    "%-20s %-20s %-20s %-20s %-20d%n", // Add %n for a new line and %d for the age (integer)
+                    staff.hospitalStaffID,
+                    staff.name, 
                     staff.role, 
                     staff.gender, 
                     staff.age
                 );
             }
+        }
+    }
+
+    public void displayUser(HashMap<String, Users> validUsers) {
+        System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Hospital ID","Username","Name","Role");
+        System.out.println("------------------------------------------------------------------------------");
+        
+        for (Map.Entry<String, Users> users : validUsers.entrySet()) {
+            System.out.printf(
+                "%-20s %-20s %-20s %-20s%n", // Add %n for a new line and %d for the age (integer)
+                users.getValue().hospitalID,
+                users.getValue().username,
+                users.getValue().name, 
+                users.getValue().role
+            );
         }
     }
 

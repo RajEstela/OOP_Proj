@@ -85,9 +85,10 @@ public class UserDataLoader {
     
             Sheet sheet = workbook.getSheetAt(0); 
             int lastRowNum = sheet.getLastRowNum(); 
+            Row lastRow = sheet.getRow(lastRowNum);
             Row newRow = sheet.createRow(lastRowNum + 1);
     
-            newRow.createCell(0).setCellValue(userToAdd.hospitalID); 
+            newRow.createCell(0).setCellValue(generateNextHospitalID(lastRow.getCell(0).getStringCellValue())); 
             newRow.createCell(1).setCellValue(userToAdd.name);       
             newRow.createCell(2).setCellValue(userToAdd.role);       
             newRow.createCell(3).setCellValue(userToAdd.gender);     
@@ -121,12 +122,11 @@ public class UserDataLoader {
                 }
 
                 if (row.getCell(5).getStringCellValue().equals(userName)) {
-                    row.getCell(2).setCellValue(newRole);
-
-                    refreshHashMaps();                                                    
+                    row.getCell(2).setCellValue(newRole);                                              
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    refreshHashMaps();  
                 }
             }
         } catch (IOException e) {
@@ -146,8 +146,7 @@ public class UserDataLoader {
                     continue;
                 }
 
-                if (row.getCell(5).getStringCellValue().equals(staff.username)) {
-                    row.getCell(0).setCellValue(staff.hospitalID); 
+                if (row.getCell(5).getStringCellValue().equals(staff.hospitalID)) {
                     row.getCell(1).setCellValue(staff.name);       
                     row.getCell(2).setCellValue(staff.role);       
                     row.getCell(3).setCellValue(staff.gender);     
@@ -156,10 +155,11 @@ public class UserDataLoader {
                     row.getCell(6).setCellValue(staff.password);   
                     row.getCell(7).setCellValue(staff.email);      
                     row.getCell(8).setCellValue(staff.phoneNo);                    
-                    refreshHashMaps();                                                    
+                                                                       
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    refreshHashMaps(); 
                 }
             }
         } catch (IOException e) {
@@ -180,12 +180,11 @@ public class UserDataLoader {
                 }
 
                 if (row.getCell(5).getStringCellValue().equals(userName)) {
-                    row.getCell(2).setCellValue(newRole);
-                    validUsers.get(userName).setRole(newRole); 
-                             
+                    row.getCell(2).setCellValue(newRole);                            
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    refreshHashMaps(); 
                 }
             }
         } catch (IOException e) {
@@ -208,16 +207,23 @@ public class UserDataLoader {
                 if (row.getCell(5).getStringCellValue().equals(userName)) {
                     sheet.removeRow(row);                   
                     found = true;      
-                    refreshHashMaps();                       
+                    
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    refreshHashMaps();                       
                 }
             }
             return found;
         } catch (IOException e) {
         }
         return found;
+    }
+
+    public static String generateNextHospitalID(String prevID) {
+        int numericPart = Integer.parseInt(prevID.substring(1)); 
+        numericPart ++;
+        return String.format("H%03d", numericPart);
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.CSPT.sc2001_grp1_proj1.HospitalManagementApp.refreshHashMaps;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
@@ -35,6 +36,7 @@ public class StaffDataLoader {
                 }
                 if(!row.getCell(2).getStringCellValue().equals("Patient"))
                 {
+                    refreshHashMaps();
                     String staffUserName = row.getCell(5).getStringCellValue();
                     HospitalStaff staff = new HospitalStaff(validUsers.get(staffUserName).hospitalID, validUsers.get(staffUserName).name, validUsers.get(staffUserName).role, validUsers.get(staffUserName).gender, validUsers.get(staffUserName).age);
                     staffList.add(staff);
@@ -45,24 +47,5 @@ public class StaffDataLoader {
         }
         HospitalStaffManager staffInit = new HospitalStaffManager(staffList, LocalDateTime.now(), "SYSTEM");
         return staffInit;
-    }
-
-    public static void addStaffMemberExcel(HospitalStaff staffToAdd) {
-        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
-            Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Get the first sheet
-            int lastRowNum = sheet.getLastRowNum(); // Find the last row
-            Row newRow = sheet.createRow(lastRowNum + 1); // Create a new row
-
-            // Populate the row with values
-            newRow.createCell(0).setCellValue(staffToAdd.hospitalStaffID);
-            newRow.createCell(1).setCellValue(staffToAdd.name);
-            newRow.createCell(2).setCellValue(staffToAdd.role);
-            newRow.createCell(3).setCellValue(staffToAdd.gender);
-            newRow.createCell(4).setCellValue(staffToAdd.age);
-
-        } catch (IOException e) {
-        }
     }
 }
