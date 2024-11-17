@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
@@ -23,11 +24,14 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
     private final HospitalStaffManager hospitalStaffManager;
     private final InventoryManager medicalInventoryManager;
+    private final AppointmentManager appointmentManager;
 
-    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager,HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers ) {
+
+    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager,AppointmentManager appointmentManager,HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers ) {
         super(validUsersLogin, validUsers);
         this.hospitalStaffManager = hospitalStaffManager;
         this.medicalInventoryManager = medicalInventoryManager;
+        this.appointmentManager = appointmentManager;
     }
 
     public void main() {
@@ -38,7 +42,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     hospitalStaff(hospitalStaffManager,this.validUsers); 
                 }
                 case 2 -> {
-                    appointmentDetails();
+                    appointmentDetails(appointmentManager);
                 }
                 case 3 -> {
                     medicationInventory(medicalInventoryManager);
@@ -110,8 +114,29 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     }
     
 
-    private static void appointmentDetails() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private static void appointmentDetails(AppointmentManager appointmentManager) {
+        Scanner scanner = new Scanner(System.in);
+        boolean inStaffMenu = true;
+    
+        while (inStaffMenu) {
+            System.out.print("\n1 View Appointments\n2 Administrator Main Menu\nEnter your choice:");  
+            if (scanner.hasNextInt()) {
+                int choice = scanner.nextInt();
+                scanner.nextLine(); 
+    
+                switch (choice) {
+                    case 1 -> appointmentManager.viewAppointments();
+                    case 2 -> {
+                        System.out.println("\nReturning to Administrator Main Menu");
+                        inStaffMenu = false;
+                    }
+                    default -> System.out.println("Invalid option. Please enter 1 or 2.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine();
+            }
+        }
     }
 
     private static void medicationInventory(InventoryManager medicalInventoryManager) {

@@ -32,10 +32,20 @@ public class Appointment {
         return patientID;
     }
 
+    public String getDoctorID() {
+        return doctorID;
+    }
+
     public String getAppointmentStatus() {
         return appointmentStatus;
     }
 
+    public String getAppointmentDateTime() {
+        return appointmentDateTime;
+    }
+    public String getOutcomeRecord() {
+        return appointmentOutcomeRecordID;
+    }
     public void printAppointmentDetails() {
         HashMap<String, Users> validUsers = HospitalManagementApp.getValidUsersByID();
         LocalDateTime date = LocalDateTime.parse(this.appointmentDateTime);
@@ -44,7 +54,7 @@ public class Appointment {
         System.out.println("Appointment Date : " + formatDate.format(date));
         System.out.println("Appointment Time : " + formatTime.format(date));
         System.out.println("Doctor ID : " + this.doctorID);
-        System.out.println("Doctor Name : " + validUsers.get(this.doctorID).name);
+        System.out.println("Doctor Name : " + validUsers.get(this.doctorID).getname());
         System.out.println("Appointment Status : "+ this.appointmentStatus+"\n");
     }
 }

@@ -5,9 +5,11 @@ import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
@@ -20,17 +22,27 @@ public class HospitalManagementApp {
     private static HashMap<String, Users> validUsersByID = new HashMap<>();
     private static HospitalStaffManager hospitalStaffManager;
     private static InventoryManager medicalInventoryManager;
+    private static AppointmentManager appointmentManager;
+
 
     public static void refreshHashMaps(){
         validUsersLogin.clear();
         validUsers.clear();
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
     }
+
+    public static void refreshvalidUsers(){
+        validUsers.clear();
+        validUsers = UserDataLoader.populateValidUsers(validUsers);
+    }
     
     public static void main(String[] args) {
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
         medicalInventoryManager = loadMedicalInventory();
+        
+        AppointmentsDataLoader aptmntDL = new AppointmentsDataLoader();
+        appointmentManager = new AppointmentManager(aptmntDL);
         loginProcess();
     }
 
@@ -79,18 +91,18 @@ public class HospitalManagementApp {
     //TODO: ADD YOUR ROLES HERE post login
     private static void handleUserRole(Users user) {
         try {
-            RolesEnum roleEnum = RolesEnum.valueOf(user.role);
+            RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
 
             switch (roleEnum) {
                 case Doctor -> System.out.println("This person is a Doctor.");
                 case Administrator -> {
-                    System.out.printf("\nWelcome %s\n", user.username);
-                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager, validUsersLogin, validUsers);  
+                    System.out.printf("\nWelcome %s\n", user.getUsername());
+                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager,appointmentManager,validUsersLogin, validUsers);  
                     admin.main();
                 }
                 case Pharmacists -> System.out.println("This person is a Pharmacist.");
                 case Patient -> {
-                    System.out.printf("\nWelcome %s\n", user.username);
+                    System.out.printf("\nWelcome %s\n", user.getUsername());
                     Patient patient = new Patient();
                     patient.main();
                 }

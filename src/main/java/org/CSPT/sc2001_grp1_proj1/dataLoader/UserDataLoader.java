@@ -49,6 +49,34 @@ public class UserDataLoader {
         }
         
     }
+    public static HashMap<String, Users> populateValidUsers(HashMap<String, Users> validUsers) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+             Workbook workbook = new XSSFWorkbook(file)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+            
+                String userId = row.getCell(0).getStringCellValue();
+                String name = row.getCell(1).getStringCellValue();
+                String role = row.getCell(2).getStringCellValue();
+                String gender = row.getCell(3).getStringCellValue();
+                int age = (int) row.getCell(4).getNumericCellValue();
+                String username = row.getCell(5).getStringCellValue();
+                String pwd = row.getCell(6).getStringCellValue();
+                String email = row.getCell(7).getStringCellValue();
+                int phoneNo = (int) row.getCell(8).getNumericCellValue();
+                Users user = new Users(userId,name,role,gender,age,username,pwd,email,phoneNo);
+                validUsers.put(username, user);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return validUsers;
+    }
 
     public static boolean resetPassword(String userName, HashMap<String, Users> validUsers, Scanner scanner) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
@@ -90,14 +118,14 @@ public class UserDataLoader {
             Row newRow = sheet.createRow(lastRowNum + 1);
     
             newRow.createCell(0).setCellValue(generateNextHospitalID(lastRow.getCell(0).getStringCellValue())); 
-            newRow.createCell(1).setCellValue(userToAdd.name);       
-            newRow.createCell(2).setCellValue(userToAdd.role);       
-            newRow.createCell(3).setCellValue(userToAdd.gender);     
-            newRow.createCell(4).setCellValue(userToAdd.age);        
-            newRow.createCell(5).setCellValue(userToAdd.username);   
-            newRow.createCell(6).setCellValue(userToAdd.password);   
-            newRow.createCell(7).setCellValue(userToAdd.email);      
-            newRow.createCell(8).setCellValue(userToAdd.phoneNo);    
+            newRow.createCell(1).setCellValue(userToAdd.getname());       
+            newRow.createCell(2).setCellValue(userToAdd.getRole());       
+            newRow.createCell(3).setCellValue(userToAdd.getGender());     
+            newRow.createCell(4).setCellValue(userToAdd.getAge());        
+            newRow.createCell(5).setCellValue(userToAdd.getUsername());   
+            newRow.createCell(6).setCellValue(userToAdd.getPassword());   
+            newRow.createCell(7).setCellValue(userToAdd.getEmail());      
+            newRow.createCell(8).setCellValue(userToAdd.getPhoneNo());    
     
             try (FileOutputStream fos = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                 workbook.write(fos);
@@ -147,15 +175,15 @@ public class UserDataLoader {
                     continue;
                 }
 
-                if (row.getCell(5).getStringCellValue().equals(staff.hospitalID)) {
-                    row.getCell(1).setCellValue(staff.name);       
-                    row.getCell(2).setCellValue(staff.role);       
-                    row.getCell(3).setCellValue(staff.gender);     
-                    row.getCell(4).setCellValue(staff.age);        
-                    row.getCell(5).setCellValue(staff.username);   
-                    row.getCell(6).setCellValue(staff.password);   
-                    row.getCell(7).setCellValue(staff.email);      
-                    row.getCell(8).setCellValue(staff.phoneNo);                    
+                if (row.getCell(5).getStringCellValue().equals(staff.gethospitalID())) {
+                    row.getCell(1).setCellValue(staff.getname());       
+                    row.getCell(2).setCellValue(staff.getrole());       
+                    row.getCell(3).setCellValue(staff.getgender());     
+                    row.getCell(4).setCellValue(staff.getAge());        
+                    row.getCell(5).setCellValue(staff.getUsername());   
+                    row.getCell(6).setCellValue(staff.getPassword());   
+                    row.getCell(7).setCellValue(staff.getEmail());      
+                    row.getCell(8).setCellValue(staff.getPhoneNo());                    
                                                                        
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
@@ -192,8 +220,7 @@ public class UserDataLoader {
         }
     }
 
-    public static boolean removeUser(String userName) {
-        boolean found = false;    
+    public static void removeUser(String staffID) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
 
@@ -205,9 +232,8 @@ public class UserDataLoader {
                     continue;
                 }
 
-                if (row.getCell(5).getStringCellValue().equals(userName)) {
+                if (row.getCell(0).getStringCellValue().equals(staffID)) {
                     sheet.removeRow(row);                   
-                    found = true;      
                     
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
@@ -215,10 +241,8 @@ public class UserDataLoader {
                     refreshHashMaps();                       
                 }
             }
-            return found;
         } catch (IOException e) {
         }
-        return found;
     }
 
     public static String generateNextHospitalID(String prevID) {

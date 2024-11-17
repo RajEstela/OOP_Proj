@@ -3,6 +3,7 @@ package org.CSPT.sc2001_grp1_proj1.entity;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -52,10 +53,14 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                                         "\nEnter Role:"
                                 );
                         String role = scanner.nextLine();
-                        HospitalStaff staff = new HospitalStaff("x", validUsers.get(staffUserName).name, role, validUsers.get(staffUserName).gender, validUsers.get(staffUserName).age);
-                        UserDataLoader.updateRole(validUsers.get(staffUserName).username,validUsers,role);
+                        HospitalStaff staff = new HospitalStaff("x", 
+                        validUsers.get(staffUserName).getname(), 
+                        role, 
+                        validUsers.get(staffUserName).getGender(), 
+                        validUsers.get(staffUserName).getAge());
+                        UserDataLoader.updateRole(validUsers.get(staffUserName).getUsername(),validUsers,role);
                         staffList.add(staff);
-                        
+                        validUsers = UserDataLoader.populateValidUsers(validUsers);
                         System.out.printf
                                 (
                                         "\nStaff successfully added"
@@ -96,6 +101,8 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                     // Create a new Users object with the entered details
                     Users newUser = new Users("x", name, role, gender, age, username, password, email, phoneNo);
                     UserDataLoader.addUser(newUser);
+                    validUsers = UserDataLoader.populateValidUsers(validUsers);
+
                 }
                 case 3 -> selection = false;
                 default -> throw new AssertionError();
@@ -106,29 +113,36 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
 
     @Override
     public void removeStaffMember() {
-        boolean removedSuccessfully = false;
+        boolean removedCondition = true;
         Scanner scanner = new Scanner(System.in);
-
-        System.out.printf
-        (
-            "\nEnter Staff ID To Remove:"
-        );
-        String idToremove = scanner.nextLine();
-        for (HospitalStaff staff : staffList) {
-            if (staff.hospitalStaffID.equals(idToremove))
-            {
-                staffList.remove(staff);  
-                removedSuccessfully = UserDataLoader.removeUser(idToremove);
-                break;          
-            }
-        }  
-        if(removedSuccessfully)  
-        {
+        while(removedCondition){
             System.out.printf
             (
-                "\nStaff Removed Successfully\n"
+                "\nEnter Staff ID To Remove:"
             );
+            String idToremove = scanner.nextLine();
+            for (HospitalStaff staff : staffList) {
+                if (staff.gethospitalID().equals(idToremove))
+                {
+                    staffList.remove(staff);  
+                    UserDataLoader.removeUser(idToremove);
+                    removedCondition = false;
+                    System.out.printf
+                    (
+                        "\nStaff Removed Successfully\n"
+                    );
+                    break;          
+                }
+            }  
+            if(removedCondition)
+            {
+                System.out.printf
+                (
+                    "\nStaff does not exists try again.\n"
+                ); 
+            }
         }
+        
     }
 
     @Override
@@ -140,77 +154,49 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         Scanner scanner = new Scanner(System.in);
         String idToUpdate = scanner.nextLine();
 
-        HospitalStaff staffToUpdate = null;
-
         for (var hStaff : this.staffList) {
-            if(hStaff.hospitalStaffID.equals(idToUpdate))
+            if(hStaff.gethospitalID().equals(idToUpdate))
             {
-                staffToUpdate = hStaff;
-                break;
+                boolean updatingStaff = true;
+                while(updatingStaff)
+                {
+                    System.out.printf
+                    (
+                        "\nWhat would you like to update:\n1 Role\n2 Age\n3 Gender\n4 Cancel\n Enter Choice: "
+                    );
+                    try {
+                        int updateChoice = scanner.nextInt();
+                        scanner.nextLine(); 
+                        switch (updateChoice) {
+                            case 1 -> {
+                                System.out.print("\nEnter new Role: ");
+                                hStaff.role = scanner.nextLine();
+                            }
+                            case 2 -> {
+                                System.out.print("\nEnter new Age: ");
+                                hStaff.age = scanner.nextInt();
+                                scanner.nextLine(); 
+                            }
+                            case 3 -> {
+                                System.out.print("\nEnter new Gender: ");
+                                hStaff.gender = scanner.nextLine();
+                            }
+                            case 4 -> {
+                                System.out.println("\nUpdate cancelled.");
+                                updatingStaff = false;
+                            }
+                            default -> System.out.println("\nInvalid selection. Please try again.");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nInvalid input. Please enter a number.");
+                        scanner.nextLine(); // Clear invalid input
+                    }
+                } 
+                break;          
             }
         }
 
-        if (staffToUpdate!=null)
-        {
-            boolean updatingStaff = true;
-            while(updatingStaff)
-            {
-                System.out.printf
-                (
-                    "\nWhat would you like to update:\n 1 Staff ID\n 2 Role\n 3 Age?\n 4 Gender\n 5 Cancel\n Enter Choice: "
-                );
-                int actionStaff = scanner.nextInt();
-                scanner.nextLine();
-                switch (actionStaff) {
-                    case 1 -> {
-                        System.out.printf
-                        (
-                            "\nEnter new Staff ID: "
-                        );
-                        staffToUpdate.hospitalStaffID = scanner.nextLine();
-                    }
-                    case 2 -> {
-                        System.out.printf
-                        (
-                            "\nEnter new Role: "
-                        );            
-                        staffToUpdate.role = scanner.nextLine();
-                    }
-                    case 3 -> {
-                        System.out.printf
-                        (
-                            "\nEnter new Age: "
-                        );            
-                        staffToUpdate.age = scanner.nextInt();
-                        scanner.nextLine();
-
-                    }
-                    case 4 -> {
-                        System.out.printf
-                        (
-                            "\nEnter new Gender: "
-                        );  
-                        staffToUpdate.gender = scanner.nextLine();            
-                    }
-                    case 5 ->{
-                        UserDataLoader.updateStaff(staffToUpdate);                
-                        System.out.printf
-                        (
-                            "\nCancelled "
-                        );   
-                        updatingStaff = false;
-                        break;          
-                    }
-                    default -> {
-                        System.out.printf
-                        (
-                            "\nInvalid Selection "
-                        );        
-                    }
-                } 
-            } 
-
-        }    
+        
     }
 
     @Override
@@ -220,13 +206,13 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         {
             System.out.printf
             (
-                "\nOrder By:\n1 Staff ID\n2 Age\n3 Gender?\n4 Roles\n5 Back\nEnter Choice: "
+                "\nOrder By:\n1 Staff ID\n2 Age\n3 Gender\n4 Roles\n5 Back\nEnter Choice: "
             );
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 2 -> this.staffList.sort(Comparator.comparingInt(HospitalStaff::getAge));
                 case 1 -> this.staffList.sort(Comparator.comparing(HospitalStaff::gethospitalStaffID));
+                case 2 -> this.staffList.sort(Comparator.comparingInt(HospitalStaff::getAge));
                 case 3 -> this.staffList.sort(Comparator.comparing(HospitalStaff::getgender));
                 case 4 -> this.staffList.sort(Comparator.comparing(HospitalStaff::getrole));
                 case 5 -> System.out.println("Returning to the previous menu...");
@@ -245,11 +231,11 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
             for (HospitalStaff staff : this.staffList) {
                 System.out.printf(
                     "%-20s %-20s %-20s %-20s %-20d%n", // Add %n for a new line and %d for the age (integer)
-                    staff.hospitalStaffID,
-                    staff.name, 
-                    staff.role, 
-                    staff.gender, 
-                    staff.age
+                    staff.gethospitalStaffID(),
+                    staff.getname(), 
+                    staff.getrole(), 
+                    staff.getgender(), 
+                    staff.getAge()
                 );
             }
         }
@@ -262,10 +248,10 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         for (Map.Entry<String, Users> users : validUsers.entrySet()) {
             System.out.printf(
                 "%-20s %-20s %-20s %-20s%n", // Add %n for a new line and %d for the age (integer)
-                users.getValue().hospitalID,
-                users.getValue().username,
-                users.getValue().name, 
-                users.getValue().role
+                users.getValue().gethospitalID(),
+                users.getValue().getUsername(),
+                users.getValue().getname(), 
+                users.getValue().getRole()
             );
         }
     }
