@@ -24,8 +24,16 @@ public class Appointment {
         this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
     }
 
+    public String getAppointmentID() {
+        return appointmentID;
+    }
+
     public String getPatientID() {
         return patientID;
+    }
+
+    public String getAppointmentStatus() {
+        return appointmentStatus;
     }
 
     public void printAppointmentDetails() {
@@ -33,14 +41,10 @@ public class Appointment {
         LocalDateTime date = LocalDateTime.parse(this.appointmentDateTime);
         DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("h:m a");
-        System.out.println("");
         System.out.println("Appointment Date : " + formatDate.format(date));
-        System.out.println("Appointment Time : " + formatTime.format(date));        
-        System.out.println("Patient ID : " + this.patientID);
-        System.out.println("Patient Name : " + validUsers.get(this.patientID).name);
+        System.out.println("Appointment Time : " + formatTime.format(date));
         System.out.println("Doctor ID : " + this.doctorID);
         System.out.println("Doctor Name : " + validUsers.get(this.doctorID).name);
-        System.out.println("Appointment Status : "+ this.appointmentStatus);
-        System.out.println("");
+        System.out.println("Appointment Status : "+ this.appointmentStatus+"\n");
     }
 }
