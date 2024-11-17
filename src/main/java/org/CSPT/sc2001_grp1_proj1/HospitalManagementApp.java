@@ -37,32 +37,38 @@ public class HospitalManagementApp {
         UserLogin userLogin = new UserLogin(validUsersLogin, validUsers);
 
         while (true) {
-            System.out.println("\nMenu:");
-            System.out.println("1. Login");
-            System.out.println("2. Forgot Password");
-            System.out.print("Please enter your choice (or type 'exit' to quit): ");
+            try {
+                System.out.println("\nMenu:");
+                System.out.println("1. Login");
+                System.out.println("2. Forgot Password");
+                System.out.print("Please enter your choice (or type 'exit' to quit): ");
 
-            String input = scanner.nextLine();
+                String input = scanner.nextLine();
 
-            if (input.equalsIgnoreCase("exit")) {
-                System.out.println("Exiting the application. Goodbye!");
-                break;
-            }
-
-            int choice = Integer.parseInt(input);
-
-            switch (choice) {
-                case 1:
-                    Users loggedInUser = userLogin.loginMenu();
-                    if (loggedInUser != null) {
-                        handleUserRole(loggedInUser);
-                    }
+                if (input.equalsIgnoreCase("exit")) {
+                    System.out.println("Exiting the application. Goodbye!");
                     break;
-                case 2:
-                    userLogin.forgotPassword(scanner);
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
+                }
+
+                int choice = Integer.parseInt(input);
+
+                switch (choice) {
+                    case 1:
+                        Users loggedInUser = userLogin.loginMenu();
+                        if (loggedInUser != null) {
+                            handleUserRole(loggedInUser); 
+                        }
+                        break;
+                    case 2:
+                        userLogin.forgotPassword(scanner);
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please enter 1 or 2.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number (1 or 2) or type 'exit' to quit.");
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }
         scanner.close();

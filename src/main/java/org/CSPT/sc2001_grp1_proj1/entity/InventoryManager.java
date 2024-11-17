@@ -36,6 +36,7 @@ public class InventoryManager implements InventoryManagerInterface {
                 medicineFound = true;  
                 meds.medicineStockCount++;
                 meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
+                MedicineDataLoader.updateStockCount(meds);
                 System.out.printf
                 (
                     "\nAdded Successfully\n"
@@ -70,6 +71,7 @@ public class InventoryManager implements InventoryManagerInterface {
                 medicineFound = true;  
                 meds.medicineStockCount--;
                 meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
+                MedicineDataLoader.updateStockCount(meds);
                 System.out.printf
                 (
                     "\nRemoved Successfully\n"
@@ -168,6 +170,7 @@ public class InventoryManager implements InventoryManagerInterface {
                     }
                     meds.lowStockLevelCount = newAlertLevel;
                     meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
+                    MedicineDataLoader.updateLowLevelStockCount(meds);
                     System.out.println("\nUpdated Successfully\n");
                     break;
                 }
@@ -196,6 +199,185 @@ public class InventoryManager implements InventoryManagerInterface {
     public void displayReplenishmentRequests() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'displayReplenishmentRequests'");
+    }
+
+    @Override
+    public void addMedicine() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("\nEnter Medicine Name: ");
+        String medicineName = scanner.nextLine();
+
+        System.out.printf("\nEnter Medicine Detail: ");
+        String medicineDetail = scanner.nextLine();
+        int medicineStockCount = 0;
+        int medicineAlertLevelCount =0;
+        while (true) {
+            try {
+                System.out.printf("\nEnter Medicine Stock Count: ");
+                medicineStockCount = Integer.parseInt(scanner.nextLine());
+        
+                System.out.printf("\nEnter Medicine Low Stock Alert Level Count: ");
+                medicineAlertLevelCount  = Integer.parseInt(scanner.nextLine());                
+
+                if (medicineStockCount < 0 || medicineAlertLevelCount < 0) {
+                    throw new IllegalArgumentException("Input should not be below 0.");
+                }
+                break; 
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); 
+            }
+        }
+
+        boolean lowAlert = false;
+
+        if(medicineAlertLevelCount > medicineStockCount){
+            lowAlert = true;            
+        }
+
+        Medicine newMeds = new Medicine("x",medicineName,medicineDetail, medicineStockCount,lowAlert,medicineAlertLevelCount);
+        MedicineDataLoader.addMedicine(newMeds);
+    }
+    @Override
+    public void updateMedicine() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf
+        (
+            "\nEnter Medicine Name To Update:"
+        );
+        String medsNameToUpdate = scanner.nextLine();
+        Medicine medsToUpdate = null;
+
+        for (var meds : this.totalMedicineInventoryList) {
+            if(meds.medicineName.equals(medsNameToUpdate))
+            {
+                medsToUpdate = meds;
+                break;
+            }
+        }
+
+        if (medsToUpdate!=null)
+        {
+            boolean updatingMeds = true;
+            while(updatingMeds)
+            {
+                System.out.printf
+                (
+                    "\nWhat would you like to update?\n1 Medicine Name\n2 Medicine Detail\n3 Medicine Stock Count\n4 Medicine Low Stock Alert Level\n5 Cancel\nEnter Choice: "
+                );
+                int actionStaff = scanner.nextInt();
+                scanner.nextLine();
+                switch (actionStaff) {
+                    case 1 -> {
+                        System.out.printf
+                        (
+                            "\nEnter new Medicine Name: "
+                        );
+                        medsToUpdate.medicineName = scanner.nextLine();
+                    }
+                    case 2 -> {
+                        System.out.printf
+                        (
+                            "\nEnter new Medicine Detail: "
+                        );            
+                        medsToUpdate.medicineDetail = scanner.nextLine();
+                    }
+                    case 3 -> {
+                        int stock = 0;
+                        while (true) {
+                            try {
+                                System.out.printf
+                                (
+                                    "\nEnter new Medicine Stock Count: "
+                                );            
+                                stock = scanner.nextInt();
+                                if (stock < 0) {
+                                    throw new IllegalArgumentException("\nInput should not be below 0.");
+                                }
+                                break; 
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("\nError: " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("\nInvalid input. Please enter a valid integer.");
+                                scanner.nextLine(); 
+                            }
+                        }       
+                        medsToUpdate.medicineStockCount = stock;
+                        scanner.nextLine();
+                    }
+                    case 4 -> {
+                        int stock = 0;
+                        while (true) {
+                            try {
+                                System.out.printf
+                                (
+                                    "\nEnter new Medicine Low Stock Alert Level: "
+                                );            
+                                stock = scanner.nextInt();
+                                if (stock < 0) {
+                                    throw new IllegalArgumentException("\nInput should not be below 0.");
+                                }
+                                break; 
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("\nError: " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("\nInvalid input. Please enter a valid integer.");
+                                scanner.nextLine(); 
+                            }
+                        }        
+                        medsToUpdate.lowStockLevelCount = stock; 
+                        scanner.nextLine();
+                    }
+                    case 5 ->{
+                        MedicineDataLoader.updateMedicine(medsToUpdate);             
+                        System.out.printf
+                        (
+                            "\nCancelled "
+                        );   
+                        updatingMeds = false;
+                        break;          
+                    }
+                    default -> {
+                        System.out.printf
+                        (
+                            "\nInvalid Selection "
+                        );        
+                    }
+                } 
+            } 
+        }
+        else{
+            System.out.printf
+            (
+                "\nMedicine Not Found"
+            );   
+        }    
+    }
+    @Override
+    public void removeMedicine() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf
+        (
+            "\nEnter Medicine Name To Remove:"
+        );
+        String medsNameToUpdate = scanner.nextLine();
+        Medicine medsToUpdate = null;
+
+        for (var meds : this.totalMedicineInventoryList) {
+            if(meds.medicineName.equals(medsNameToUpdate))
+            {
+                medsToUpdate = meds;
+                break;
+            }
+        }   
+        if(!MedicineDataLoader.removeMedicine(medsToUpdate)){
+            System.out.printf
+            (
+                "\nError, Medicine unable to remove. Please try again later"
+            );            
+        }
     }
 
 
