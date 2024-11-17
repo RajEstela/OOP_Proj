@@ -21,10 +21,10 @@ public class UserLogin {
     public Users loginMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.printf("\n Login\n Username: ");
+        System.out.printf("\nLogin:\nUsername: ");
         String userName = scanner.nextLine();
 
-        System.out.printf("\n Password (Enter \"Forgot\" to reset password): ");
+        System.out.printf("\nPassword (Enter \"Forgot\" to reset password): ");
         String pwd = scanner.nextLine();
 
         if ("Forgot".equals(pwd)) {
@@ -34,11 +34,11 @@ public class UserLogin {
 
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
-            System.out.println("\nLogin Successfully\n");
+            System.out.println("\nLogin Successfully");
             this.loginUser = userLogin.getHospitalID();
             return userLogin;
         } else {
-            System.out.println("Login Failed");
+            System.out.println("\nLogin Failed");
             return null;
         }
         
@@ -52,14 +52,14 @@ public class UserLogin {
     }
 
     public void forgotPassword(Scanner scanner) {
-        System.out.println("Enter Username:");
+        System.out.println("\nEnter Username:");
         String userName = scanner.nextLine();
     
         if (UserDataLoader.resetPassword(userName, validUsers, scanner)) {
-            System.out.println("Password reset successfully.");           
+            System.out.println("\nPassword reset successfully.");           
             refreshHashMaps();
         } else {
-            System.out.println("Username not found. Please try again.");
+            System.out.println("\nUsername not found. Please try again.");
         }
     }
 
