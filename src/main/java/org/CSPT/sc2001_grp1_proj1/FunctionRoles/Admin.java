@@ -4,10 +4,14 @@
 
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
+import org.CSPT.sc2001_grp1_proj1.UserLogin;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
+import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
+import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
 
 /**
@@ -15,12 +19,15 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
  * @author RajEstela
  */
 
- public class Admin {
+ public class Admin extends UserLogin {
 
     private final HospitalStaffManager hospitalStaffManager;
+    private final InventoryManager medicalInventoryManager;
 
-    public Admin(HospitalStaffManager hospitalStaffManager) {
+    public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager,HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers ) {
+        super(validUsersLogin, validUsers);
         this.hospitalStaffManager = hospitalStaffManager;
+        this.medicalInventoryManager = medicalInventoryManager;
     }
 
     public void main() {
@@ -28,13 +35,13 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
         while(loggedIn){
             switch (administratorMenu()) {
                 case 1 -> {
-                    hospitalStaff(hospitalStaffManager);  // Use the passed instance
+                    hospitalStaff(hospitalStaffManager,this.validUsers); 
                 }
                 case 2 -> {
                     appointmentDetails();
                 }
                 case 3 -> {
-                    medicationInventory();
+                    medicationInventory(medicalInventoryManager);
                 }
                 case 4 -> {
                     approveRepReq();
@@ -72,7 +79,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
         return choice;
     }
 
-    private static void hospitalStaff(HospitalStaffManager staff) {
+    private static void hospitalStaff(HospitalStaffManager staff,HashMap<String, Users> validUsers) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
     
@@ -86,7 +93,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
     
                 switch (choice) {
                     case 1 -> staff.displayStaff();
-                    case 2 -> staff.addStaffMember();
+                    case 2 -> staff.addStaffMember(validUsers);
                     case 3 -> staff.removeStaffMember();
                     case 4 -> staff.updateStaffMember();
                     case 5 -> {
@@ -107,9 +114,37 @@ import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private static void medicationInventory() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    private static void medicationInventory(InventoryManager medicalInventoryManager) {
+        Scanner scanner = new Scanner(System.in);
+        boolean inStaffMenu = true;
+    
+        while (inStaffMenu) {
+            System.out.printf(
+                "\n1 View Medical Inventory Stocks\n2 Add Medical Inventory Stock\n3 Remove Medical Inventory Stock\n4 Update Medical Inventory Stock Count\n5 Update Medical Inventory Stock Alert Level\n6 View Replenishment Requests\7 Administrator Main Menu\n Enter Choice: "
+            );
+    
+            try {
+                int choice = scanner.nextInt();
+    
+                switch (choice) {
+                    case 1 -> medicalInventoryManager.displayStock();
+                    case 2 -> medicalInventoryManager.addStock();
+                    case 3 -> medicalInventoryManager.removeStock();
+                    case 4 -> medicalInventoryManager.updateStockCount();
+                    case 5 -> medicalInventoryManager.updateStockAlertLevel();
+                    case 6 -> medicalInventoryManager.displayReplenishmentRequests();
+                    case 7 -> {
+                        System.out.println("\nReturning to Administrator Main Menu");
+                        inStaffMenu = false;
+                    }
+                    default -> System.out.println("Invalid option. Please enter a number between 1 and 5.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); 
+            }
+        }   
+     }
 
     private static void approveRepReq() {
         throw new UnsupportedOperationException("Not supported yet.");
