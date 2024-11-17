@@ -17,17 +17,18 @@ public class HospitalManagementApp {
 
     private static HashMap<String, String> validUsersLogin = new HashMap<>();
     private static HashMap<String, Users> validUsers = new HashMap<>();
+    private static HashMap<String, Users> validUsersByID = new HashMap<>();
     private static HospitalStaffManager hospitalStaffManager;
     private static InventoryManager medicalInventoryManager;
 
     public static void refreshHashMaps(){
         validUsersLogin.clear();
         validUsers.clear();
-        UserDataLoader.populateUsers(validUsersLogin, validUsers);
+        UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
     }
     
     public static void main(String[] args) {
-        UserDataLoader.populateUsers(validUsersLogin, validUsers);
+        UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
         medicalInventoryManager = loadMedicalInventory();
         loginProcess();
@@ -108,6 +109,9 @@ public class HospitalManagementApp {
         return MedicineDataLoader.loadMedicalInventory("./data/MedicalInventory_List.xlsx");
     }
 
+    public static HashMap<String, Users> getValidUsersByID() {
+        return validUsersByID;
+    }
     public static void logout() {
         System.out.println("Logging out...");
         loginProcess(); 
