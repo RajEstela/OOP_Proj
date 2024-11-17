@@ -186,4 +186,35 @@ public class MedicineDataLoader {
         numericPart ++;
         return String.format("M%03d", numericPart);
     }
+
+    public static List<Medicine> inventoryReload(){
+        List<Medicine> medsList = new ArrayList<>();
+
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+             Workbook workbook = new XSSFWorkbook(file)) {
+
+            // Get the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+               
+               String medicineID =row.getCell(0).getStringCellValue();
+               String medicineName =row.getCell(1).getStringCellValue();
+               String medicineDetail =row.getCell(2).getStringCellValue();
+               int medicineStockCount = (int) row.getCell(3).getNumericCellValue();
+               boolean lowStockLevelAlert = row.getCell(4).getBooleanCellValue();              
+               int lowStockLevelCount = (int) row.getCell(5).getNumericCellValue();
+               Medicine meds = new Medicine(medicineID,medicineName,medicineDetail,medicineStockCount,lowStockLevelAlert,lowStockLevelCount);
+               medsList.add(meds);
+            }
+        } catch (IOException e) {
+        }
+        InventoryManager medsInit = new InventoryManager(medsList, LocalDateTime.now(), "SYSTEM");
+        return medsList;
+    }
 }

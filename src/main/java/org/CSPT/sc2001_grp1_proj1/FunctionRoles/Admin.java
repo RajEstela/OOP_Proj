@@ -85,7 +85,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     
         while (inStaffMenu) {
             System.out.printf(
-                "\n 1 View Staff\n 2 Add Staff\n 3 Remove Staff\n 4 Update Staff\n 5 Administrator Main Menu\n Enter Choice: "
+                "\n1 View Staff\n2 Add Staff\n3 Remove Staff\n4 Update Staff\n5 Administrator Main Menu\n Enter Choice: "
             );
     
             try {
@@ -120,7 +120,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     
         while (inStaffMenu) {
             System.out.printf(
-                "\n1 View Medical Inventory Stocks\n2 Add Medical Inventory Stock\n3 Remove Medical Inventory Stock\n4 Update Medical Inventory Stock Count\n5 Update Medical Inventory Stock Alert Level\n6 View Replenishment Requests\7 Administrator Main Menu\n Enter Choice: "
+                "\n1 View Medical Inventory Stocks\n2 Add Medical Inventory Stock\n3 Remove Medical Inventory Stock\n4 Update Medical Inventory Stock Count\n5 Update Medical Inventory Stock Alert Level\n6 Add Medicine Into Inventory\n7 Remove Medicine From Inventory\n8 View Replenishment Requests\n9 Administrator Main Menu\n Enter Choice: "
             );
     
             try {
@@ -132,8 +132,10 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     case 3 -> medicalInventoryManager.removeStock();
                     case 4 -> medicalInventoryManager.updateStockCount();
                     case 5 -> medicalInventoryManager.updateStockAlertLevel();
-                    case 6 -> medicalInventoryManager.displayReplenishmentRequests();
-                    case 7 -> {
+                    case 6 -> medicalInventoryManager.addMedicine();
+                    case 7 -> medicalInventoryManager.removeMedicine();
+                    case 8 -> medicalInventoryManager.displayReplenishmentRequests();
+                    case 9 -> {
                         System.out.println("\nReturning to Administrator Main Menu");
                         inStaffMenu = false;
                     }

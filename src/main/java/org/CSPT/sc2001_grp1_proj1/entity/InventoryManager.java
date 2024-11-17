@@ -37,6 +37,7 @@ public class InventoryManager implements InventoryManagerInterface {
                 meds.medicineStockCount++;
                 meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
                 MedicineDataLoader.updateStockCount(meds);
+                inventoryReload();
                 System.out.printf
                 (
                     "\nAdded Successfully\n"
@@ -72,6 +73,7 @@ public class InventoryManager implements InventoryManagerInterface {
                 meds.medicineStockCount--;
                 meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
                 MedicineDataLoader.updateStockCount(meds);
+                inventoryReload();
                 System.out.printf
                 (
                     "\nRemoved Successfully\n"
@@ -125,6 +127,7 @@ public class InventoryManager implements InventoryManagerInterface {
                     meds.medicineStockCount += addStockCount;
                     meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
                     MedicineDataLoader.updateStockCount(meds);
+                    inventoryReload();
                     System.out.println("\nUpdated Successfully\n");
                     break;
                 }
@@ -171,6 +174,7 @@ public class InventoryManager implements InventoryManagerInterface {
                     meds.lowStockLevelCount = newAlertLevel;
                     meds.lowStockLevelAlert = meds.medicineStockCount < meds.lowStockLevelCount;
                     MedicineDataLoader.updateLowLevelStockCount(meds);
+                    inventoryReload();
                     System.out.println("\nUpdated Successfully\n");
                     break;
                 }
@@ -331,7 +335,8 @@ public class InventoryManager implements InventoryManagerInterface {
                         scanner.nextLine();
                     }
                     case 5 ->{
-                        MedicineDataLoader.updateMedicine(medsToUpdate);             
+                        MedicineDataLoader.updateMedicine(medsToUpdate);  
+                        inventoryReload();           
                         System.out.printf
                         (
                             "\nCancelled "
@@ -378,7 +383,11 @@ public class InventoryManager implements InventoryManagerInterface {
                 "\nError, Medicine unable to remove. Please try again later"
             );            
         }
+        inventoryReload();
     }
-
+    
+    private void inventoryReload(){
+        this.totalMedicineInventoryList = MedicineDataLoader.inventoryReload();
+    }
 
 }

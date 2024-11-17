@@ -1,0 +1,7 @@
+# Ignore all .class files
+*.class
+
+# Ignore build directories (commonly used in Java projects)
+/bin/
+/build/
+/target/
