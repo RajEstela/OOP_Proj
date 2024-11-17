@@ -1,6 +1,7 @@
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,6 @@ import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
 
 public class Patient {
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
-    private AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
 
     public void main() {
         System.out.println("1. View Medical Record");
@@ -47,12 +47,24 @@ public class Patient {
                     break;
                 case 4:
                     // Schedule an Appointment
+                    scheduleAppointment();
+                    main();
+                    break;
                 case 5:
                     // Reschedule an appointment
+                    rescheduleAppointment();
+                    main();
+                    break;
                 case 6:
                     // Cancel an appointment
+                    cancelAppointment();
+                    main();
+                    break;
                 case 7:
                     // View Scheduled Appointments
+                    viewScheduledAppointments();
+                    main();
+                    break;
                 case 8:
                     // View Past appointment outcome records
                 case 9:
@@ -128,9 +140,123 @@ public class Patient {
     }
     
     private void viewAvailableAppointmentSlots() {
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        List<Appointment> appointments = appointmentData.getAvailableAppointments();
+        HashMap<Integer, Appointment> hashedAppointments = appointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(hashedAppointments.isEmpty()) {
+            System.out.println("Currently, there are no available appointments.\n");
+            main();
+        }
+
+        hashedAppointments.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
+            appointment.printAppointmentDetails();
+        });
+    }
+
+    private void scheduleAppointment() {
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        List<Appointment> appointments = appointmentData.getAvailableAppointments();
+        HashMap<Integer, Appointment> hashedAppointments = appointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(hashedAppointments.isEmpty()) {
+            System.out.println("Currently, there are no available appointments.\n");
+            main();
+        }
+
+        hashedAppointments.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
+            appointment.printAppointmentDetails();
+        });
+
+        System.out.println("Please enter the index number for the appointment.");
+        Scanner choice_scanner = new Scanner(System.in);
+        int choice = choice_scanner.nextInt();
+        
+        if(hashedAppointments.get(choice) != null) {
+            String appointmentID = hashedAppointments.get(choice).getAppointmentID();
+            String userID = UserLogin.getLoginUserID();
+            appointmentData.scheduleAppointment(appointmentID, userID);
+            System.out.println("Your appointment has been scheduled successfully.\n");
+        } else {
+            System.out.println("The index value is not correct.\n");
+        }
+    }
+
+    private void rescheduleAppointment() {
         String userID = UserLogin.getLoginUserID();
-        List<Appointment> appointments = appointmentData.getAppointmentsByPatientID(userID);
-        appointments.forEach(appointment -> {
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(hashedScheduledAppointments.isEmpty()) {
+            System.out.println("Currently, there are no scheduled appointments.");
+            main();
+        }
+        
+        hashedScheduledAppointments.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
+            appointment.printAppointmentDetails();
+        });
+
+        System.out.println("Please enter the index number for the appointment you would like to reschedule.");
+        Scanner choice_scanner = new Scanner(System.in);
+        int choice = choice_scanner.nextInt();
+
+        if(hashedScheduledAppointments.get(choice) != null) {
+            String appointmentID = hashedScheduledAppointments.get(choice).getAppointmentID();
+            appointmentData.cancelAppointment(appointmentID);
+            System.out.println("Your appointment has been cancelled successfully. Please schedule the available appointments.\n");
+            appointmentData.loadAppointments();
+            scheduleAppointment();
+        } else {
+            System.out.println("The index value is not correct.\n");
+        }
+    }
+    
+    private void cancelAppointment() {
+        String userID = UserLogin.getLoginUserID();
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(hashedScheduledAppointments.isEmpty()) {
+            System.out.println("Currently, there are no scheduled appointments.");
+            main();
+        }
+        
+        hashedScheduledAppointments.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
+            appointment.printAppointmentDetails();
+        });
+
+        System.out.println("Please enter the index number for the appointment you would like to cancel.");
+        Scanner choice_scanner = new Scanner(System.in);
+        int choice = choice_scanner.nextInt();
+
+        if(hashedScheduledAppointments.get(choice) != null) {
+            String appointmentID = hashedScheduledAppointments.get(choice).getAppointmentID();
+            appointmentData.cancelAppointment(appointmentID);
+            System.out.println("Your appointment has been cancelled successfully.\n");
+        } else {
+            System.out.println("The index value is not correct.\n");
+        }
+    }
+
+    private void viewScheduledAppointments() {
+        String userID = UserLogin.getLoginUserID();
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(hashedScheduledAppointments.isEmpty()) {
+            System.out.println("Currently, there are no scheduled appointments.");
+            main();
+        }
+        System.out.println("The scheduled appointments:");
+        hashedScheduledAppointments.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
             appointment.printAppointmentDetails();
         });
     }

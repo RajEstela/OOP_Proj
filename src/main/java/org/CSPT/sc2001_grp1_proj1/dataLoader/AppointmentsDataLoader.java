@@ -2,6 +2,7 @@ package org.CSPT.sc2001_grp1_proj1.dataLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +48,72 @@ public class AppointmentsDataLoader {
         }
     }
 
+    
     public List<Appointment> getAppointments() {
         return appointments;
     }
 
-    public List<Appointment> getAppointmentsByPatientID(String patientID) {
-        List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getPatientID().equals(patientID)).toList();
+    public List<Appointment> getAvailableAppointments() {
+        List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Available")).toList();
         return filteredAppointments;
     }
+
+    public List<Appointment> getScheduledAppointments(String patientID) {
+        List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Pending") ||  appointment.getAppointmentStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
+        return filteredAppointments;
+    }
+
+    public void scheduleAppointment(String appointmentID, String patientID) {
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+            // Get the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue; // Skip header row
+                }
+                if(row.getCell(0).getStringCellValue().equals(appointmentID)) {
+                    row.getCell(2).setCellValue(patientID); //Patient ID
+                    row.getCell(4).setCellValue("Pending"); //Appointment Status
+                    break;
+                }
+            }
+            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(outFile);
+            }
+
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void cancelAppointment(String appointmentID) {
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+            // Get the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue; // Skip header row
+                }
+                if(row.getCell(0).getStringCellValue().equals(appointmentID)) {
+                    row.getCell(2).setCellValue("N/A"); //Patient ID
+                    row.getCell(4).setCellValue("Available"); //Appointment Status
+                    break;
+                }
+            }
+            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(outFile);
+            }
+
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    
 }
