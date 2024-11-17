@@ -243,6 +243,8 @@ public class InventoryManager implements InventoryManagerInterface {
 
         Medicine newMeds = new Medicine("x",medicineName,medicineDetail, medicineStockCount,lowAlert,medicineAlertLevelCount);
         MedicineDataLoader.addMedicine(newMeds);
+        inventoryReload();
+
     }
     @Override
     public void updateMedicine() {

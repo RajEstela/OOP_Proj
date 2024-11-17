@@ -90,7 +90,7 @@ public class MedicineDataLoader {
                 }
 
                 if (row.getCell(1).getStringCellValue().equals(medicineToUpdate.getMedicineName())) {
-                    row.getCell(3).setCellValue(medicineToUpdate.getLowStockLevelCount());
+                    row.getCell(3).setCellValue(medicineToUpdate.getMedicineStockCount());
                     row.getCell(4).setCellValue(medicineToUpdate.getLowStockLevelAlert());                
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
