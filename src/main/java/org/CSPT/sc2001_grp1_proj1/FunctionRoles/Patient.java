@@ -6,11 +6,14 @@ import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicalRecordDataLoader;
+import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
 
 public class Patient {
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
+    private AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
 
     public void main() {
         System.out.println("1. View Medical Record");
@@ -39,6 +42,9 @@ public class Patient {
                     break;
                 case 3:
                     // View Available Appoointment Slots
+                    viewAvailableAppointmentSlots();
+                    main();
+                    break;
                 case 4:
                     // Schedule an Appointment
                 case 5:
@@ -58,7 +64,7 @@ public class Patient {
 
     }
 
-    public List<MedicalRecord> filterMedicalRecords(String userID) {
+    private List<MedicalRecord> filterMedicalRecords(String userID) {
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
         loadMedicalRecords.populateMedicalRecords(medicalRecords);
 
@@ -67,7 +73,7 @@ public class Patient {
         return filteredMedicalRecords;
     }
 
-    public void viewMedicalRecord() {
+    private void viewMedicalRecord() {
         String userID = UserLogin.getLoginUserID();
         List<MedicalRecord> filteredMedicalRecords = filterMedicalRecords(userID);
         System.out.println("");
@@ -75,7 +81,7 @@ public class Patient {
         filteredMedicalRecords.forEach(record -> record.printMedicalRecord());
     }
 
-    public void updatePersonalInformation() {
+    private void updatePersonalInformation() {
         System.out.println("Please select your choice of contact update.");
         System.out.println("1. Phone Number");
         System.out.println("2. Email");
@@ -98,6 +104,7 @@ public class Patient {
                 case 3:
                     //Go back
                     main();
+                    break;
             }
         }
     }
@@ -120,4 +127,11 @@ public class Patient {
         loadMedicalRecords.updateEmail(userID, newEmail);
     }
     
+    private void viewAvailableAppointmentSlots() {
+        String userID = UserLogin.getLoginUserID();
+        List<Appointment> appointments = appointmentData.getAppointmentsByPatientID(userID);
+        appointments.forEach(appointment -> {
+            appointment.printAppointmentDetails();
+        });
+    }
 }

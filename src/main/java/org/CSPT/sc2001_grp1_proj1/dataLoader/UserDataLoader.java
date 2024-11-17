@@ -19,7 +19,7 @@ public class UserDataLoader {
 
     private static final String EXCEL_FILE_PATH = "./data/UserList.xlsx";
 
-    public static void populateUsers(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
+    public static void populateUsers(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers, HashMap<String, Users> validUsersByID) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -42,6 +42,7 @@ public class UserDataLoader {
                 validUsersLogin.put(username, pwd);
                 Users user = new Users(userId,name,role,gender,age,username,pwd,email,phoneNo);
                 validUsers.put(username, user);
+                validUsersByID.put(userId, user);
             }
         } catch (IOException e) {
             System.out.println(e);
