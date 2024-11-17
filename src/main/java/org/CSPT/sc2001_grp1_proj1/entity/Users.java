@@ -44,4 +44,8 @@ public class Users {
         this.role = role;
     }
 
+    public String getHospitalID() {
+        return hospitalID;
+    }
+
 }

@@ -10,7 +10,8 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
 public class UserLogin {
 
     private final HashMap<String, String> validUsersLogin;
-    public final HashMap<String, Users> validUsers;
+    protected final HashMap<String, Users> validUsers;
+    private static String loginUser;
 
     public UserLogin(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
         this.validUsersLogin = validUsersLogin;
@@ -34,11 +35,13 @@ public class UserLogin {
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
             System.out.println("\nLogin Successfully\n");
+            this.loginUser = userLogin.getHospitalID();
             return userLogin;
         } else {
             System.out.println("Login Failed");
             return null;
         }
+        
     }
 
     private Users login(String userName, String pwd) {
@@ -60,6 +63,8 @@ public class UserLogin {
         }
     }
 
-
+    public static String getLoginUserID() {
+        return loginUser;
+    }
     
 }
