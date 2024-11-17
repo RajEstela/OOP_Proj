@@ -10,6 +10,7 @@ public class UserLogin {
 
     private final HashMap<String, String> validUsersLogin;
     private final HashMap<String, Users> validUsers;
+    private static String loginUser;
 
     public UserLogin(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
         this.validUsersLogin = validUsersLogin;
@@ -33,11 +34,13 @@ public class UserLogin {
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
             System.out.println("\nLogin Successfully\n");
+            this.loginUser = userLogin.getHospitalID();
             return userLogin;
         } else {
             System.out.println("Login Failed");
             return null;
         }
+        
     }
 
     private Users login(String userName, String pwd) {
@@ -61,6 +64,10 @@ public class UserLogin {
         } else {
             System.out.println("Username not found. Please try again.");
         }
+    }
+
+    public static String getLoginUserID() {
+        return loginUser;
     }
     
 }

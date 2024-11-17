@@ -20,16 +20,13 @@ public class UserDataLoader {
     public static void populateUsers(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
-
             Sheet sheet = workbook.getSheetAt(0);
             boolean isHeader = true;
-
             for (Row row : sheet) {
                 if (isHeader) {
                     isHeader = false;
                     continue;
                 }
-
                 String staffId = row.getCell(0).getStringCellValue();
                 String role = row.getCell(2).getStringCellValue();
                 String gender = row.getCell(3).getStringCellValue();
@@ -44,7 +41,9 @@ public class UserDataLoader {
                 validUsers.put(username, user);
             }
         } catch (IOException e) {
+            System.out.println(e);
         }
+        
     }
 
     public static boolean resetPassword(String userName, HashMap<String, Users> validUsers, Scanner scanner) {

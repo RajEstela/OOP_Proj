@@ -30,4 +30,8 @@ public class Users {
         this.password = password;
     }
 
+    public String getHospitalID() {
+        return hospitalID;
+    }
+
 }
