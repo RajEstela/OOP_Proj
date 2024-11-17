@@ -88,9 +88,13 @@ public class Patient {
                 case 1:
                     //Update Phone Number
                     updatePhoneNumber();
+                    main();
+                    break;
                 case 2:
                     //Update Email
                     updateEmail();
+                    main();
+                    break;
                 case 3:
                     //Go back
                     main();
@@ -101,7 +105,7 @@ public class Patient {
         String userID = UserLogin.getLoginUserID();
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
 
-        System.out.println("Please enter your new email address: ");
+        System.out.println("Please enter your new phone number: ");    
         Scanner newPhone_scanner = new Scanner(System.in);
         String newPhone = newPhone_scanner.nextLine();
         loadMedicalRecords.updatePhoneNumber(userID, Integer.parseInt(newPhone));
@@ -110,7 +114,7 @@ public class Patient {
         String userID = UserLogin.getLoginUserID();
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
 
-        System.out.println("Please enter your new phone number: ");
+        System.out.println("Please enter your new email address: ");
         Scanner newEmail_scanner = new Scanner(System.in);
         String newEmail = newEmail_scanner.nextLine();
         loadMedicalRecords.updateEmail(userID, newEmail);

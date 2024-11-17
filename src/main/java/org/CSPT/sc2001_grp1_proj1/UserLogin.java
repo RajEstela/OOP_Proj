@@ -10,7 +10,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
 public class UserLogin {
 
     private final HashMap<String, String> validUsersLogin;
-    private final HashMap<String, Users> validUsers;
+    protected final HashMap<String, Users> validUsers;
     private static String loginUser;
 
     public UserLogin(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers) {
