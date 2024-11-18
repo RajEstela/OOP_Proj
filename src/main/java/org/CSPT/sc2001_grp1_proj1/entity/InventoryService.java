@@ -18,11 +18,11 @@ public class InventoryService {
 		this.replenishmentRequests = ReplenishmentRequestLoader.loadReplenishmentRequests();
     }
 	
-	    // Method to clear the replenishment requests
-		public void clearReplenishmentRequests() {
-			replenishmentRequests.clear();
-			System.out.println("Replenishment requests cleared.");
-		}
+	// Method to clear the replenishment requests
+	public void clearReplenishmentRequests() {
+		replenishmentRequests.clear();
+		System.out.println("Replenishment requests cleared.");
+	}
 
 	public void displayStock() 
 	{
