@@ -53,14 +53,17 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                                         "\nEnter Role:"
                                 );
                         String role = scanner.nextLine();
-                        HospitalStaff staff = new HospitalStaff("x", 
-                        validUsers.get(staffUserName).getname(), 
-                        role, 
-                        validUsers.get(staffUserName).getGender(), 
-                        validUsers.get(staffUserName).getAge());
                         UserDataLoader.updateRole(validUsers.get(staffUserName).getUsername(),validUsers,role);
-                        staffList.add(staff);
                         validUsers = UserDataLoader.populateValidUsers(validUsers);
+                        
+                        HospitalStaff staffMem =  new HospitalStaff(
+                            validUsers.get(staffUserName).gethospitalID(),
+                            validUsers.get(staffUserName).getname(),
+                            validUsers.get(staffUserName).getRole(),
+                            validUsers.get(staffUserName).getGender(),
+                            validUsers.get(staffUserName).getAge()
+                        );
+                        staffList.add(staffMem);                   
                         System.out.printf
                                 (
                                         "\nStaff successfully added"
@@ -89,8 +92,7 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                     System.out.printf("\nEnter Username: ");
                     String username = scanner.nextLine();
                 
-                    System.out.printf("\nEnter Password: ");
-                    String password = scanner.nextLine();
+                    String password = "DEFAULT_PASSWORD";
                 
                     System.out.printf("\nEnter Email: ");
                     String email = scanner.nextLine();
@@ -102,6 +104,17 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
                     Users newUser = new Users("x", name, role, gender, age, username, password, email, phoneNo);
                     UserDataLoader.addUser(newUser);
                     validUsers = UserDataLoader.populateValidUsers(validUsers);
+                    if(role != "Patient"){
+                        HospitalStaff staffMem =  new HospitalStaff(
+                            validUsers.get(username).gethospitalID(),
+                            validUsers.get(username).getname(),
+                            validUsers.get(username).getRole(),
+                            validUsers.get(username).getGender(),
+                            validUsers.get(username).getAge()
+                        );
+                        staffList.add(staffMem);
+                    }
+                    System.out.printf("\nUser added with the default password.");
 
                 }
                 case 3 -> selection = false;
@@ -246,20 +259,60 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         System.out.println("------------------------------------------------------------------------------");
         
         for (Map.Entry<String, Users> users : validUsers.entrySet()) {
-            System.out.printf(
-                "%-20s %-20s %-20s %-20s%n", // Add %n for a new line and %d for the age (integer)
-                users.getValue().gethospitalID(),
-                users.getValue().getUsername(),
-                users.getValue().getname(), 
-                users.getValue().getRole()
-            );
+            if(users.getValue().getRole().equals("Patient") || users.getValue().getRole().equals("Pending")){
+                System.out.printf(
+                    "%-20s %-20s %-20s %-20s%n", // Add %n for a new line and %d for the age (integer)
+                    users.getValue().gethospitalID(),
+                    users.getValue().getUsername(),
+                    users.getValue().getname(), 
+                    users.getValue().getRole()
+                );
+            }
         }
     }
 
 
     @Override
-    public void addUser() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addUser'");
+    public void addUser(HashMap<String, Users> validUsers) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.printf("\nEnter Name: ");
+        String name = scanner.nextLine();
+    
+        System.out.printf("\nEnter Role: ");
+        String role = scanner.nextLine();
+    
+        System.out.printf("\nEnter Gender: ");
+        String gender = scanner.nextLine();
+    
+        System.out.printf("\nEnter Age: ");
+        int age = Integer.parseInt(scanner.nextLine());
+    
+        System.out.printf("\nEnter Username: ");
+        String username = scanner.nextLine();
+    
+        String password = "DEFAULT_PASSWORD";
+    
+        System.out.printf("\nEnter Email: ");
+        String email = scanner.nextLine();
+    
+        System.out.printf("\nEnter Phone Number: ");
+        int phoneNo = Integer.parseInt(scanner.nextLine());
+    
+        Users newUser = new Users("x", name, role, gender, age, username, password, email, phoneNo);
+        UserDataLoader.addUser(newUser);
+        validUsers = UserDataLoader.populateValidUsers(validUsers);
+
+        if(role != "Patient"){
+            HospitalStaff staffMem =  new HospitalStaff(
+                validUsers.get(username).gethospitalID(),
+                validUsers.get(username).getname(),
+                validUsers.get(username).getRole(),
+                validUsers.get(username).getGender(),
+                validUsers.get(username).getAge()
+            );
+            staffList.add(staffMem);
+        }
+        System.out.printf("\nUser added with the default password.");
     }
 }

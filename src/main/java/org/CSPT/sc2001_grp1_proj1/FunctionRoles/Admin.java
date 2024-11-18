@@ -48,7 +48,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     medicationInventory(medicalInventoryManager);
                 }
                 case 4 -> {
-                    approveRepReq();
+                    approveRepReq(medicalInventoryManager);
                 }
                 case 5 -> {
                     HospitalManagementApp.logout();
@@ -89,7 +89,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     
         while (inStaffMenu) {
             System.out.printf(
-                "\n1 View Staff\n2 Add Staff\n3 Remove Staff\n4 Update Staff\n5 Administrator Main Menu\n Enter Choice: "
+                "\n1 View Staff\n2 Add Staff\n3 Remove Staff\n4 Update Staff\n5 Add User\n6 Administrator Main Menu\n Enter Choice: "
             );
     
             try {
@@ -100,7 +100,8 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     case 2 -> staff.addStaffMember(validUsers);
                     case 3 -> staff.removeStaffMember();
                     case 4 -> staff.updateStaffMember();
-                    case 5 -> {
+                    case 5 -> staff.addUser(validUsers);
+                    case 6 -> {
                         System.out.println("\nReturning to Administrator Main Menu");
                         inStaffMenu = false;
                     }
@@ -173,8 +174,32 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
         }   
      }
 
-    private static void approveRepReq() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private static void approveRepReq(InventoryManager medicalInventoryManager) {
+        Scanner scanner = new Scanner(System.in);
+        boolean inStaffMenu = true;
+    
+        while (inStaffMenu) {
+            System.out.printf(
+                "\n1 View Replenishment Requests\n2 Approve Replenishment Requests\n3 Administrator Main Menu\n Enter Choice: "
+            );
+    
+            try {
+                int choice = scanner.nextInt();
+    
+                switch (choice) {
+                    case 1 -> medicalInventoryManager.displayReplenishmentRequests();
+                    case 2 -> medicalInventoryManager.approveReplenishmentRequests();
+                    case 3 -> {
+                        System.out.println("\nReturning to Administrator Main Menu");
+                        inStaffMenu = false;
+                    }
+                    default -> System.out.println("Invalid option. Please enter a number between 1 and 5.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); 
+            }
+        }   
     }
 
 }

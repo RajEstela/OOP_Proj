@@ -20,11 +20,11 @@ public class AppointmentManager implements AppointmentManagerInterface {
 
     @Override
     public void viewAppointments() {
-        System.out.printf("\n%-20s %-20s %-20s %-20s %-20s %-20s%n", "Appointment ID", "Appointment Date & Time", "Patient ID", "Doctor ID","Appointment Status","Outcome Record ID");
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("\n%-20s %-40s %-20s %-20s %-20s %-20s%n", "Appointment ID", "Date & Time", "Patient ID", "Doctor ID","Status","Outcome Record ID");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
 
         for (Appointment appointment : AppointmentsDataLoader.getAppointments()) {
-            System.out.printf("%-20s %-20s %-20s %-20s %-20s %-20s%n", 
+            System.out.printf("%-20s %-40s %-20s %-20s %-20s %-20s%n", 
             appointment.getAppointmentID(), 
             appointment.getAppointmentDateTime(), 
             appointment.getPatientID(),

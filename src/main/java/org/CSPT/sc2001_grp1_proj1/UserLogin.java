@@ -20,28 +20,31 @@ public class UserLogin {
 
     public Users loginMenu() {
         Scanner scanner = new Scanner(System.in);
-
         System.out.printf("\nLogin:\nUsername: ");
         String userName = scanner.nextLine();
+        
+        String checkPwd = validUsers.get(userName).getPassword();
 
         System.out.printf("\nPassword (Enter \"Forgot\" to reset password): ");
         String pwd = scanner.nextLine();
-
-        if ("Forgot".equals(pwd)) {
+    
+        if ("Forgot".equalsIgnoreCase(pwd)) {
             forgotPassword(scanner);
             return null;
+        } else if ("DEFAULT_PASSWORD".equals(pwd) && "DEFAULT_PASSWORD".equals(checkPwd)) {
+            changePassword(scanner, userName);
+            return null; 
         }
-
+    
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
             System.out.println("\nLogin Successfully");
-            this.loginUser = userLogin.gethospitalID();
+            loginUser = userLogin.gethospitalID();
             return userLogin;
         } else {
-            System.out.println("\nLogin Failed");
+            System.out.println("\nLogin Failed, invalid credentials. Please log in again");
             return null;
         }
-        
     }
 
     private Users login(String userName, String pwd) {
@@ -55,13 +58,35 @@ public class UserLogin {
         System.out.println("\nEnter Username:");
         String userName = scanner.nextLine();
     
-        if (UserDataLoader.resetPassword(userName, validUsers, scanner)) {
-            System.out.println("\nPassword reset successfully.");           
-            refreshHashMaps();
-        } else {
+        if (!validUsers.containsKey(userName)) {
             System.out.println("\nUsername not found. Please try again.");
+            return;
         }
+    
+        System.out.println("\nEnter New Password:");
+        String newPassword = scanner.nextLine();
+        UserDataLoader.resetPassword(userName, validUsers, newPassword);
+        
+        refreshHashMaps();
+    
+        System.out.println("\nPassword reset successfully. Please log in again.");
     }
+    
+
+    public void changePassword(Scanner scanner, String username) {
+        if (!validUsers.containsKey(username)) {
+            System.out.println("\nUsername not found. Please try again.");
+            return;
+        }
+    
+        System.out.println("\nEnter New Password:");
+        String newPassword = scanner.nextLine();
+        UserDataLoader.resetPassword(username, validUsers, newPassword);
+        refreshHashMaps();
+    
+        System.out.println("\nPassword reset successfully. Please log in again.");
+    }
+    
 
     public static String getLoginUserID() {
         return loginUser;

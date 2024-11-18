@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.ReplenishmentRequestLoader;
 import org.CSPT.sc2001_grp1_proj1.interfaces.InventoryManagerInterface;
 
 public class InventoryManager implements InventoryManagerInterface {
 
     protected List<Medicine> totalMedicineInventoryList;
-    //protected List<ReplenishmentRequests> replenishmentRequests;
+    protected List<ReplenishmentRequest> replenishmentRequests;
     protected LocalDateTime lastUpdatedTime;
     protected String lastUpdatedBy; 
 
@@ -18,6 +19,10 @@ public class InventoryManager implements InventoryManagerInterface {
         this.totalMedicineInventoryList = totalMedicineInventoryList;
         this.lastUpdatedTime = lastUpdatedTime;
         this.lastUpdatedBy = system;
+    }
+
+    public void replenishmentRequestInit(){
+        this.replenishmentRequests = ReplenishmentRequestLoader.loadReplenishmentRequests();
     }
 
     @Override
@@ -201,8 +206,55 @@ public class InventoryManager implements InventoryManagerInterface {
     }
     @Override
     public void displayReplenishmentRequests() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayReplenishmentRequests'");
+        System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Request ID", "Medicine Name", "Quantity", "Requested By", "Status");
+        System.out.println("-------------------------------------------------------------");
+
+        for (ReplenishmentRequest reps : this.replenishmentRequests) {
+            System.out.printf("%-20s %-20s %-20s %-20s%n", 
+                                reps.medicineName, 
+                                reps.quantity,
+                                reps.requestedBy, 
+                                reps.status);
+        }
+    }
+
+    @Override
+    public void approveReplenishmentRequests() {
+        Scanner scanner = new Scanner(System.in);
+        boolean req = false;
+    
+        while (!req) {
+            System.out.print("\nEnter Replenishment Request's Medicine Name To Approve: ");
+            String reqMedName = scanner.nextLine();
+    
+            for (ReplenishmentRequest reps : this.replenishmentRequests) {
+                if ((reps.medicineName == null && reqMedName == null) ||
+                    (reps.medicineName != null && reps.medicineName.equals(reqMedName))) {
+                    
+                    req = true;  
+                    reps.status = "Approved";                     
+                    ReplenishmentRequestLoader.updateReplenishmentRequest(reps);
+                    replenishmentRequestInit();
+
+                    for (Medicine meds : this.totalMedicineInventoryList) {
+                        if (meds.medicineName.equals(reps.medicineName)) {
+                                        
+                            meds.medicineStockCount += reps.quantity;
+                            MedicineDataLoader.updateStockCount(meds);
+                            inventoryReload();
+                            break;
+                        }
+                    }
+
+                    System.out.println("\nUpdated Successfully\n");
+                    break;
+                }
+            }
+    
+            if (!req) {
+                System.out.println("\nInvalid Request ID! Please try again.\n");
+            }
+        }
     }
 
     @Override
@@ -391,5 +443,7 @@ public class InventoryManager implements InventoryManagerInterface {
     private void inventoryReload(){
         this.totalMedicineInventoryList = MedicineDataLoader.inventoryReload();
     }
+
+
 
 }

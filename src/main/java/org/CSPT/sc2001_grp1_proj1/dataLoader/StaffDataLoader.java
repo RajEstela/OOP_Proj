@@ -34,7 +34,7 @@ public class StaffDataLoader {
                     isHeader = false;
                     continue; 
                 }
-                if(!row.getCell(2).getStringCellValue().equals("Patient"))
+                if(!row.getCell(2).getStringCellValue().equals("Patient") && !row.getCell(2).getStringCellValue().equals("Pending"))
                 {
                     refreshHashMaps();
                     String staffUserName = row.getCell(5).getStringCellValue();
