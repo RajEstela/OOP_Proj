@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -22,11 +24,13 @@ public class AppointmentsDataLoader {
     }
 
     public void loadAppointments() {
+        // Clear appointments
+        appointments.clear();
+        // Load excel sheet into appointments
         try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
             boolean isHeader = true;
-
             for (Row row : sheet) {
                 if (isHeader) {
                     isHeader = false;
@@ -57,9 +61,22 @@ public class AppointmentsDataLoader {
         return filteredAppointments;
     }
 
+    public List<Appointment> getAppointmentsByStatus(AppointmentStatusEnum status) {
+        List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getAppointmentStatus().equals(status.toString())).toList();
+        return filteredAppointments;
+    }
+
     public List<Appointment> getScheduledAppointments(String patientID) {
         List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Pending") ||  appointment.getAppointmentStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointments;
+    }
+
+    public HashMap<String, Appointment> getAppointmentsByOutcomeRecordID() {
+        HashMap<String, Appointment> hashedAppointmentsByOutcomeRecordID = new HashMap<>();
+        appointments.forEach(appointment -> {
+            hashedAppointmentsByOutcomeRecordID.put(appointment.getAppointmentOutcomeRecordID(), appointment);
+        });
+        return hashedAppointmentsByOutcomeRecordID;
     }
 
     public void scheduleAppointment(String appointmentID, String patientID) {
@@ -114,5 +131,26 @@ public class AppointmentsDataLoader {
         }
     }
 
-    
+    public void confirmAppointment(String appointmentID, String doctorID) {
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+            // Get the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue; // Skip header row
+                }
+                if(row.getCell(0).getStringCellValue().equals(appointmentID)) {
+                    row.getCell(4).setCellValue("Confirmed"); //Appointment Status
+                    break;
+                }
+            }
+            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(outFile);
+            }
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
 }
