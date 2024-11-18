@@ -3,8 +3,6 @@ package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
-import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
-import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
 
@@ -39,7 +37,7 @@ public class Pharmacist  extends HospitalStaff{
             switch (option)
 			{
 				case 1:
-				viewAppointmentOutComeRecord();
+				viewAppointmentOutComeRecord(1); //delete 1 when you do the implementation
 				break;
 				case 2:
 				updatePrescriptionStatus();

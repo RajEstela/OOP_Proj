@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicalRecordDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
@@ -67,6 +68,9 @@ public class Patient {
                     break;
                 case 8:
                     // View Past appointment outcome records
+                    viewPastAppointmentOutcomeRecords();
+                    main();
+                    break;
                 case 9:
                     loggedIn = false;
                     HospitalManagementApp.logout();
@@ -259,5 +263,10 @@ public class Patient {
             System.out.println("\nIndex : "+i);
             appointment.printAppointmentDetails();
         });
+    }
+    private void viewPastAppointmentOutcomeRecords() {
+        String userID = UserLogin.getLoginUserID();
+        AppointmentOutcomeRecordsDataLoader appointmentOutcomeRecordData = new AppointmentOutcomeRecordsDataLoader();
+        System.out.println(appointmentOutcomeRecordData.getAppointmentOutcomeRecords());
     }
 }
