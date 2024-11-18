@@ -18,6 +18,11 @@ public class InventoryService {
 		this.replenishmentRequests = ReplenishmentRequestLoader.loadReplenishmentRequests();
     }
 	
+	    // Method to clear the replenishment requests
+		public void clearReplenishmentRequests() {
+			replenishmentRequests.clear();
+			System.out.println("Replenishment requests cleared.");
+		}
 
 	public void displayStock() 
 	{
@@ -34,11 +39,35 @@ public class InventoryService {
 
 
     // Submit a new replenishment request
-    public void submitReplenishmentRequest(String medicineName, int quantity, String requestedBy) {
-        ReplenishmentRequest request = new ReplenishmentRequest(medicineName, quantity, requestedBy, "New");
-        replenishmentRequests.add(request);
-        ReplenishmentRequestLoader.addReplenishmentRequest(request);
-        System.out.println("Replenishment request submitted succesfully for medication:  " + medicineName + " with a quantity of: " + quantity);
+    public void submitReplenishmentRequest(String medicineName, int quantity, String requestedBy) 
+	{
+		boolean requestExists = false;
+
+		//to check if request already exists
+        for (ReplenishmentRequest existingRequest : replenishmentRequests)
+		{
+			if(existingRequest.getMedicineName().equalsIgnoreCase(medicineName) && existingRequest.getStatus().equalsIgnoreCase("New"))
+			{
+				//update quantity
+				int newQuantity = existingRequest.getQuantity() + quantity;
+				existingRequest.quantity = newQuantity;
+			
+			
+			//update request in excel file
+			ReplenishmentRequestLoader.updateReplenishmentRequest(existingRequest);
+			requestExists = true;
+			System.out.println("Updated replenishment request for medication: " + medicineName + " to new quantity: " + newQuantity);
+			break;
+			}
+		}
+		if(!requestExists)
+		{
+			ReplenishmentRequest request = new ReplenishmentRequest("R",medicineName, quantity, requestedBy, "New");
+        	ReplenishmentRequestLoader.addReplenishmentRequest(request);
+			replenishmentRequests.add(request);
+        	System.out.println("Replenishment request submitted succesfully for medication:  " + medicineName + " with a quantity of: " + quantity);
+		}
+
     }
 }
 	
