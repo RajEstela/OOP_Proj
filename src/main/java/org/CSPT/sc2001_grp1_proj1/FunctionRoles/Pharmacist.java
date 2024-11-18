@@ -37,7 +37,7 @@ public class Pharmacist  extends HospitalStaff{
             switch (option)
 			{
 				case 1:
-				viewAppointmentOutComeRecord(1); //delete 1 when you do the implementation
+				viewAppointmentOutComeRecord();
 				break;
 				case 2:
 				updatePrescriptionStatus();
@@ -63,7 +63,7 @@ public class Pharmacist  extends HospitalStaff{
 		}
 	}
 	
-	public void viewAppointmentOutComeRecord(int appointmentID) 
+	public void viewAppointmentOutComeRecord() 
 	{
 		//appointmentOutcomeService.ViewRecord(appointmentID);
 		System.out.println("ViewAppointmentRecord: public void viewAppointmentOutComeRecord(int appointmentID)");
@@ -102,25 +102,5 @@ public class Pharmacist  extends HospitalStaff{
             }
         }
     }
-	
-	//for testing
-	//public class PharmacistTester {
-	  //public static void main(String[] args) {
-	    	// Initialize InventoryManager
-	        //InventoryManager inventoryManager = new InventoryManager();
-
-	        // Initialize InventoryService
-	        //InventoryService inventoryService = new InventoryService(inventoryManager);
-	        
-	        //initialize new pharmacist
-	        //Pharmacist pharmacist = new Pharmacist("H123", "john_johnson", "password123", "john.johnson@gmail.com", "Male", 35, 12345678, "Pharmacist", inventoryService);
-	        
-	      //System.out.println("\nSubmitting Replenishment Request:");
-	     //pharmacist.submitReplenishmentRequest("Paracetamol", 100);
-
-	     //   System.out.println("\nDisplaying Replenishment Requests:");
-	    // pharmacist.displayReplenishmentRequests();
-	   // }
-	//}
 
 }
