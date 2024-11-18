@@ -1,5 +1,8 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class AppointmentOutcomeRecord extends Appointment{
     private String serviceType;
     private String prescribedMedications;
@@ -15,6 +18,30 @@ public class AppointmentOutcomeRecord extends Appointment{
     }
 
     public void printAppointmentOutcomeRecordDetails() {
-        //Add the details here
+        LocalDateTime date = LocalDateTime.parse(getAppointmentDateTime());
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("h:m a");
+        System.out.println("Appointment Date : " + formatDate.format(date));
+        System.out.println("Appointment Time : " + formatTime.format(date));
+        System.out.println("Type of Service : " + this.serviceType);
+        System.out.println("Prescribed Medications : " + this.prescribedMedications);
+        System.out.println("Prescribed Status : " + this.prescribedStatus);
+        System.out.println("Consultation Notes : " + this.consultationNotes+"\n");
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public String getPrescribedMedications() {
+        return prescribedMedications;
+    }
+
+    public String getPrescribedStatus() {
+        return prescribedStatus;
+    }
+
+    public String getConsultationNotes() {
+        return consultationNotes;
     }
 }

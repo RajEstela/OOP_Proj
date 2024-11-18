@@ -58,4 +58,9 @@ public class AppointmentOutcomeRecordsDataLoader {
     public List<AppointmentOutcomeRecord> getAppointmentOutcomeRecords() {
         return appointmentOutcomeRecords;
     }
+
+    public List<AppointmentOutcomeRecord> getPastAppointmentOutcomeRecords(String patientID) {
+        List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Done") && appointment.getPrescribedStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
+        return filteredAppointmentOutcomeRecords;
+    }
 }
