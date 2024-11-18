@@ -10,6 +10,7 @@ public class ReplenishmentRequest {
 
     public ReplenishmentRequest(String requestID, String medicineName, int quantity, String requestedBy, String status)
     {
+        this.requestID = requestID;
         this.medicineName = medicineName;
         this.quantity = quantity;
         this.requestedBy = requestedBy;
