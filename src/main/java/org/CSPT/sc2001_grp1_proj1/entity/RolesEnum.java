@@ -7,5 +7,6 @@ public enum RolesEnum {
     Patient,
     SecurityGuard,
     Janitor,
-    Nurse
+    Nurse,
+    Pending
 }

@@ -37,7 +37,7 @@ public class Pharmacist  extends HospitalStaff{
             switch (option)
 			{
 				case 1:
-				viewAppointmentOutComeRecord();
+				// viewAppointmentOutComeRecord();
 				break;
 				case 2:
 				updatePrescriptionStatus();

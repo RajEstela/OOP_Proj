@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
-import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
@@ -42,7 +42,7 @@ public class HospitalManagementApp {
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
         medicalInventoryManager = loadMedicalInventory();
-        
+        medicalInventoryManager.replenishmentRequestInit();
         AppointmentsDataLoader aptmntDL = new AppointmentsDataLoader();
         appointmentManager = new AppointmentManager(aptmntDL);
 
@@ -92,7 +92,6 @@ public class HospitalManagementApp {
         scanner.close();
     }
 
-    //TODO: ADD YOUR ROLES HERE post login
     private static void handleUserRole(Users user) {
         try {
             RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
@@ -119,6 +118,11 @@ public class HospitalManagementApp {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Patient patient = new Patient();
                     patient.main();
+                }
+                case Pending ->{
+                    System.out.printf("\nWelcome %s\n", user.getUsername());
+                    System.out.printf("\nYou are yet to be assigned to any role. Please try again Later\n", user.getUsername());
+                    loginProcess();
                 }
                 default -> throw new AssertionError("Unknown role: " + roleEnum);
             }

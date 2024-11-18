@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import static org.CSPT.sc2001_grp1_proj1.HospitalManagementApp.refreshHashMaps;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
@@ -78,7 +77,7 @@ public class UserDataLoader {
         return validUsers;
     }
 
-    public static boolean resetPassword(String userName, HashMap<String, Users> validUsers, Scanner scanner) {
+    public static boolean resetPassword(String userName, HashMap<String, Users> validUsers,String newPwd) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
 
@@ -92,8 +91,6 @@ public class UserDataLoader {
                 }
 
                 if (row.getCell(5).getStringCellValue().equals(userName)) {
-                    System.out.println("Enter New Password:");
-                    String newPwd = scanner.nextLine();
                     row.getCell(6).setCellValue(newPwd);
                     validUsers.get(userName).setPassword(newPwd);
                     
