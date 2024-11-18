@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
@@ -12,6 +13,7 @@ import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
+import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
@@ -43,6 +45,8 @@ public class HospitalManagementApp {
         
         AppointmentsDataLoader aptmntDL = new AppointmentsDataLoader();
         appointmentManager = new AppointmentManager(aptmntDL);
+
+        
         loginProcess();
     }
 
@@ -100,7 +104,17 @@ public class HospitalManagementApp {
                     Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager,appointmentManager,validUsersLogin, validUsers);  
                     admin.main();
                 }
-                case Pharmacists -> System.out.println("This person is a Pharmacist.");
+                case Pharmacist -> {
+                    System.out.printf("\nWelcome %s\n", user.getUsername());
+                    String hospitalStaffID = user.gethospitalID();
+                    String name = user.getname(); 
+                    String role = user.getRole();
+                    String gender = user.getGender(); 
+                    int age = user.getAge(); 
+                    InventoryService inventoryService = new InventoryService(medicalInventoryManager);
+                    Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService);
+                    pharmacist.main(); // Call the pharmacist's main method
+                 } 
                 case Patient -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Patient patient = new Patient();
@@ -112,7 +126,7 @@ public class HospitalManagementApp {
             System.out.println("Login Failed");
         }
     }
-
+    
     private static HospitalStaffManager loadHospitalStaff(HashMap<String, Users> validUsers) {
         return StaffDataLoader.loadHospitalStaff(validUsers);
     }
@@ -129,3 +143,4 @@ public class HospitalManagementApp {
         loginProcess(); 
     }
 }
+
