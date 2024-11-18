@@ -14,6 +14,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
@@ -111,7 +112,8 @@ public class HospitalManagementApp {
                     String gender = user.getGender(); 
                     int age = user.getAge(); 
                     InventoryService inventoryService = new InventoryService(medicalInventoryManager);
-                    Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService);
+                    AppointmentOutcomeService appointmentOutcomeService = new AppointmentOutcomeService();
+                    Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService, appointmentOutcomeService);
                     pharmacist.main(); // Call the pharmacist's main method
                  } 
                 case Patient -> {

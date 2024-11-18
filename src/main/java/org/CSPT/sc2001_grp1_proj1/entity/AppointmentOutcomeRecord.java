@@ -37,6 +37,11 @@ public class AppointmentOutcomeRecord extends Appointment{
         return prescribedMedications;
     }
 
+    public void setPrescribedStatus(String prescribedStatus) 
+    {
+        this.prescribedStatus = prescribedStatus;
+    }
+
     public String getPrescribedStatus() {
         return prescribedStatus;
     }
