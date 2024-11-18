@@ -28,12 +28,24 @@ public class Appointment {
         return appointmentID;
     }
 
+    public String getAppointmentDateTime() {
+        return appointmentDateTime;
+    }
+
     public String getPatientID() {
         return patientID;
     }
 
+    public String getDoctorID() {
+        return doctorID;
+    }
+
     public String getAppointmentStatus() {
         return appointmentStatus;
+    }
+
+    public String getAppointmentOutcomeRecordID() {
+        return appointmentOutcomeRecordID;
     }
 
     public void printAppointmentDetails() {
