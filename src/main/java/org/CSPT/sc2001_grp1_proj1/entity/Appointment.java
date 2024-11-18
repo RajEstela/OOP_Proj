@@ -56,7 +56,7 @@ public class Appointment {
         System.out.println("Appointment Date : " + formatDate.format(date));
         System.out.println("Appointment Time : " + formatTime.format(date));
         System.out.println("Doctor ID : " + this.doctorID);
-        System.out.println("Doctor Name : " + validUsers.get(this.doctorID).name);
+        System.out.println("Doctor Name : " + validUsers.get(this.doctorID).getname());
         System.out.println("Appointment Status : "+ this.appointmentStatus+"\n");
     }
 }

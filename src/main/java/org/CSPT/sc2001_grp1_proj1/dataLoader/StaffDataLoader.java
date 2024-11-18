@@ -38,7 +38,12 @@ public class StaffDataLoader {
                 {
                     refreshHashMaps();
                     String staffUserName = row.getCell(5).getStringCellValue();
-                    HospitalStaff staff = new HospitalStaff(validUsers.get(staffUserName).hospitalID, validUsers.get(staffUserName).name, validUsers.get(staffUserName).role, validUsers.get(staffUserName).gender, validUsers.get(staffUserName).age);
+                    HospitalStaff staff = new HospitalStaff(
+                        validUsers.get(staffUserName).gethospitalID(), 
+                        validUsers.get(staffUserName).getname(), 
+                        validUsers.get(staffUserName).getRole(), 
+                        validUsers.get(staffUserName).getGender(), 
+                        validUsers.get(staffUserName).getAge());
                     staffList.add(staff);
                 }
 

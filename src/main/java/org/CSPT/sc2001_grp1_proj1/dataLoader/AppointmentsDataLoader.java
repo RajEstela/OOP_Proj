@@ -16,8 +16,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class AppointmentsDataLoader {
     private final String EXCEL_FILE_PATH = "./data/AppointmentList.xlsx";
-    private List<Appointment> appointments = new ArrayList<>();
-
+    private static List<Appointment> appointments = new ArrayList<>();
+    
     public AppointmentsDataLoader() {
         loadAppointments();
     }
@@ -47,9 +47,8 @@ public class AppointmentsDataLoader {
             System.out.println(e);
         }
     }
-
-    
-    public List<Appointment> getAppointments() {
+          
+    public static List<Appointment> getAppointments() {
         return appointments;
     }
 

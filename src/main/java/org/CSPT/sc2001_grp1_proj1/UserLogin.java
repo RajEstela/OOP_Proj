@@ -35,7 +35,7 @@ public class UserLogin {
         Users userLogin = login(userName, pwd);
         if (userLogin != null) {
             System.out.println("\nLogin Successfully");
-            this.loginUser = userLogin.getHospitalID();
+            this.loginUser = userLogin.gethospitalID();
             return userLogin;
         } else {
             System.out.println("\nLogin Failed");

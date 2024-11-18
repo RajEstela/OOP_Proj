@@ -1,15 +1,15 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
 public class Users {
-    public String hospitalID;
-    public String name;
-    public String role;
-    public String gender;
-    public int age;
-    public String username;
-    public String password;
-    public String email;
-    public int phoneNo;
+    protected String hospitalID;
+    private String name;
+    protected String role;
+    protected String gender;
+    protected int age;
+    private String username;
+    private String password;
+    private String email;
+    private int phoneNo;
 
     public Users(    
     String  hospitalID
@@ -33,8 +33,32 @@ public class Users {
         this.phoneNo = phoneNo;
     }
 
+    public String gethospitalID(){
+        return hospitalID;
+    }
+    public String getname(){
+        return name;
+    }
+    public String getGender(){
+        return role;
+    }
+    public int getAge(){
+        return age;
+    }
+    public String getUsername(){
+        return username;
+    }
+    public String getRole(){
+        return role;
+    }
     public String getPassword() {
         return password;
+    }
+    public String getEmail(){
+        return email;
+    }
+    public int getPhoneNo(){
+        return phoneNo;
     }
 
     public void setPassword(String password) {
@@ -42,10 +66,6 @@ public class Users {
     }
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getHospitalID() {
-        return hospitalID;
     }
 
 }
