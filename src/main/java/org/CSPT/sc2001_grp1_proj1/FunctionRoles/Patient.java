@@ -11,6 +11,7 @@ import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicalRecordDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
 
 public class Patient {
@@ -267,6 +268,17 @@ public class Patient {
     private void viewPastAppointmentOutcomeRecords() {
         String userID = UserLogin.getLoginUserID();
         AppointmentOutcomeRecordsDataLoader appointmentOutcomeRecordData = new AppointmentOutcomeRecordsDataLoader();
-        System.out.println(appointmentOutcomeRecordData.getAppointmentOutcomeRecords());
+        HashMap<Integer, AppointmentOutcomeRecord> pastAppointmentOutcomeRecords = appointmentOutcomeRecordData.getPastAppointmentOutcomeRecords(userID).stream().collect(HashMap<Integer, AppointmentOutcomeRecord>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+
+        if(pastAppointmentOutcomeRecords.isEmpty()) {
+            System.out.println("Currently, there are no past appointment outcome records.");
+            main();
+        }
+
+        System.out.println("Past appointment outcome records:");
+        pastAppointmentOutcomeRecords.forEach((i, appointment) -> {
+            System.out.println("\nIndex : "+i);
+            appointment.printAppointmentOutcomeRecordDetails();
+        });
     }
 }
