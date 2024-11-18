@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
@@ -26,7 +27,6 @@ public class AppointmentsDataLoader {
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
             boolean isHeader = true;
-
             for (Row row : sheet) {
                 if (isHeader) {
                     isHeader = false;
@@ -60,6 +60,14 @@ public class AppointmentsDataLoader {
     public List<Appointment> getScheduledAppointments(String patientID) {
         List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Pending") ||  appointment.getAppointmentStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointments;
+    }
+
+    public HashMap<String, Appointment> getAppointmentsByOutcomeRecordID() {
+        HashMap<String, Appointment> hashedAppointmentsByOutcomeRecordID = new HashMap<>();
+        appointments.forEach(appointment -> {
+            hashedAppointmentsByOutcomeRecordID.put(appointment.getAppointmentOutcomeRecordID(), appointment);
+        });
+        return hashedAppointmentsByOutcomeRecordID;
     }
 
     public void scheduleAppointment(String appointmentID, String patientID) {

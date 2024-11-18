@@ -28,6 +28,10 @@ public class Appointment {
         return appointmentID;
     }
 
+    public String getAppointmentDateTime() {
+        return appointmentDateTime;
+    }
+
     public String getPatientID() {
         return patientID;
     }
@@ -40,12 +44,10 @@ public class Appointment {
         return appointmentStatus;
     }
 
-    public String getAppointmentDateTime() {
-        return appointmentDateTime;
-    }
-    public String getOutcomeRecord() {
+    public String getAppointmentOutcomeRecordID() {
         return appointmentOutcomeRecordID;
     }
+
     public void printAppointmentDetails() {
         HashMap<String, Users> validUsers = HospitalManagementApp.getValidUsersByID();
         LocalDateTime date = LocalDateTime.parse(this.appointmentDateTime);
