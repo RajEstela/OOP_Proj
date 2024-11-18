@@ -30,7 +30,7 @@ public class AppointmentManager implements AppointmentManagerInterface {
             appointment.getPatientID(),
             appointment.getDoctorID(),
             appointment.getAppointmentStatus(),
-            appointment.getOutcomeRecord()
+            appointment.getAppointmentOutcomeRecordID()
             );
         }
     }
