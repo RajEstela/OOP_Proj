@@ -21,11 +21,13 @@ public class Pharmacist  extends HospitalStaff{
     }
 
 		public void showMenu() {
-		System.out.println("1. View Appointment Outcome Record");
-		System.out.println("2. Update Prescription Status");
-		System.out.println("3. View Medication Inventory");
-		System.out.println("4. Submit Replenishment Request");
-		System.out.println("5. Logout");
+		System.out.println("1. View All Appointment Outcome Records");
+		System.out.println("2. View Pending Appointment Outcome Records");
+		System.out.println("3. Update Prescription Status");
+		System.out.println("4. View Medication Inventory");
+		System.out.println("5. Submit Replenishment Request");
+		System.out.println("6. View Pending Replenishment Request");
+		System.out.println("7. Logout");
 	}
 	
 	public void main()
@@ -42,14 +44,17 @@ public class Pharmacist  extends HospitalStaff{
 				main();
 				break;
 				case 2:
-				updatePrescriptionStatus();
+				viewPendingAppointmentOutcomeRecords();
 				main();
 				break;
 				case 3:
-				displayStock();
+				updatePrescriptionStatus();
 				main();
 				break;
 				case 4:
+				displayStock();
+				break;
+				case 5:
 				System.out.print("Enter medication name: ");
 				String medicineName = scanner.nextLine();
 				System.out.print("Enter quantity: ");
@@ -58,7 +63,10 @@ public class Pharmacist  extends HospitalStaff{
 				submitReplenishmentRequest(medicineName, quantity);
 				main();
 				break;
-				case 5:
+				case 6:
+				viewPendingReplenishmentRequests();
+				break;
+				case 7:
 				loggedIn = false;
 				HospitalManagementApp.logout();
 				break;
@@ -69,22 +77,31 @@ public class Pharmacist  extends HospitalStaff{
 	
 	public void viewAppointmentOutComeRecord() 
 	{
+		System.out.println("========= Displaying All Appointment Outcome Records ==========");
 		appointmentOutcomeService.viewAppointmentOutComeRecord();
+		System.out.println("======================== END ==================================");
 	}
-	
+
+	public void viewPendingAppointmentOutcomeRecords()
+	{
+		System.out.println("====== Displaying Pending Appointment Outcome Records =======");
+		appointmentOutcomeService.viewPendingAppointmentOutcomeRecords();
+		System.out.println("======================= END =================================");
+	}
+
 	public void updatePrescriptionStatus() 
 	{
-		System.out.print("Enter the Appointment Outcome Record ID to update: ");
+		System.out.print("Please enter the Appointment Outcome Record ID for update: ");
         String recordID = scanner.nextLine();
-        System.out.print("Enter the new status (Completed / Processing): ");
+        System.out.print("Please enter the new status (Dispensed / Pending): ");
         String newStatus = scanner.nextLine();
 
-        // Update the status via the appointment outcome service
+        // Update the status via the appointmentOutcomeService
         boolean success = appointmentOutcomeService.updatePrescriptionStatus(recordID, newStatus);
         if (success) {
-            System.out.println("Prescription status updated successfully.");
+            System.out.println("Prescription status for " + recordID + " has been updated successfully.");
         } else {
-            System.out.println("No record found with the given ID or update failed.");
+            System.out.println("No record found for " + recordID + " or update failed.");
         }
     }
 	
@@ -96,12 +113,18 @@ public class Pharmacist  extends HospitalStaff{
 	
 	public void displayStock() 
 	{
+		System.out.println("=================== Displaying All Medication List ===================");
 		inventoryService.displayStock();
+		System.out.println("============================== END ===================================");
+
 	}
 	
-	public void displayReplenishmentRequests() 
+	public void viewPendingReplenishmentRequests() 
 	{
-		inventoryService.displayReplenishmentRequests();
+		System.out.println("============ Displaying Your Pending Replenishment Requests ============");
+		String requestedBy = this.gethospitalStaffID(); 
+		inventoryService.viewPendingReplenishmentRequests(requestedBy);
+		System.out.println("============================= END ======================================");
 	}
 
 	private int getValidOption() {
