@@ -1,4 +1,5 @@
 package org.CSPT.sc2001_grp1_proj1.dataLoader;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
 import org.CSPT.sc2001_grp1_proj1.entity.Medicine;
@@ -89,6 +90,7 @@ public class ReplenishmentRequestLoader {
             System.err.println("Error adding replenishment request: " + e.getMessage());
         }
     }
+
 
     public static void updateReplenishmentRequest(ReplenishmentRequest updateRequest)
     {
