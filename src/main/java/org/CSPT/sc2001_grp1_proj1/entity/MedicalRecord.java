@@ -24,15 +24,47 @@ public class MedicalRecord {
         this.pastDiagnosesAndTreatments = pastDiagnosesAndTreatments;
     }
 
-    public void updateEmail(String email){
+    // These setter functions DO NOT update the database -
+    // Pass this record into MedicalRecordDataLoader updateByMedicalRecord() after setting updated values.
+    public void setName(String name){ 
+        this.name = name;
+    }
+    public void setDob(String dob){ 
+        this.dob = dob;
+    }
+    public void setGender(String gender){ 
+        this.gender = gender;
+    }
+    public void setBloodType(String bloodType){ 
+        this.bloodType = bloodType;
+    }
+    public void setEmail(String email){ 
         this.email = email;
     }
-    public void updatePhoneNumber(int phoneNumber){
+    public void setPhoneNumber(int phoneNumber){
         this.phoneNumber = phoneNumber;
     }
 
     public String getPatientID() {
         return patientID;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getDob() {
+        return dob;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getBloodType() {
+        return bloodType;
     }
 
     public void printMedicalRecord() {
