@@ -16,6 +16,7 @@ public class MedicalRecordDataLoader {
     private final String EXCEL_FILE_PATH = "./data/MedicalRecordList.xlsx";
 
     public void populateMedicalRecords(List<MedicalRecord> medicalRecords) {
+        medicalRecords.clear();
         try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
