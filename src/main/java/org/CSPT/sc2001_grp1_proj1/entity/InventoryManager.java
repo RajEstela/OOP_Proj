@@ -194,14 +194,15 @@ public class InventoryManager implements InventoryManagerInterface {
 
     @Override
     public void displayStock() {
-        System.out.printf("\n%-20s %-20s %-20s%n", "Medicine Name", "Stock Count", "Low Stock Level");
+        System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Medicine Name", "Stock Count", "Low Stock Alert","Low Stock Level");
         System.out.println("-------------------------------------------------------------");
 
         for (Medicine medicine : this.totalMedicineInventoryList) {
-            System.out.printf("%-20s %-20d %-20s%n", 
+            System.out.printf("%-20s %-20d %-20s %-20s%n", 
                                 medicine.medicineName, 
-                                medicine.medicineStockCount, 
-                                medicine.lowStockLevelAlert);
+                                medicine.medicineStockCount,
+                                medicine.lowStockLevelAlert, 
+                                medicine.lowStockLevelCount);
         }
     }
     @Override
