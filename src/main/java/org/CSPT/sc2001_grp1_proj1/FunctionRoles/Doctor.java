@@ -4,10 +4,12 @@ import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
+import org.CSPT.sc2001_grp1_proj1.dataLoader.DiagnosisDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicalRecordDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
+import org.CSPT.sc2001_grp1_proj1.entity.Diagnosis;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
 
@@ -89,7 +91,6 @@ public class Doctor extends HospitalStaff {
                 scanner.nextLine();
             }
         }
-
         return choice;
     }
 
@@ -141,66 +142,27 @@ public class Doctor extends HospitalStaff {
 
         // Update patient medical record if found
         boolean finishUpdating = false;
+        DiagnosisDataLoader diagnosisDataLoader = new DiagnosisDataLoader();
         while (finishUpdating == false && patientRecord != null){
-            System.out.println("-- Please select which field to update --");
-            System.out.printf("1. Name: %s\n2. Date Of Birth: %s\n3. Gender: %s\n4. Phone Number: %s\n5. Email: %s\n6. Blood Type: %s\n7. Save Changes and Return\n", 
-                patientRecord.getName(), patientRecord.getDob(), patientRecord.getGender(), 
-                patientRecord.getPhoneNumber(), patientRecord.getEmail(), patientRecord.getBloodType());
+            System.out.println("-- Updating Medical Record --");
+            System.out.println("1. Add diagnosis\n2. Back\n");
             int updateChoice = scanner.nextInt();
             scanner.nextLine();//consume \n
             switch (updateChoice) {
-                case 1: //name
-                    System.out.print("Updated name: ");
-                    String updatedName = scanner.nextLine();
-                    patientRecord.setName(updatedName);
+                case 1: //Add diagnosis, treatment plan and prescription
+                    System.out.print("Enter Diagnosis: ");
+                    String diagnosis = scanner.nextLine().trim();
+            
+                    System.out.print("Enter Treatment Plan: ");
+                    String treatmentPlan = scanner.nextLine().trim();
+
+                    System.out.print("Enter Prescription: ");
+                    String prescription = scanner.nextLine().trim();
+
+                    Diagnosis newDiagnosis = new Diagnosis(this.hospitalID, patientID, diagnosis, treatmentPlan, prescription);
+                    diagnosisDataLoader.setNewDiagnosis(newDiagnosis);
                     break;
-                case 2: //dob
-                    System.out.print("Updated Date of Birth (dd-MM-yyyy): ");
-                    String updatedDob = scanner.nextLine();
-                    patientRecord.setDob(updatedDob);
-                    break;
-                case 3: //gender
-                    System.out.print("Updated Gender (F/M): ");
-                    String updatedGender = scanner.next();
-                    switch (updatedGender) {
-                        case "F": case "f":
-                            updatedGender = "Female";
-                            patientRecord.setGender(updatedGender);
-                            break;
-                        case "M": case "m":
-                            updatedGender = "Male";
-                            patientRecord.setGender(updatedGender);
-                            break;
-                        default:
-                            System.out.println("Invalid gender entered");
-                            break;
-                    }
-                    break;
-                case 4: //phone number
-                    System.out.print("Updated phone number: ");
-                    int updatedPhoneNo = scanner.nextInt();
-                    patientRecord.setPhoneNumber(updatedPhoneNo);
-                    break;
-                case 5: //email
-                    System.out.print("Updated email: ");
-                    String updatedEmail = scanner.nextLine();
-                    patientRecord.setEmail(updatedEmail);
-                    break;
-                case 6: //blood type
-                    System.out.print("Updated blood type (A+/A-/B+/B-/O+/O-/AB+/AB-): ");
-                    String updatedBloodType = scanner.nextLine();
-                    switch (updatedBloodType) {
-                        case "A+": case "A-": case "B+": case "B-":
-                        case "O+": case "O-": case "AB+": case "AB-":
-                            patientRecord.setBloodType(updatedBloodType);
-                            break;
-                        default:
-                            System.out.println("Invalid blood type entered");
-                            break;
-                    }
-                    break;
-                case 7: //finish updating
-                    loadMedicalRecords.updateByMedicalRecord(patientRecord);
+                case 2: //finish updating
                     finishUpdating = true;
                     break;
                 default:
@@ -212,10 +174,13 @@ public class Doctor extends HospitalStaff {
     public void viewPersonalSchedule() {
         System.out.println("\n Here is your schedule");
         String userID = UserLogin.getLoginUserID();
-        List<Appointment> personalAppointments = appointmentsDataLoader.getAppointments().stream()
-                .filter(appointment -> appointment.getDoctorID().equals(userID))
+        String appStatus = AppointmentStatusEnum.Completed.toString();
+        appointmentsDataLoader.loadAppointments();
+        List<Appointment> personalAppointments = AppointmentsDataLoader.getAppointments().stream()
+                .filter(appointment -> appointment.getDoctorID().equals(userID)
+                && !appointment.getAppointmentStatus().equalsIgnoreCase(appStatus))
                 .toList();
-
+ 
         if (personalAppointments.isEmpty()) {
             System.out.println("There is no appointments scheduled.");
         } else {

@@ -1,5 +1,9 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
+import java.util.List;
+
+import org.CSPT.sc2001_grp1_proj1.dataLoader.DiagnosisDataLoader;
+
 public class MedicalRecord {
     private String medicalRecordID;
     private String patientID;
@@ -76,7 +80,12 @@ public class MedicalRecord {
         System.out.println("Phone - "+this.phoneNumber);
         System.out.println("Email - "+this.email);
         System.out.println("Blood Type - "+this.bloodType);
-        System.out.println("Past Diagnoses and Treatments - "+this.pastDiagnosesAndTreatments);
+        System.out.println("-- Past Diagnoses and Treatments -- ");
+        DiagnosisDataLoader diagnosisDataLoader = new DiagnosisDataLoader();
+        List<Diagnosis> diagnoses = diagnosisDataLoader.getDiagnosisByPatient(this.patientID);
+        for (Diagnosis diagnosis: diagnoses){
+            diagnosis.printDiagnosisDetails();
+        }
         System.out.println("");
     }
 }
