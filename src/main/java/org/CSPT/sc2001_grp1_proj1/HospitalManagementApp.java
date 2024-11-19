@@ -7,6 +7,7 @@ import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
@@ -100,8 +101,8 @@ public class HospitalManagementApp {
 
             switch (roleEnum) {
                 case Doctor -> {
-                    System.out.printf("\nHi!Dr. %s\n",user.getUsername());
-                    Doctor doctor = new Doctor();
+                    System.out.printf("\nWelcome Doctor %s\n", user.getname());
+                    Doctor doctor = new Doctor(user.gethospitalID(), user.getname(), user.getRole(), user.getGender(), user.getAge());
                     doctor.main();
                 }
                 case Administrator -> {

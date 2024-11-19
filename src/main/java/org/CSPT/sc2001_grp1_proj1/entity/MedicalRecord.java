@@ -1,5 +1,9 @@
 package org.CSPT.sc2001_grp1_proj1.entity;
 
+import java.util.List;
+
+import org.CSPT.sc2001_grp1_proj1.dataLoader.DiagnosisDataLoader;
+
 public class MedicalRecord {
     private String medicalRecordID;
     private String patientID;
@@ -24,15 +28,47 @@ public class MedicalRecord {
         this.pastDiagnosesAndTreatments = pastDiagnosesAndTreatments;
     }
 
-    public void updateEmail(String email){
+    // These setter functions DO NOT update the database -
+    // Pass this record into MedicalRecordDataLoader updateByMedicalRecord() after setting updated values.
+    public void setName(String name){ 
+        this.name = name;
+    }
+    public void setDob(String dob){ 
+        this.dob = dob;
+    }
+    public void setGender(String gender){ 
+        this.gender = gender;
+    }
+    public void setBloodType(String bloodType){ 
+        this.bloodType = bloodType;
+    }
+    public void setEmail(String email){ 
         this.email = email;
     }
-    public void updatePhoneNumber(int phoneNumber){
+    public void setPhoneNumber(int phoneNumber){
         this.phoneNumber = phoneNumber;
     }
 
     public String getPatientID() {
         return patientID;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getDob() {
+        return dob;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getBloodType() {
+        return bloodType;
     }
 
     public void printMedicalRecord() {
@@ -44,7 +80,12 @@ public class MedicalRecord {
         System.out.println("Phone - "+this.phoneNumber);
         System.out.println("Email - "+this.email);
         System.out.println("Blood Type - "+this.bloodType);
-        System.out.println("Past Diagnoses and Treatments - "+this.pastDiagnosesAndTreatments);
+        System.out.println("-- Past Diagnoses and Treatments -- ");
+        DiagnosisDataLoader diagnosisDataLoader = new DiagnosisDataLoader();
+        List<Diagnosis> diagnoses = diagnosisDataLoader.getDiagnosisByPatient(this.patientID);
+        for (Diagnosis diagnosis: diagnoses){
+            diagnosis.printDiagnosisDetails();
+        }
         System.out.println("");
     }
 }

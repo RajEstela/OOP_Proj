@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,9 +25,12 @@ public class AppointmentOutcomeRecordsDataLoader {
     }
 
     public void loadAppointmentRecords() {
-            AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
-            HashMap<String, Appointment> hashedAppointments = appointmentData.getAppointmentsByOutcomeRecordID();
-            try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+        // Clear appointment records before loading
+        appointmentOutcomeRecords.clear();
+        // Load excel sheet into appointments
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        HashMap<String, Appointment> hashedAppointments = appointmentData.getAppointmentsByOutcomeRecordID();
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
             boolean isHeader = true;
@@ -101,7 +105,7 @@ public class AppointmentOutcomeRecordsDataLoader {
     }
 
     public List<AppointmentOutcomeRecord> getPastAppointmentOutcomeRecords(String patientID) {
-        List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Done") && appointment.getPrescribedStatus().equals("Dispensed") && appointment.getPatientID().equals(patientID)).toList();
+        List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals(AppointmentStatusEnum.Completed.toString()) && appointment.getPrescribedStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointmentOutcomeRecords;
     }
 
