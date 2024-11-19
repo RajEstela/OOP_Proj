@@ -25,9 +25,12 @@ public class AppointmentOutcomeRecordsDataLoader {
     }
 
     public void loadAppointmentRecords() {
-            AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
-            HashMap<String, Appointment> hashedAppointments = appointmentData.getAppointmentsByOutcomeRecordID();
-            try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+        // Clear appointment records before loading
+        appointmentOutcomeRecords.clear();
+        // Load excel sheet into appointments
+        AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
+        HashMap<String, Appointment> hashedAppointments = appointmentData.getAppointmentsByOutcomeRecordID();
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
             boolean isHeader = true;
