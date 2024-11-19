@@ -10,4 +10,6 @@ public interface InventoryManagerInterface{
     void updateMedicine();
     void displayStock();
     void displayReplenishmentRequests();
+    void approveReplenishmentRequests();
+
 }

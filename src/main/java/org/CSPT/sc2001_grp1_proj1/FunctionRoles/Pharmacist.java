@@ -3,19 +3,20 @@ package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
 
 public class Pharmacist  extends HospitalStaff{
 //private AppointmentOutcomeRecord appointmentOutComeRecord;
 	private InventoryService inventoryService;
-	//private AppointmentOutcomeService appointmentOutcomeService;
+	private AppointmentOutcomeService appointmentOutcomeService;
 	private Scanner scanner;
 	
-    public Pharmacist(String hospitalStaffID, String name, String role, String gender, int age, InventoryService inventoryService) {
+    public Pharmacist(String hospitalStaffID, String name, String role, String gender, int age, InventoryService inventoryService, AppointmentOutcomeService appointmentOutcomeService) {
         super(hospitalStaffID, name, role, gender, age); 
         this.inventoryService = inventoryService;
-		//this.appointmentOutcomeService = appointmentOutcomeService;
+		this.appointmentOutcomeService = appointmentOutcomeService;
 		this.scanner = new Scanner(System.in); 
     }
 
@@ -37,44 +38,55 @@ public class Pharmacist  extends HospitalStaff{
             switch (option)
 			{
 				case 1:
-				viewAppointmentOutComeRecord(1); //delete 1 when you do the implementation
+				viewAppointmentOutComeRecord();
+				main();
 				break;
 				case 2:
 				updatePrescriptionStatus();
+				main();
 				break;
 				case 3:
 				displayStock();
+				main();
 				break;
 				case 4:
 				System.out.print("Enter medication name: ");
 				String medicineName = scanner.nextLine();
 				System.out.print("Enter quantity: ");
 				int quantity = scanner.nextInt();
+				scanner.nextLine(); // Consume the newline character
 				submitReplenishmentRequest(medicineName, quantity);
+				main();
 				break;
 				case 5:
 				loggedIn = false;
 				HospitalManagementApp.logout();
 				break;
-				default:
-				System.out.println("Invalid option. Please enter a number from 1 to 5.");
 			}
 
 		}
 	}
 	
-	public void viewAppointmentOutComeRecord(int appointmentID) 
+	public void viewAppointmentOutComeRecord() 
 	{
-		//appointmentOutcomeService.ViewRecord(appointmentID);
-		System.out.println("ViewAppointmentRecord: public void viewAppointmentOutComeRecord(int appointmentID)");
-		//AppointmentOutcomeRecord record = appointmentOutcomeService.getAppointmentOutcomeRecord(appointmentID);
+		appointmentOutcomeService.viewAppointmentOutComeRecord();
 	}
 	
 	public void updatePrescriptionStatus() 
 	{
-		//appointmentOutComeRecord.updatePrescriptionStatus(prescriptionID, status);
-		System.out.println("Update Prescription Status: public void updatePrescriptionStatus(int prescriptionID, String status) ;");
-	}
+		System.out.print("Enter the Appointment Outcome Record ID to update: ");
+        String recordID = scanner.nextLine();
+        System.out.print("Enter the new status (Completed / Processing): ");
+        String newStatus = scanner.nextLine();
+
+        // Update the status via the appointment outcome service
+        boolean success = appointmentOutcomeService.updatePrescriptionStatus(recordID, newStatus);
+        if (success) {
+            System.out.println("Prescription status updated successfully.");
+        } else {
+            System.out.println("No record found with the given ID or update failed.");
+        }
+    }
 	
 	public void submitReplenishmentRequest(String medicineName, int quantity) 
 	{
@@ -102,25 +114,5 @@ public class Pharmacist  extends HospitalStaff{
             }
         }
     }
-	
-	//for testing
-	//public class PharmacistTester {
-	  //public static void main(String[] args) {
-	    	// Initialize InventoryManager
-	        //InventoryManager inventoryManager = new InventoryManager();
-
-	        // Initialize InventoryService
-	        //InventoryService inventoryService = new InventoryService(inventoryManager);
-	        
-	        //initialize new pharmacist
-	        //Pharmacist pharmacist = new Pharmacist("H123", "john_johnson", "password123", "john.johnson@gmail.com", "Male", 35, 12345678, "Pharmacist", inventoryService);
-	        
-	      //System.out.println("\nSubmitting Replenishment Request:");
-	     //pharmacist.submitReplenishmentRequest("Paracetamol", 100);
-
-	     //   System.out.println("\nDisplaying Replenishment Requests:");
-	    // pharmacist.displayReplenishmentRequests();
-	   // }
-	//}
 
 }

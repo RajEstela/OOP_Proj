@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
-import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
@@ -14,6 +15,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
@@ -42,7 +44,7 @@ public class HospitalManagementApp {
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
         medicalInventoryManager = loadMedicalInventory();
-        
+        medicalInventoryManager.replenishmentRequestInit();
         AppointmentsDataLoader aptmntDL = new AppointmentsDataLoader();
         appointmentManager = new AppointmentManager(aptmntDL);
 
@@ -92,13 +94,16 @@ public class HospitalManagementApp {
         scanner.close();
     }
 
-    //TODO: ADD YOUR ROLES HERE post login
     private static void handleUserRole(Users user) {
         try {
             RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
 
             switch (roleEnum) {
-                case Doctor -> System.out.println("This person is a Doctor.");
+                case Doctor -> {
+                    System.out.printf("\nHi!Dr. %s\n",user.getUsername());
+                    Doctor doctor = new Doctor();
+                    doctor.main();
+                }
                 case Administrator -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager,appointmentManager,validUsersLogin, validUsers);  
@@ -112,13 +117,19 @@ public class HospitalManagementApp {
                     String gender = user.getGender(); 
                     int age = user.getAge(); 
                     InventoryService inventoryService = new InventoryService(medicalInventoryManager);
-                    Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService);
+                    AppointmentOutcomeService appointmentOutcomeService = new AppointmentOutcomeService();
+                    Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService, appointmentOutcomeService);
                     pharmacist.main(); // Call the pharmacist's main method
                  } 
                 case Patient -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Patient patient = new Patient();
                     patient.main();
+                }
+                case Pending ->{
+                    System.out.printf("\nWelcome %s\n", user.getUsername());
+                    System.out.printf("\nYou are yet to be assigned to any role. Please try again Later\n", user.getUsername());
+                    loginProcess();
                 }
                 default -> throw new AssertionError("Unknown role: " + roleEnum);
             }

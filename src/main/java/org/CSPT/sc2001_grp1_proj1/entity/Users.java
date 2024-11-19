@@ -40,7 +40,7 @@ public class Users {
         return name;
     }
     public String getGender(){
-        return role;
+        return gender;
     }
     public int getAge(){
         return age;

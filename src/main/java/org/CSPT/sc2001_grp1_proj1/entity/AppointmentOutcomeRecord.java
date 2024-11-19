@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class AppointmentOutcomeRecord extends Appointment{
+
     private String serviceType;
     private String prescribedMedications;
     private String prescribedStatus;
@@ -37,11 +38,32 @@ public class AppointmentOutcomeRecord extends Appointment{
         return prescribedMedications;
     }
 
+    public void setPrescribedStatus(String prescribedStatus) 
+    {
+        this.prescribedStatus = prescribedStatus;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+    
+    public void setPrescribedMedications(String prescribedMedications) {
+        this.prescribedMedications = prescribedMedications;
+    }
+    
+    public void setConsultationNotes(String consultationNotes) {
+        this.consultationNotes = consultationNotes;
+    }
+
     public String getPrescribedStatus() {
         return prescribedStatus;
     }
 
+    
     public String getConsultationNotes() {
         return consultationNotes;
     }
+
+    
+
 }

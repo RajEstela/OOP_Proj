@@ -8,8 +8,9 @@ public class ReplenishmentRequest {
     public String status;
     public int quantity;
 
-    public ReplenishmentRequest(String medicineName, int quantity, String requestedBy, String status)
+    public ReplenishmentRequest(String requestID, String medicineName, int quantity, String requestedBy, String status)
     {
+        this.requestID = requestID;
         this.medicineName = medicineName;
         this.quantity = quantity;
         this.requestedBy = requestedBy;
