@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
+import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
@@ -98,7 +99,11 @@ public class HospitalManagementApp {
             RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
 
             switch (roleEnum) {
-                case Doctor -> System.out.println("This person is a Doctor.");
+                case Doctor -> {
+                    System.out.printf("\nHi!Dr. %s\n",user.getUsername());
+                    Doctor doctor = new Doctor();
+                    doctor.main();
+                }
                 case Administrator -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager,appointmentManager,validUsersLogin, validUsers);  
