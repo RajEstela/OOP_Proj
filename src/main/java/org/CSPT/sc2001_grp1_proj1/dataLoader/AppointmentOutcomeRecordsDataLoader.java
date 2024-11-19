@@ -104,4 +104,31 @@ public class AppointmentOutcomeRecordsDataLoader {
         List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals("Done") && appointment.getPrescribedStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointmentOutcomeRecords;
     }
+
+    public void addNewRecord(AppointmentOutcomeRecord record) {
+        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+             Workbook workbook = new XSSFWorkbook(file)) {
+    
+            Sheet sheet = workbook.getSheetAt(0);
+            int lastRow = sheet.getLastRowNum();
+            Row newRow = sheet.createRow(lastRow + 1);
+    
+            // Populate the new row with appointment details
+            newRow.createCell(0).setCellValue(record.getAppointmentOutcomeRecordID());
+            newRow.createCell(1).setCellValue(record.getServiceType());
+            newRow.createCell(2).setCellValue(record.getPrescribedMedications());
+            newRow.createCell(3).setCellValue(record.getPrescribedStatus());
+            newRow.createCell(4).setCellValue(record.getConsultationNotes());
+            
+    
+            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(outFile);
+            }
+    
+            System.out.println("Appointment outcome recorded:");
+    
+        } catch (IOException e) {
+            System.out.println("Error updating the appointment list: " + e.getMessage());
+        }
+    }  
 }
