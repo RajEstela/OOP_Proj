@@ -92,4 +92,33 @@ public class MedicalRecordDataLoader {
             System.out.println(e);
         }
     }
+
+    // Updates Name, DOB, Gender, Phone, Email, Blood Type
+    public void updateByMedicalRecord(MedicalRecord medicalRecord){
+        try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
+            // Get the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isHeader = true;
+
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue; // Skip header row
+                }
+                if(row.getCell(1).getStringCellValue().equals(medicalRecord.getPatientID())) {
+                    row.getCell(2).setCellValue(medicalRecord.getName());
+                    row.getCell(3).setCellValue(medicalRecord.getDob());
+                    row.getCell(4).setCellValue(medicalRecord.getGender());
+                    row.getCell(5).setCellValue(medicalRecord.getPhoneNumber());
+                    row.getCell(6).setCellValue(medicalRecord.getEmail());
+                    row.getCell(7).setCellValue(medicalRecord.getBloodType());
+                }
+            }
+            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+                workbook.write(outFile);
+            }
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
 }

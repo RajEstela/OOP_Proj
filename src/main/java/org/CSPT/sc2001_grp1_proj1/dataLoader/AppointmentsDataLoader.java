@@ -71,6 +71,15 @@ public class AppointmentsDataLoader {
         return filteredAppointments;
     }
 
+    public List<Appointment> getAppointmentsByDoctor(String doctorID) {
+        List<Appointment> filteredAppointments = appointments.stream().filter(appointment -> 
+            appointment.getDoctorID().equals(doctorID) ||  
+            appointment.getAppointmentStatus().equals(AppointmentStatusEnum.Approved.toString()) ||
+            appointment.getAppointmentStatus().equals(AppointmentStatusEnum.Completed.toString())
+        ).toList();
+        return filteredAppointments;
+    }
+
     public HashMap<String, Appointment> getAppointmentsByOutcomeRecordID() {
         HashMap<String, Appointment> hashedAppointmentsByOutcomeRecordID = new HashMap<>();
         appointments.forEach(appointment -> {
@@ -142,7 +151,7 @@ public class AppointmentsDataLoader {
                     continue; // Skip header row
                 }
                 if(row.getCell(0).getStringCellValue().equals(appointmentID)) {
-                    row.getCell(4).setCellValue("Confirmed"); //Appointment Status
+                    row.getCell(4).setCellValue(AppointmentStatusEnum.Approved.toString()); //Appointment Status
                     break;
                 }
             }
