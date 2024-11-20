@@ -14,10 +14,24 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * The class is responsible for loading, adding, updating, 
+ * and removing user data from an Excel file, as well as managing users' roles and 
+ * passwords.
+ */
 public class UserDataLoader {
-
+    /**
+     * The path to the Excel file containing user data.
+     * This file is used to store and load user information.
+     */
     private static final String EXCEL_FILE_PATH = "./data/UserList.xlsx";
-
+    /**
+     * Populates the given maps with user data from the Excel file.
+     * 
+     * @param validUsersLogin a map that stores valid usernames and their corresponding passwords.
+     * @param validUsers a map that stores valid users with usernames as keys.
+     * @param validUsersByID a map that stores valid users with their user IDs as keys.
+     */
     public static void populateUsers(HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers, HashMap<String, Users> validUsersByID) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -48,6 +62,12 @@ public class UserDataLoader {
         }
         
     }
+    /**
+     * Populates the given map with valid user data from the Excel file.
+     * 
+     * @param validUsers a map that stores valid users with usernames as keys.
+     * @return the updated {@code validUsers} map.
+     */
     public static HashMap<String, Users> populateValidUsers(HashMap<String, Users> validUsers) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -76,7 +96,14 @@ public class UserDataLoader {
         }
         return validUsers;
     }
-
+    /**
+     * Resets the password for the given user by updating it in the Excel file and in the valid users map.
+     * 
+     * @param userName the username of the user whose password is to be reset.
+     * @param validUsers a map that stores valid users with usernames as keys.
+     * @param newPwd the new password to be set for the user.
+     * @return {@code true} if the password was successfully updated; {@code false} otherwise.
+     */
     public static boolean resetPassword(String userName, HashMap<String, Users> validUsers,String newPwd) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -104,7 +131,11 @@ public class UserDataLoader {
         }
         return false;
     }
-
+    /**
+     * Adds a new user to the Excel file and updates the user data in memory.
+     * 
+     * @param userToAdd the user to be added.
+     */
     public static void addUser(Users userToAdd) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -133,7 +164,12 @@ public class UserDataLoader {
             System.err.println("Error while adding user: " + e.getMessage());
         }
     }
-
+    /**
+     * Updates the role of a user in the Excel file and refreshes the user data in memory.
+     * 
+     * @param userName the username of the user whose role is to be updated.
+     * @param newRole the new role to be assigned to the user.
+     */
     public static void updateRole(String userName, String newRole) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -158,7 +194,11 @@ public class UserDataLoader {
         } catch (IOException e) {
         }
     }
-
+    /**
+     * Updates the information of a hospital staff member in the Excel file.
+     * 
+     * @param staff the hospital staff member whose information is to be updated.
+     */
     public static void updateStaff(HospitalStaff staff) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -191,7 +231,13 @@ public class UserDataLoader {
         } catch (IOException e) {
         }
     }
-
+    /**
+     * Updates the role of a user in the Excel file and refreshes the user data in memory.
+     * 
+     * @param userName the username of the user whose role is to be updated.
+     * @param validUsers a map that stores valid users with usernames as keys.
+     * @param newRole the new role to be assigned to the user.
+     */
     public static void updateRole(String userName, HashMap<String, Users> validUsers, String newRole) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -216,7 +262,11 @@ public class UserDataLoader {
         } catch (IOException e) {
         }
     }
-
+    /**
+     * Removes a user from the Excel file and refreshes the user data in memory.
+     * 
+     * @param staffID the staff ID of the user to be removed.
+     */
     public static void removeUser(String staffID) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -241,7 +291,12 @@ public class UserDataLoader {
         } catch (IOException e) {
         }
     }
-
+    /**
+     * Generates the next hospital ID based on the previous ID by incrementing the numeric part.
+     * 
+     * @param prevID the previous hospital ID.
+     * @return the generated next hospital ID.
+     */
     public static String generateNextHospitalID(String prevID) {
         int numericPart = Integer.parseInt(prevID.substring(1)); 
         numericPart ++;

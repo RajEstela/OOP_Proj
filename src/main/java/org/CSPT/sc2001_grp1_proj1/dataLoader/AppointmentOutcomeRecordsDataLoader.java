@@ -17,14 +17,27 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * This class handles loading, updating, and managing appointment outcome records from an Excel file.
+ */
 public class AppointmentOutcomeRecordsDataLoader {
+    /**
+     * Path to the Excel file storing appointment outcome records.
+     */
     private final String EXCEL_FILE_PATH = "./data/AppointmentOutcomeRecordList.xlsx";
+    /**
+     * List to store all loaded appointment outcome records.
+     */
     private List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
-
+    /**
+     * Constructor for the data loader. Initializes the loader by loading appointment records from the Excel file.
+     */
     public AppointmentOutcomeRecordsDataLoader() {
         loadAppointmentRecords();
     }
-
+    /**
+     * Loads appointment outcome records from the Excel file into the internal list.
+     */
     public void loadAppointmentRecords() {
         // Clear appointment records before loading
         appointmentOutcomeRecords.clear();
@@ -60,7 +73,11 @@ public class AppointmentOutcomeRecordsDataLoader {
             System.out.println(e);
         }
     }
-
+    /**
+     * Updates an appointment outcome record in the Excel file and the internal list.
+     *
+     * @param updatedRecord The updated appointment outcome record to be saved.
+     */
     public void updateAppointmentOutcomeRecord(AppointmentOutcomeRecord updatedRecord) {
     boolean recordUpdated = false; // Flag to check if the record was updated
 
@@ -100,16 +117,29 @@ public class AppointmentOutcomeRecordsDataLoader {
         System.err.println("Error updating appointment outcome record: " + e.getMessage());
     }
 }
-
+    /**
+     * Retrieves all appointment outcome records loaded into the system.
+     *
+     * @return A list of all appointment outcome records.
+     */
     public List<AppointmentOutcomeRecord> getAppointmentOutcomeRecords() {
         return appointmentOutcomeRecords;
     }
-
+    /**
+     * Filters and retrieves completed past appointment outcome records for a specific patient.
+     *
+     * @param patientID The ID of the patient.
+     * @return A list of past completed appointment outcome records for the given patient.
+     */
     public List<AppointmentOutcomeRecord> getPastAppointmentOutcomeRecords(String patientID) {
         List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals(AppointmentStatusEnum.Completed.toString()) && appointment.getPrescribedStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointmentOutcomeRecords;
     }
-
+    /**
+     * Adds a new appointment outcome record or updates an existing one in the Excel file.
+     *
+     * @param record The new or updated appointment outcome record.
+     */
     public void addNewRecord(AppointmentOutcomeRecord record) {
     try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
          Workbook workbook = new XSSFWorkbook(file)) {

@@ -13,14 +13,27 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * This class handles loading, retrieving, and updating diagnosis records from an Excel file.
+ */
 public class DiagnosisDataLoader {
+    /**
+     * Path to the Excel file containing diagnosis data.
+     */
     private final String EXCEL_FILE_PATH = "./data/DiagnosisList.xlsx";
+    /**
+     * Static list of all loaded diagnosis records.
+     */
     private static List<Diagnosis> diagnoses = new ArrayList<>();
-    
+    /**
+     * Constructor that initializes the loader and loads diagnosis data.
+     */
     public DiagnosisDataLoader() {
         loadDiagnosis();
     }
-
+    /**
+     * Loads diagnosis data from the Excel file into the static list of diagnoses.
+     */
     public void loadDiagnosis() {
         // Clear diagnosis
         diagnoses.clear();
@@ -49,25 +62,43 @@ public class DiagnosisDataLoader {
             System.out.println(e);
         }
     }
-          
+    /**
+     * Retrieves all loaded diagnoses.
+     *
+     * @return A list of all diagnoses.
+     */
     public static List<Diagnosis> getDiagnosis() {
         return diagnoses;
     }
-
+    /**
+     * Retrieves all diagnoses associated with a specific patient.
+     *
+     * @param patientID The ID of the patient.
+     * @return A list of diagnoses for the specified patient.
+     */
     public List<Diagnosis> getDiagnosisByPatient(String patientID) {
         List<Diagnosis> filteredDiagnosis = diagnoses.stream().filter(diagnosis -> 
             diagnosis.getPatientID().equals(patientID)
         ).toList();
         return filteredDiagnosis;
     }
-
+    /**
+     * Retrieves all diagnoses associated with a specific doctor.
+     *
+     * @param doctorID The ID of the doctor.
+     * @return A list of diagnoses for the specified doctor.
+     */
     public List<Diagnosis> getDiagnosisByDoctor(String doctorID) {
         List<Diagnosis> filteredDiagnosis = diagnoses.stream().filter(diagnosis -> 
             diagnosis.getDoctorID().equals(doctorID)
         ).toList();
         return filteredDiagnosis;
     }
-
+    /**
+     * Adds a new diagnosis record to the Excel file.
+     *
+     * @param diagnosis The diagnosis record to be added.
+     */
     public void setNewDiagnosis(Diagnosis diagnosis) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
