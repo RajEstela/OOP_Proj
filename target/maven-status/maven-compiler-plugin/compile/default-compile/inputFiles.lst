@@ -1,20 +1,34 @@
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\MedicineDataLoader.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\StaffDataLoader.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\UserDataLoader.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Appointment.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentOutcomeRecord.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\HospitalStaff.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\HospitalStaffManager.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\InventoryManager.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\InventoryService.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\MedicalRecord.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Medicine.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\RolesEnum.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Users.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Admin.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Pharmacist.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\HospitalManagementApp.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\AppointmentManagerInterface.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\HospitalStaffManagerInterface.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\InventoryManagerInterface.java
-C:\Part Time Studies\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\UserLogin.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\AppointmentOutcomeRecordsDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\AppointmentsDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\DiagnosisDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\MedicalRecordDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\MedicineDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\ReplenishmentRequestLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\StaffDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\dataLoader\UserDataLoader.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Appointment.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentDoctor.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentManager.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentOutcomeRecord.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentOutcomeService.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\AppointmentStatusEnum.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Diagnosis.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\HospitalStaff.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\HospitalStaffManager.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\InventoryManager.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\InventoryService.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\MedicalRecord.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Medicine.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\ReplenishmentRequest.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\RolesEnum.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\entity\Users.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Admin.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Doctor.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Patient.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\FunctionRoles\Pharmacist.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\HospitalManagementApp.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\AppointmentManagerInterface.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\HospitalStaffManagerInterface.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\interfaces\InventoryManagerInterface.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\User.java
+C:\Users\cianm\OneDrive\Desktop\School Projects\SC2002 - OBJECT ORIENTIATED DESIGN & PROGRAMMING\OOP_Proj\src\main\java\org\CSPT\sc2001_grp1_proj1\UserLogin.java
