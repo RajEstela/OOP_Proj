@@ -1,27 +1,31 @@
 package org.CSPT.sc2001_grp1_proj1.dataLoader;
-import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
-import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
-import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
-import org.CSPT.sc2001_grp1_proj1.entity.Medicine;
-import org.CSPT.sc2001_grp1_proj1.entity.ReplenishmentRequest;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.CSPT.sc2001_grp1_proj1.entity.ReplenishmentRequest;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
+/**
+ * The class handles loading, adding, updating, 
+ * and managing replenishment requests from an Excel file.
+ */
 public class ReplenishmentRequestLoader {
+    /**
+     * Path to the Excel file containing the replenishment request data.
+     */
     private static final String EXCEL_FILE_PATH = "./data/ReplenishmentRequest_List.xlsx";
-
+    /**
+     * Loads all replenishment requests from the Excel file.
+     *
+     * @return a list of replenishment requests.
+     */
     public static List<ReplenishmentRequest> loadReplenishmentRequests() {
         List<ReplenishmentRequest> requestList = new ArrayList<>();
 
@@ -52,7 +56,11 @@ public class ReplenishmentRequestLoader {
 
         return requestList;
     }
-
+    /**
+     * Adds a new replenishment request to the Excel file.
+     *
+     * @param newRequest the new replenishment request to be added.
+     */
     public static void addReplenishmentRequest(ReplenishmentRequest newRequest) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -90,8 +98,12 @@ public class ReplenishmentRequestLoader {
             System.err.println("Error adding replenishment request: " + e.getMessage());
         }
     }
-
-
+    /**
+     * Updates an existing replenishment request in the Excel file. 
+     * Updates are performed based on either the request ID or the medicine name and "New" status.
+     *
+     * @param updateRequest the replenishment request containing updated information.
+     */
     public static void updateReplenishmentRequest(ReplenishmentRequest updateRequest)
     {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
@@ -145,7 +157,12 @@ public class ReplenishmentRequestLoader {
         System.err.println("Error updating replenishment request: " + e.getMessage());
     }
 }
-
+    /**
+     * Generates the next unique request ID for replenishment requests.
+     *
+     * @param prevID the previous request ID to base the new ID on.
+     * @return a new, unique request ID as a {@code String}.
+     */
     public static String generateNextRequestID(String prevID) {
         if (prevID == null || prevID.isEmpty()) {
             return "R001"; // Start from R001 if no previous ID exists

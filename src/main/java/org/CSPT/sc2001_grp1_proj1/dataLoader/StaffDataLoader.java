@@ -17,9 +17,23 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * The {@code StaffDataLoader} class is responsible for loading hospital staff data 
+ * from an Excel file into a {@code HospitalStaffManager} object.
+ */
 public class StaffDataLoader {
+    /**
+     * Path to the Excel file containing the user list data.
+     */
     private static final String EXCEL_FILE_PATH = "./data/UserList.xlsx";
 
+        /**
+     * Loads hospital staff data from an Excel file, filtering out patients and pending users.
+     * Associates staff with valid user data from the provided {@code validUsers} map.
+     *
+     * @param validUsers a {@code HashMap} containing valid user data with usernames as keys.
+     * @return a {@code HospitalStaffManager} object initialized with the loaded staff data.
+     */
     public static HospitalStaffManager loadHospitalStaff(HashMap<String, Users> validUsers) {
         List<HospitalStaff> staffList = new ArrayList<>();
 

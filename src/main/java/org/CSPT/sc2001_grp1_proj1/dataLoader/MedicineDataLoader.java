@@ -15,10 +15,21 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * This class handles operations for loading, updating, and managing medicine inventory data
+ * from an Excel file.
+ */
 public class MedicineDataLoader {
-
+    /**
+     * Path to the Excel file containing the medical inventory data.
+     */
     private static final String EXCEL_FILE_PATH = "./data/MedicalInventory_List.xlsx";
-
+    /**
+     * Loads the medical inventory from the specified Excel file.
+     *
+     * @param excelFilePath the path to the Excel file.
+     * @return an {@code InventoryManager} initialized with the medicines and the current timestamp.
+     */
     public static InventoryManager loadMedicalInventory(String excelFilePath) {
         List<Medicine> medsList = new ArrayList<>();
 
@@ -50,7 +61,11 @@ public class MedicineDataLoader {
         InventoryManager medsInit = new InventoryManager(medsList, LocalDateTime.now(), "SYSTEM");
         return medsInit;
     }
-
+    /**
+     * Updates the low stock level count and alert status for a specific medicine in the inventory.
+     *
+     * @param medicineToUpdate the {@code Medicine} object containing updated information.
+     */
     public static void updateLowLevelStockCount(Medicine medicineToUpdate) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -76,6 +91,11 @@ public class MedicineDataLoader {
             System.err.println("Error while updating medicine: " + e.getMessage());
         }
     }
+    /**
+     * Updates the stock count and low stock alert status for a specific medicine in the inventory.
+     *
+     * @param medicineToUpdate the {@code Medicine} object containing updated information.
+     */
     public static void updateStockCount(Medicine medicineToUpdate) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -101,6 +121,11 @@ public class MedicineDataLoader {
             System.err.println("Error while updating medicine: " + e.getMessage());
         }
     }
+    /**
+     * Adds a new medicine to the inventory.
+     *
+     * @param medicineToAdd the {@code Medicine} object to add.
+     */
     public static void addMedicine(Medicine medicineToAdd) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -126,6 +151,12 @@ public class MedicineDataLoader {
             System.err.println("Error while adding medicine: " + e.getMessage());
         }
     }
+    /**
+     * Removes a specific medicine from the inventory.
+     *
+     * @param medicineToRemove the {@code Medicine} object to remove.
+     * @return {@code true} if the medicine was successfully removed; {@code false} otherwise.
+     */
     public static boolean removeMedicine(Medicine medicineToRemove) {
         boolean found = false;
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
@@ -153,6 +184,11 @@ public class MedicineDataLoader {
         }
         return found;
     }
+    /**
+     * Updates all details for a specific medicine in the inventory.
+     *
+     * @param medicineToUpdate the {@code Medicine} object containing updated information.
+     */
     public static void updateMedicine(Medicine medicineToUpdate) {
         try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
             Workbook workbook = new XSSFWorkbook(file)) {
@@ -181,12 +217,22 @@ public class MedicineDataLoader {
         } catch (IOException e) {
         }
     }
+    /**
+     * Generates the next medicine ID based on the previous ID.
+     *
+     * @param prevID the previous medicine ID.
+     * @return the next medicine ID.
+     */
     public static String generateNextMedsID(String prevID) {
         int numericPart = Integer.parseInt(prevID.substring(1)); 
         numericPart ++;
         return String.format("M%03d", numericPart);
     }
-
+    /**
+     * Reloads the inventory list from the Excel file.
+     *
+     * @return a {@code List} of {@code Medicine} objects.
+     */
     public static List<Medicine> inventoryReload(){
         List<Medicine> medsList = new ArrayList<>();
 

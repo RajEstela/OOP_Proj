@@ -32,7 +32,7 @@ public class Appointment {
     private String doctorID;
 
     /**
-     * The current status of the appointment (e.g., scheduled, in progress, completed, canceled).
+     * The current status of the appointment
      */
     private String appointmentStatus;
 
