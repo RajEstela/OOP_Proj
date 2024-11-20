@@ -193,6 +193,7 @@ public class Doctor extends HospitalStaff {
     public void acceptOrDeclineAppointment() {
         System.out.println("\n--- Pending Appointments ---");
         String userID = UserLogin.getLoginUserID();
+        appointmentsDataLoader.loadAppointments();
         List<Appointment> pendingAppointments = appointmentsDataLoader
                 .getAppointmentsByStatus(AppointmentStatusEnum.Pending)
                 .stream()
@@ -287,7 +288,7 @@ public class Doctor extends HospitalStaff {
             // Call the method in AppointmentsDataLoader to add to Excel
             appointmentsDataLoader.setNewAppointment(newAppointment);
         }
-
+        appointmentsDataLoader.loadAppointments();
         System.out.println("All appointment slots added successfully!");
     }
 
@@ -295,49 +296,68 @@ public class Doctor extends HospitalStaff {
         System.out.println("\n--- Record Appointment Outcome ---");
         System.out.print("Enter Appointment ID: ");
         String appointmentID = scanner.nextLine().trim();
-
+    
         AppointmentsDataLoader appointmentDataLoader = new AppointmentsDataLoader();
         Appointment appointment = appointmentDataLoader.getAppointments().stream()
                 .filter(a -> a.getAppointmentID().equals(appointmentID))
                 .findFirst()
                 .orElse(null);
-
+    
         if (appointment == null) {
             System.out.println("Appointment not found.");
             return;
         }
-
-        System.out.print("Enter Type of Service: ");
-        String serviceType = scanner.nextLine().trim();
-
-        System.out.print("Enter Prescribed Medications: ");
-        String prescribedMedications = scanner.nextLine().trim();
-
-        String prescribedStatus = "Pending";
-
-        System.out.print("Enter Consultation Notes: ");
-        String consultationNotes = scanner.nextLine().trim();
-
+    
         String outcomeRecordID = appointment.getAppointmentOutcomeRecordID();
         if (outcomeRecordID == null || outcomeRecordID.isEmpty()) {
             System.out.println("No Outcome Record ID associated with this appointment.");
             return;
         }
-        // Create a new AppointmentOutcomeRecord
+    
+    AppointmentOutcomeRecordsDataLoader outcomeDataLoader = new AppointmentOutcomeRecordsDataLoader();
+    AppointmentOutcomeRecord existingRecord = outcomeDataLoader.getAppointmentOutcomeRecords().stream()
+            .filter(record -> record.getAppointmentOutcomeRecordID().equals(outcomeRecordID))
+            .findFirst()
+            .orElse(null);
+
+        if (existingRecord != null) {
+            System.out.println("This appointment is already recorded.");
+            System.out.print("Do you want to modify it? (yes/no): ");
+            String userResponse = scanner.nextLine().trim().toLowerCase();
+    
+            if (!userResponse.equals("yes")) {
+                System.out.println("No changes were made.");
+                return;
+            }
+        }
+    
+        // Gather new details for the outcome record
+        System.out.print("Enter Type of Service: ");
+        String serviceType = scanner.nextLine().trim();
+    
+        System.out.print("Enter Prescribed Medications: ");
+        String prescribedMedications = scanner.nextLine().trim();
+    
+        String prescribedStatus = "Pending";
+    
+        System.out.print("Enter Consultation Notes: ");
+        String consultationNotes = scanner.nextLine().trim();
+    
+        // Create or update the outcome record
         AppointmentOutcomeRecord newRecord = new AppointmentOutcomeRecord(
                 appointmentID, appointment.getAppointmentDateTime(),
                 appointment.getPatientID(), appointment.getDoctorID(),
                 appointment.getAppointmentStatus(), outcomeRecordID,
                 serviceType, prescribedMedications, prescribedStatus, consultationNotes);
-
-        // Save the record
-        AppointmentOutcomeRecordsDataLoader outcomeDataLoader = new AppointmentOutcomeRecordsDataLoader();
+    
+        // Save or update the record
         outcomeDataLoader.addNewRecord(newRecord);
-
+    
         // Update the appointment status to "Completed"
         String status = AppointmentStatusEnum.Completed.toString();
         appointmentDataLoader.updateAppointmentStatus(appointmentID, status);
-
+        appointmentDataLoader.loadAppointments();
     }
+    
 
 }
