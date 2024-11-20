@@ -68,7 +68,7 @@ public class Pharmacist  extends HospitalStaff{
 				break;
 				case 7:
 				loggedIn = false;
-				HospitalManagementApp.logout();
+				HospitalManagementApp.logout(null);
 				break;
 			}
 
