@@ -8,6 +8,12 @@ import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.ReplenishmentRequestLoader;
 import org.CSPT.sc2001_grp1_proj1.interfaces.InventoryManagerInterface;
 
+/**
+ * This class is responsible for managing the inventory of medicines, including adding/removing stock,
+ * updating stock count and alert levels, displaying inventory, handling replenishment requests, and managing medicine details.
+ * It implements the {@link InventoryManagerInterface} interface to ensure required methods are included.
+ */
+
 public class InventoryManager implements InventoryManagerInterface {
 
     protected List<Medicine> totalMedicineInventoryList;
@@ -15,15 +21,34 @@ public class InventoryManager implements InventoryManagerInterface {
     protected LocalDateTime lastUpdatedTime;
     protected String lastUpdatedBy; 
 
+    /**
+     * Constructor for the InventoryManager class.
+     * 
+     * @param totalMedicineInventoryList List of all medicines in the inventory.
+     * @param lastUpdatedTime Timestamp when the inventory was last updated.
+     * @param system The name of the system or user that last updated the inventory.
+     */
+
     public InventoryManager(List<Medicine> totalMedicineInventoryList, LocalDateTime lastUpdatedTime, String system) {
         this.totalMedicineInventoryList = totalMedicineInventoryList;
         this.lastUpdatedTime = lastUpdatedTime;
         this.lastUpdatedBy = system;
     }
+    
+    /**
+     * Initializes the replenishment request list by loading from a data source.
+     */
 
     public void replenishmentRequestInit(){
         this.replenishmentRequests = ReplenishmentRequestLoader.loadReplenishmentRequests();
     }
+
+    /**
+     * Adds stock to an existing medicine in the inventory.
+     * Prompts the user to enter a medicine name, finds the corresponding medicine in the inventory,
+     * and increases the stock count by 1.
+     * Displays a success or error message based on the input.
+     */
 
     @Override
     public void addStock() {
@@ -60,6 +85,14 @@ public class InventoryManager implements InventoryManagerInterface {
             addStock();
         }          
     }
+
+    /**
+     * Removes stock from an existing medicine in the inventory.
+     * Prompts the user to enter a medicine name, finds the corresponding medicine in the inventory,
+     * and decreases the stock count by 1.
+     * Displays a success or error message based on the input.
+     */
+
     @Override
     public void removeStock() {
         // TODO Auto-generated method stub
@@ -97,6 +130,12 @@ public class InventoryManager implements InventoryManagerInterface {
             removeStock();
         }      
     }
+
+    /**
+     * Updates the stock count for a specific medicine.
+     * Prompts the user to enter a medicine name and the number of stocks to add.
+     * The input must be a positive integer; otherwise, an error message is displayed.
+     */
 
     @Override
     public void updateStockCount() {
@@ -144,6 +183,11 @@ public class InventoryManager implements InventoryManagerInterface {
         }
     }
     
+    /**
+     * Updates the low stock alert level for a specific medicine.
+     * Prompts the user to enter a medicine name and a new stock alert level.
+     * The input must be a positive integer; otherwise, an error message is displayed.
+     */
 
     @Override
     public void updateStockAlertLevel() {
@@ -191,6 +235,10 @@ public class InventoryManager implements InventoryManagerInterface {
         }
     }
     
+    /**
+     * Displays the current stock of all medicines in the inventory.
+     * The displayed information includes the medicine name, stock count, low stock alert, and alert level.
+     */
 
     @Override
     public void displayStock() {
@@ -205,6 +253,12 @@ public class InventoryManager implements InventoryManagerInterface {
                                 medicine.lowStockLevelCount);
         }
     }
+
+    /**
+     * Displays all the replenishment requests that are pending.
+     * The displayed information includes request ID, medicine name, quantity, requested by, and request status.
+     */
+
     @Override
     public void displayReplenishmentRequests() {
         System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Request ID", "Medicine Name", "Quantity", "Requested By", "Status");
@@ -218,6 +272,12 @@ public class InventoryManager implements InventoryManagerInterface {
                                 reps.status);
         }
     }
+
+    /**
+     * Approves a replenishment request for a medicine.
+     * Prompts the user to enter the name of the medicine whose replenishment request is to be approved.
+     * Once approved, the stock for the corresponding medicine is updated and the request status is marked as "Approved".
+     */
 
     @Override
     public void approveReplenishmentRequests() {
@@ -257,6 +317,12 @@ public class InventoryManager implements InventoryManagerInterface {
             }
         }
     }
+
+    /**
+     * Adds a new medicine to the inventory.
+     * Prompts the user to enter the medicine name, details, stock count, and low stock alert level.
+     * Performs validation for non-negative stock values and ensures the alert level is not greater than the stock count.
+     */
 
     @Override
     public void addMedicine() {
@@ -299,6 +365,13 @@ public class InventoryManager implements InventoryManagerInterface {
         inventoryReload();
 
     }
+
+    /**
+     * Updates the details of an existing medicine.
+     * Prompts the user to select which detail (medicine name, detail, stock count, or alert level) they want to update.
+     * Allows canceling the update if the user chooses to do so.
+     */
+
     @Override
     public void updateMedicine() {
         Scanner scanner = new Scanner(System.in);
@@ -415,6 +488,12 @@ public class InventoryManager implements InventoryManagerInterface {
             );   
         }    
     }
+
+    /**
+     * Removes an existing medicine from the inventory.
+     * Prompts the user to enter the medicine name and removes the corresponding medicine from the inventory.
+     */
+
     @Override
     public void removeMedicine() {
         Scanner scanner = new Scanner(System.in);
