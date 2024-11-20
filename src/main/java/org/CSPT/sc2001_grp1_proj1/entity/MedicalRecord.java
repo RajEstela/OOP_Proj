@@ -13,10 +13,9 @@ public class MedicalRecord {
     private int phoneNumber;
     private String email;
     private String bloodType;
-    private String pastDiagnosesAndTreatments;
 
     public MedicalRecord(String medicalRecordID, String patientID, String name, String dob, String gender, 
-    int phoneNumber, String email, String bloodType, String pastDiagnosesAndTreatments){
+    int phoneNumber, String email, String bloodType){
         this.medicalRecordID = medicalRecordID;
         this.patientID = patientID;
         this.name = name;
@@ -25,7 +24,6 @@ public class MedicalRecord {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bloodType = bloodType;
-        this.pastDiagnosesAndTreatments = pastDiagnosesAndTreatments;
     }
 
     // These setter functions DO NOT update the database -
