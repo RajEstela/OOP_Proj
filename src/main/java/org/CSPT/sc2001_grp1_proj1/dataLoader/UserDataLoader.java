@@ -189,6 +189,7 @@ public class UserDataLoader {
                         workbook.write(outFile);
                     }
                     refreshHashMaps();  
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -226,6 +227,7 @@ public class UserDataLoader {
                         workbook.write(outFile);
                     }
                     refreshHashMaps(); 
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -257,6 +259,7 @@ public class UserDataLoader {
                         workbook.write(outFile);
                     }
                     refreshHashMaps(); 
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -285,7 +288,8 @@ public class UserDataLoader {
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
-                    refreshHashMaps();                       
+                    refreshHashMaps();
+                    break;                       
                 }
             }
         } catch (IOException e) {

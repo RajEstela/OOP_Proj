@@ -85,6 +85,7 @@ public class MedicineDataLoader {
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -115,6 +116,7 @@ public class MedicineDataLoader {
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -177,6 +179,7 @@ public class MedicineDataLoader {
                         workbook.write(outFile);
                     }
                     System.out.println("Medicine removed successfully!");
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -212,6 +215,7 @@ public class MedicineDataLoader {
                     try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
                         workbook.write(outFile);
                     }
+                    break;
                 }
             }
         } catch (IOException e) {
