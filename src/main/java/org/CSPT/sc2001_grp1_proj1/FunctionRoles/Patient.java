@@ -14,9 +14,22 @@ import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
 
+/**
+ * Class representing the Patient role in the hospital management system.
+ * Provides functionalities such as viewing and updating personal information, 
+ * managing medical records, and handling appointments.
+ */
 public class Patient {
+
+    /**
+     * A list of medical records associated with the patient.
+     */
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    /**
+     * Main menu for patient-specific operations. Provides options to view and manage medical records,
+     * appointments, and personal information.
+     */
     public void main() {
         System.out.print("\nPatient's Menu:\n");
         System.out.println("1. View Medical Record");
@@ -35,71 +48,71 @@ public class Patient {
             Scanner choice_scanner = new Scanner(System.in);
             int choice = choice_scanner.nextInt();
             switch(choice) {
-                case 1:
-                    //View Medical Record
+                case 1 -> {
                     viewMedicalRecord();
                     main();
-                    break;
-                case 2:
-                    //Update Personal Information
-                    updatePersonalInformation();
-                    break;
-                case 3:
-                    // View Available Appoointment Slots
+                }
+                case 2 -> updatePersonalInformation();
+                case 3 -> {
                     viewAvailableAppointmentSlots();
                     main();
-                    break;
-                case 4:
-                    // Schedule an Appointment
+                }
+                case 4 -> {
                     scheduleAppointment();
                     main();
-                    break;
-                case 5:
-                    // Reschedule an appointment
+                }
+                case 5 -> {
                     rescheduleAppointment();
                     main();
-                    break;
-                case 6:
-                    // Cancel an appointment
+                }
+                case 6 -> {
                     cancelAppointment();
                     main();
-                    break;
-                case 7:
-                    // View Scheduled Appointments
+                }
+                case 7 -> {
                     viewScheduledAppointments();
                     main();
-                    break;
-                case 8:
-                    // View Past appointment outcome records
+                }
+                case 8 -> {
                     viewPastAppointmentOutcomeRecords();
                     main();
-                    break;
-                case 9:
+                }
+                case 9 -> {
                     loggedIn = false;
                     HospitalManagementApp.logout(null);
-                    break;
+                }
             }
         }
-
     }
 
+    /**
+     * Filters medical records based on the patient ID.
+     *
+     * @param userID The patient ID for which medical records are to be filtered.
+     * @return A list of filtered medical records.
+     */
     private List<MedicalRecord> filterMedicalRecords(String userID) {
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
         loadMedicalRecords.populateMedicalRecords(medicalRecords);
 
-        //Filter the medical records based on userID
-        List<MedicalRecord> filteredMedicalRecords = medicalRecords.stream().filter(record -> record.getPatientID().equals(userID)).toList();
-        return filteredMedicalRecords;
+        // Filter the medical records based on userID
+        return medicalRecords.stream().filter(record -> record.getPatientID().equals(userID)).toList();
     }
 
+    /**
+     * Displays the patient's medical records.
+     */
     private void viewMedicalRecord() {
         String userID = UserLogin.getLoginUserID();
         List<MedicalRecord> filteredMedicalRecords = filterMedicalRecords(userID);
         System.out.println("");
         System.out.println("Please find your medical record.");
-        filteredMedicalRecords.forEach(record -> record.printMedicalRecord());
+        filteredMedicalRecords.forEach(MedicalRecord::printMedicalRecord);
     }
 
+    /**
+     * Provides options to update the patient's personal information.
+     */
     private void updatePersonalInformation() {
         System.out.println("\nPlease select your choice of contact update.");
         System.out.println("1. Phone Number");
@@ -111,23 +124,22 @@ public class Patient {
             Scanner choice_scanner = new Scanner(System.in);
             int choice = choice_scanner.nextInt();
             switch(choice) {
-                case 1:
-                    //Update Phone Number
+                case 1 -> {
                     updatePhoneNumber();
                     main();
-                    break;
-                case 2:
-                    //Update Email
+                }
+                case 2 -> {
                     updateEmail();
                     main();
-                    break;
-                case 3:
-                    //Go back
-                    main();
-                    break;
+                }
+                case 3 -> main();
             }
         }
     }
+
+    /**
+     * Updates the patient's phone number.
+     */
     private void updatePhoneNumber() {
         String userID = UserLogin.getLoginUserID();
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
@@ -137,6 +149,10 @@ public class Patient {
         String newPhone = newPhone_scanner.nextLine();
         loadMedicalRecords.updatePhoneNumber(userID, Integer.parseInt(newPhone));
     }
+
+    /**
+     * Updates the patient's email address.
+     */
     private void updateEmail() {
         String userID = UserLogin.getLoginUserID();
         MedicalRecordDataLoader loadMedicalRecords = new MedicalRecordDataLoader();
@@ -146,45 +162,53 @@ public class Patient {
         String newEmail = newEmail_scanner.nextLine();
         loadMedicalRecords.updateEmail(userID, newEmail);
     }
-    
+
+    /**
+     * Displays the available appointment slots.
+     */
     private void viewAvailableAppointmentSlots() {
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> appointments = appointmentData.getAvailableAppointments();
-        HashMap<Integer, Appointment> hashedAppointments = appointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, Appointment> hashedAppointments = appointments.stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(hashedAppointments.isEmpty()) {
+        if (hashedAppointments.isEmpty()) {
             System.out.println("Currently, there are no available appointments.\n");
             main();
         }
 
         System.out.println("\nPlease find the available appointments.");
         hashedAppointments.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentDetails();
         });
     }
 
+    /**
+     * Allows the patient to schedule an appointment.
+     */
     private void scheduleAppointment() {
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> appointments = appointmentData.getAvailableAppointments();
-        HashMap<Integer, Appointment> hashedAppointments = appointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, Appointment> hashedAppointments = appointments.stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(hashedAppointments.isEmpty()) {
+        if (hashedAppointments.isEmpty()) {
             System.out.println("Currently, there are no available appointments.\n");
             main();
         }
 
         System.out.println("\nPlease find the available appointments.");
         hashedAppointments.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentDetails();
         });
 
         System.out.println("Please enter the index number for the appointment.");
         Scanner choice_scanner = new Scanner(System.in);
         int choice = choice_scanner.nextInt();
-        
-        if(hashedAppointments.get(choice) != null) {
+
+        if (hashedAppointments.get(choice) != null) {
             String appointmentID = hashedAppointments.get(choice).getAppointmentID();
             String userID = UserLogin.getLoginUserID();
             appointmentData.scheduleAppointment(appointmentID, userID);
@@ -194,19 +218,23 @@ public class Patient {
         }
     }
 
+    /**
+     * Allows the patient to reschedule an existing appointment.
+     */
     private void rescheduleAppointment() {
         String userID = UserLogin.getLoginUserID();
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
-        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(hashedScheduledAppointments.isEmpty()) {
+        if (hashedScheduledAppointments.isEmpty()) {
             System.out.println("Currently, there are no scheduled appointments.");
             main();
         }
-        
+
         hashedScheduledAppointments.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentDetails();
         });
 
@@ -214,7 +242,7 @@ public class Patient {
         Scanner choice_scanner = new Scanner(System.in);
         int choice = choice_scanner.nextInt();
 
-        if(hashedScheduledAppointments.get(choice) != null) {
+        if (hashedScheduledAppointments.get(choice) != null) {
             String appointmentID = hashedScheduledAppointments.get(choice).getAppointmentID();
             appointmentData.cancelAppointment(appointmentID);
             System.out.println("Your appointment has been cancelled successfully. Please schedule the available appointments.\n");
@@ -224,20 +252,25 @@ public class Patient {
             System.out.println("The index value is not correct.\n");
         }
     }
-    
+
+    /**
+     * Allows the patient to cancel an existing appointment.
+     */
     private void cancelAppointment() {
         String userID = UserLogin.getLoginUserID();
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
-        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(hashedScheduledAppointments.isEmpty()) {
+        if (hashedScheduledAppointments.isEmpty()) {
             System.out.println("Currently, there are no scheduled appointments.");
             main();
         }
+
         System.out.println("\nPlease find the scheduled appointments.");
         hashedScheduledAppointments.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentDetails();
         });
 
@@ -245,7 +278,7 @@ public class Patient {
         Scanner choice_scanner = new Scanner(System.in);
         int choice = choice_scanner.nextInt();
 
-        if(hashedScheduledAppointments.get(choice) != null) {
+        if (hashedScheduledAppointments.get(choice) != null) {
             String appointmentID = hashedScheduledAppointments.get(choice).getAppointmentID();
             appointmentData.cancelAppointment(appointmentID);
             System.out.println("Your appointment has been cancelled successfully.\n");
@@ -254,35 +287,46 @@ public class Patient {
         }
     }
 
+    /**
+     * Displays the patient's scheduled appointments.
+     */
     private void viewScheduledAppointments() {
         String userID = UserLogin.getLoginUserID();
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> scheduledAppointments = appointmentData.getScheduledAppointments(userID);
-        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream().collect(HashMap<Integer, Appointment>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, Appointment> hashedScheduledAppointments = scheduledAppointments.stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(hashedScheduledAppointments.isEmpty()) {
+        if (hashedScheduledAppointments.isEmpty()) {
             System.out.println("Currently, there are no scheduled appointments.");
             main();
         }
+
         System.out.println("The scheduled appointments:");
         hashedScheduledAppointments.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentDetails();
         });
     }
+
+    /**
+     * Displays the patient's past appointment outcome records.
+     */
     private void viewPastAppointmentOutcomeRecords() {
         String userID = UserLogin.getLoginUserID();
         AppointmentOutcomeRecordsDataLoader appointmentOutcomeRecordData = new AppointmentOutcomeRecordsDataLoader();
-        HashMap<Integer, AppointmentOutcomeRecord> pastAppointmentOutcomeRecords = appointmentOutcomeRecordData.getPastAppointmentOutcomeRecords(userID).stream().collect(HashMap<Integer, AppointmentOutcomeRecord>::new,(map, streamValue) -> map.put(map.size(), streamValue),(map, map2) -> {});
+        HashMap<Integer, AppointmentOutcomeRecord> pastAppointmentOutcomeRecords = appointmentOutcomeRecordData
+                .getPastAppointmentOutcomeRecords(userID).stream()
+                .collect(HashMap::new, (map, streamValue) -> map.put(map.size(), streamValue), HashMap::putAll);
 
-        if(pastAppointmentOutcomeRecords.isEmpty()) {
+        if (pastAppointmentOutcomeRecords.isEmpty()) {
             System.out.println("Currently, there are no past appointment outcome records.");
             main();
         }
 
         System.out.println("Past appointment outcome records:");
         pastAppointmentOutcomeRecords.forEach((i, appointment) -> {
-            System.out.println("\nIndex : "+i);
+            System.out.println("\nIndex : " + i);
             appointment.printAppointmentOutcomeRecordDetails();
         });
     }
