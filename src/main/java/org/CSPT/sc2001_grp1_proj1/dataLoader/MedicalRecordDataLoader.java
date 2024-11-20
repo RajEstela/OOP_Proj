@@ -46,9 +46,8 @@ public class MedicalRecordDataLoader {
             int phone = (int) row.getCell(5).getNumericCellValue();
             String email = row.getCell(6).getStringCellValue();
             String bloodType = row.getCell(7).getStringCellValue();
-            String pastDianosesAndTreatments = row.getCell(8).getStringCellValue();
 
-            MedicalRecord medicalRecord = new MedicalRecord(medicalRecordID, patientID, name, dob, gender, phone, email, bloodType, pastDianosesAndTreatments);
+            MedicalRecord medicalRecord = new MedicalRecord(medicalRecordID, patientID, name, dob, gender, phone, email, bloodType);
             medicalRecords.add(medicalRecord);
             
             }
