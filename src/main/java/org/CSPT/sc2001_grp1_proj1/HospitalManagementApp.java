@@ -7,19 +7,22 @@ import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Admin;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Patient;
 import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Pharmacist;
-import org.CSPT.sc2001_grp1_proj1.FunctionRoles.Doctor;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentsDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.MedicineDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.StaffDataLoader;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentManager;
+import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaffManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
-import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeService;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
-
+/**
+ * Main class for the Hospital Management Application.
+ * Provides functionality for user login, role-specific actions, and management of hospital resources
+ * such as staff, inventory, and appointments.
+ */
 public class HospitalManagementApp {
 
     private static HashMap<String, String> validUsersLogin = new HashMap<>();
@@ -29,18 +32,21 @@ public class HospitalManagementApp {
     private static InventoryManager medicalInventoryManager;
     private static AppointmentManager appointmentManager;
 
-
-    public static void refreshHashMaps(){
+    /**
+     * Refreshes the user data from the data source and repopulates the valid user HashMaps.
+     */
+    public static void refreshHashMaps() {
         validUsersLogin.clear();
         validUsers.clear();
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
     }
 
-    public static void refreshvalidUsers(){
-        validUsers.clear();
-        validUsers = UserDataLoader.populateValidUsers(validUsers);
-    }
-    
+    /**
+     * Main entry point of the application.
+     * Initializes hospital resources and starts the user login process.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
@@ -49,12 +55,16 @@ public class HospitalManagementApp {
         AppointmentsDataLoader aptmntDL = new AppointmentsDataLoader();
         appointmentManager = new AppointmentManager(aptmntDL);
 
-        
-        loginProcess();
+        Scanner scanner = new Scanner(System.in);
+        loginProcess(scanner);
     }
 
-    private static void loginProcess() {
-        Scanner scanner = new Scanner(System.in);
+    /**
+     * Handles the user login process, including options for login and password recovery.
+     *
+     * @param scanner A Scanner object for user input.
+     */
+    private static void loginProcess(Scanner scanner) {
         UserLogin userLogin = new UserLogin(validUsersLogin, validUsers);
 
         while (true) {
@@ -68,6 +78,7 @@ public class HospitalManagementApp {
 
                 if (input.equalsIgnoreCase("exit")) {
                     System.out.println("Exiting the application. Goodbye!");
+                    System.exit(0);
                     break;
                 }
 
@@ -75,9 +86,9 @@ public class HospitalManagementApp {
 
                 switch (choice) {
                     case 1:
-                        Users loggedInUser = userLogin.loginMenu();
+                        Users loggedInUser = userLogin.loginMenu(scanner);
                         if (loggedInUser != null) {
-                            handleUserRole(loggedInUser); 
+                            handleUserRole(loggedInUser, scanner);
                         }
                         break;
                     case 2:
@@ -92,10 +103,15 @@ public class HospitalManagementApp {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }
-        scanner.close();
     }
 
-    private static void handleUserRole(Users user) {
+    /**
+     * Handles user actions based on their role in the hospital system.
+     *
+     * @param user    The logged-in user.
+     * @param scanner A Scanner object for user input.
+     */
+    private static void handleUserRole(Users user, Scanner scanner) {
         try {
             RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
 
@@ -107,30 +123,30 @@ public class HospitalManagementApp {
                 }
                 case Administrator -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
-                    Admin admin = new Admin(hospitalStaffManager,medicalInventoryManager,appointmentManager,validUsersLogin, validUsers);  
+                    Admin admin = new Admin(hospitalStaffManager, medicalInventoryManager, appointmentManager, validUsersLogin, validUsers);
                     admin.main();
                 }
                 case Pharmacist -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     String hospitalStaffID = user.gethospitalID();
-                    String name = user.getname(); 
+                    String name = user.getname();
                     String role = user.getRole();
-                    String gender = user.getGender(); 
-                    int age = user.getAge(); 
+                    String gender = user.getGender();
+                    int age = user.getAge();
                     InventoryService inventoryService = new InventoryService(medicalInventoryManager);
                     AppointmentOutcomeService appointmentOutcomeService = new AppointmentOutcomeService();
                     Pharmacist pharmacist = new Pharmacist(hospitalStaffID, name, role, gender, age, inventoryService, appointmentOutcomeService);
-                    pharmacist.main(); // Call the pharmacist's main method
-                 } 
+                    pharmacist.main();
+                }
                 case Patient -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
                     Patient patient = new Patient();
                     patient.main();
                 }
-                case Pending ->{
+                case Pending -> {
                     System.out.printf("\nWelcome %s\n", user.getUsername());
-                    System.out.printf("\nYou are yet to be assigned to any role. Please try again Later\n", user.getUsername());
-                    loginProcess();
+                    System.out.printf("\nYou are yet to be assigned to any role. Please try again later.\n", user.getUsername());
+                    loginProcess(scanner);
                 }
                 default -> throw new AssertionError("Unknown role: " + roleEnum);
             }
@@ -138,21 +154,46 @@ public class HospitalManagementApp {
             System.out.println("Login Failed");
         }
     }
-    
+
+    /**
+     * Loads hospital staff data from the data source.
+     *
+     * @param validUsers A HashMap of valid users.
+     * @return A HospitalStaffManager object with loaded staff data.
+     */
     private static HospitalStaffManager loadHospitalStaff(HashMap<String, Users> validUsers) {
         return StaffDataLoader.loadHospitalStaff(validUsers);
     }
 
+    /**
+     * Loads medical inventory data from the data source.
+     *
+     * @return An InventoryManager object with loaded inventory data.
+     */
     private static InventoryManager loadMedicalInventory() {
         return MedicineDataLoader.loadMedicalInventory("./data/MedicalInventory_List.xlsx");
     }
 
+    /**
+     * Retrieves a HashMap of valid users by their IDs.
+     *
+     * @return A HashMap containing users indexed by their IDs.
+     */
     public static HashMap<String, Users> getValidUsersByID() {
         return validUsersByID;
     }
-    public static void logout() {
+
+    /**
+     * Logs out the current user and redirects to the login process.
+     *
+     * @param scanner A Scanner object for user input.
+     */
+    public static void logout(Scanner scanner) {
         System.out.println("Logging out...");
-        loginProcess(); 
+        if (scanner == null) {
+            scanner = new Scanner(System.in);
+        }
+        loginProcess(scanner);
     }
 }
 

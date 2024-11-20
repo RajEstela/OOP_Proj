@@ -1,5 +1,10 @@
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
@@ -12,22 +17,32 @@ import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Diagnosis;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
+/**
+ * Represents the Doctor role in the hospital management system.
+ * Provides functionality for managing patient medical records,
+ * scheduling and managing appointments, and recording appointment outcomes.
+ */
 public class Doctor extends HospitalStaff {
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
     private final AppointmentsDataLoader appointmentsDataLoader = new AppointmentsDataLoader();
     public static List<Appointment> getdAppointments = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
-
+    /**
+     * Constructs a Doctor object with the specified details.
+     *
+     * @param hospitalStaffID The doctor's ID.
+     * @param name            The doctor's name.
+     * @param role            The doctor's role.
+     * @param gender          The doctor's gender.
+     * @param age             The doctor's age.
+     */
     public Doctor(String hospitalStaffID, String name, String role, String gender, int age) {
         super(hospitalStaffID, name, role, gender, age);
     }
-
+    /**
+     * Main function for the Doctor role.
+     * Displays a menu and processes the doctor's input.
+     */
     public void main() {
         boolean loggedIn = true;
         while (loggedIn) {
@@ -62,7 +77,7 @@ public class Doctor extends HospitalStaff {
                 }
                 case 8 -> {
                     // logout
-                    HospitalManagementApp.logout();
+                    HospitalManagementApp.logout(scanner);
                     System.out.printf("Bye!");
                     loggedIn = false;
                     break;
@@ -70,7 +85,11 @@ public class Doctor extends HospitalStaff {
             }
         }
     }
-
+    /**
+     * Displays the doctor menu and captures the user's choice.
+     *
+     * @return The menu option selected by the user.
+     */
     private static int doctorMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
@@ -93,7 +112,9 @@ public class Doctor extends HospitalStaff {
         }
         return choice;
     }
-
+   /**
+     * Views the medical records of a specific patient based on their ID.
+     */
     public void viewPatientMedicalRecord() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Patient ID to view his/her medical record: ");
@@ -115,7 +136,9 @@ public class Doctor extends HospitalStaff {
             System.out.println("Patient record not found.");
         }
     }
-
+    /**
+     * Updates the medical record of a specific patient based on their ID.
+     */
     public void updatePatientMedicalRecord() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Patient ID to update his/her medical record: ");
@@ -170,7 +193,9 @@ public class Doctor extends HospitalStaff {
             }
         }
     }
-
+    /**
+     * Views the doctor's personal appointment schedule.
+     */
     public void viewPersonalSchedule() {
         System.out.println("\n Here is your schedule");
         String userID = UserLogin.getLoginUserID();
@@ -189,10 +214,13 @@ public class Doctor extends HospitalStaff {
             }
         }
     }
-
+    /**
+     * Allows the doctor to accept or decline pending appointment requests.
+     */
     public void acceptOrDeclineAppointment() {
         System.out.println("\n--- Pending Appointments ---");
         String userID = UserLogin.getLoginUserID();
+        appointmentsDataLoader.loadAppointments();
         List<Appointment> pendingAppointments = appointmentsDataLoader
                 .getAppointmentsByStatus(AppointmentStatusEnum.Pending)
                 .stream()
@@ -221,7 +249,9 @@ public class Doctor extends HospitalStaff {
         }
         appointmentsDataLoader.loadAppointments();
     }
-
+    /**
+     * Views the doctor's upcoming appointments.
+     */
     public void viewUpcomingAppointmentList() {
         AppointmentsDataLoader appointmentData = new AppointmentsDataLoader();
         List<Appointment> appointments = appointmentData.getAppointmentsByStatus(AppointmentStatusEnum.Approved)
@@ -243,7 +273,9 @@ public class Doctor extends HospitalStaff {
         });
         main();
     }
-
+    /**
+     * Sets the doctor's availability for new appointment slots.
+     */
     public void setAvailableAppointmentSchedule() {
         String userID = UserLogin.getLoginUserID();
         AppointmentsDataLoader appointmentsDataLoader = new AppointmentsDataLoader(); // Create an instance
@@ -287,57 +319,78 @@ public class Doctor extends HospitalStaff {
             // Call the method in AppointmentsDataLoader to add to Excel
             appointmentsDataLoader.setNewAppointment(newAppointment);
         }
-
+        appointmentsDataLoader.loadAppointments();
         System.out.println("All appointment slots added successfully!");
     }
-
+    /**
+     * Records the outcome of an appointment.
+     */
     public void recordAppointmentOutcome() {
         System.out.println("\n--- Record Appointment Outcome ---");
         System.out.print("Enter Appointment ID: ");
         String appointmentID = scanner.nextLine().trim();
-
+    
         AppointmentsDataLoader appointmentDataLoader = new AppointmentsDataLoader();
         Appointment appointment = appointmentDataLoader.getAppointments().stream()
                 .filter(a -> a.getAppointmentID().equals(appointmentID))
                 .findFirst()
                 .orElse(null);
-
+    
         if (appointment == null) {
             System.out.println("Appointment not found.");
             return;
         }
-
-        System.out.print("Enter Type of Service: ");
-        String serviceType = scanner.nextLine().trim();
-
-        System.out.print("Enter Prescribed Medications: ");
-        String prescribedMedications = scanner.nextLine().trim();
-
-        String prescribedStatus = "Pending";
-
-        System.out.print("Enter Consultation Notes: ");
-        String consultationNotes = scanner.nextLine().trim();
-
+    
         String outcomeRecordID = appointment.getAppointmentOutcomeRecordID();
         if (outcomeRecordID == null || outcomeRecordID.isEmpty()) {
             System.out.println("No Outcome Record ID associated with this appointment.");
             return;
         }
-        // Create a new AppointmentOutcomeRecord
+    
+    AppointmentOutcomeRecordsDataLoader outcomeDataLoader = new AppointmentOutcomeRecordsDataLoader();
+    AppointmentOutcomeRecord existingRecord = outcomeDataLoader.getAppointmentOutcomeRecords().stream()
+            .filter(record -> record.getAppointmentOutcomeRecordID().equals(outcomeRecordID))
+            .findFirst()
+            .orElse(null);
+
+        if (existingRecord != null) {
+            System.out.println("This appointment is already recorded.");
+            System.out.print("Do you want to modify it? (yes/no): ");
+            String userResponse = scanner.nextLine().trim().toLowerCase();
+    
+            if (!userResponse.equals("yes")) {
+                System.out.println("No changes were made.");
+                return;
+            }
+        }
+    
+        // Gather new details for the outcome record
+        System.out.print("Enter Type of Service: ");
+        String serviceType = scanner.nextLine().trim();
+    
+        System.out.print("Enter Prescribed Medications: ");
+        String prescribedMedications = scanner.nextLine().trim();
+    
+        String prescribedStatus = "Pending";
+    
+        System.out.print("Enter Consultation Notes: ");
+        String consultationNotes = scanner.nextLine().trim();
+    
+        // Create or update the outcome record
         AppointmentOutcomeRecord newRecord = new AppointmentOutcomeRecord(
                 appointmentID, appointment.getAppointmentDateTime(),
                 appointment.getPatientID(), appointment.getDoctorID(),
                 appointment.getAppointmentStatus(), outcomeRecordID,
                 serviceType, prescribedMedications, prescribedStatus, consultationNotes);
-
-        // Save the record
-        AppointmentOutcomeRecordsDataLoader outcomeDataLoader = new AppointmentOutcomeRecordsDataLoader();
+    
+        // Save or update the record
         outcomeDataLoader.addNewRecord(newRecord);
-
+    
         // Update the appointment status to "Completed"
         String status = AppointmentStatusEnum.Completed.toString();
         appointmentDataLoader.updateAppointmentStatus(appointmentID, status);
-
+        appointmentDataLoader.loadAppointments();
     }
+    
 
 }

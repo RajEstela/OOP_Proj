@@ -11,19 +11,33 @@ import java.util.List;
 import org.CSPT.sc2001_grp1_proj1.entity.Appointment;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentOutcomeRecord;
 import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * This class handles loading, updating, and managing appointment outcome records from an Excel file.
+ */
 public class AppointmentOutcomeRecordsDataLoader {
+    /**
+     * Path to the Excel file storing appointment outcome records.
+     */
     private final String EXCEL_FILE_PATH = "./data/AppointmentOutcomeRecordList.xlsx";
+    /**
+     * List to store all loaded appointment outcome records.
+     */
     private List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
-
+    /**
+     * Constructor for the data loader. Initializes the loader by loading appointment records from the Excel file.
+     */
     public AppointmentOutcomeRecordsDataLoader() {
         loadAppointmentRecords();
     }
-
+    /**
+     * Loads appointment outcome records from the Excel file into the internal list.
+     */
     public void loadAppointmentRecords() {
         // Clear appointment records before loading
         appointmentOutcomeRecords.clear();
@@ -59,7 +73,11 @@ public class AppointmentOutcomeRecordsDataLoader {
             System.out.println(e);
         }
     }
-
+    /**
+     * Updates an appointment outcome record in the Excel file and the internal list.
+     *
+     * @param updatedRecord The updated appointment outcome record to be saved.
+     */
     public void updateAppointmentOutcomeRecord(AppointmentOutcomeRecord updatedRecord) {
     boolean recordUpdated = false; // Flag to check if the record was updated
 
@@ -99,40 +117,75 @@ public class AppointmentOutcomeRecordsDataLoader {
         System.err.println("Error updating appointment outcome record: " + e.getMessage());
     }
 }
-
+    /**
+     * Retrieves all appointment outcome records loaded into the system.
+     *
+     * @return A list of all appointment outcome records.
+     */
     public List<AppointmentOutcomeRecord> getAppointmentOutcomeRecords() {
         return appointmentOutcomeRecords;
     }
-
+    /**
+     * Filters and retrieves completed past appointment outcome records for a specific patient.
+     *
+     * @param patientID The ID of the patient.
+     * @return A list of past completed appointment outcome records for the given patient.
+     */
     public List<AppointmentOutcomeRecord> getPastAppointmentOutcomeRecords(String patientID) {
         List<AppointmentOutcomeRecord> filteredAppointmentOutcomeRecords = appointmentOutcomeRecords.stream().filter(appointment -> appointment.getAppointmentStatus().equals(AppointmentStatusEnum.Completed.toString()) && appointment.getPrescribedStatus().equals("Confirmed") && appointment.getPatientID().equals(patientID)).toList();
         return filteredAppointmentOutcomeRecords;
     }
-
+    /**
+     * Adds a new appointment outcome record or updates an existing one in the Excel file.
+     *
+     * @param record The new or updated appointment outcome record.
+     */
     public void addNewRecord(AppointmentOutcomeRecord record) {
-        try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
-             Workbook workbook = new XSSFWorkbook(file)) {
-    
-            Sheet sheet = workbook.getSheetAt(0);
+    try (FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH));
+         Workbook workbook = new XSSFWorkbook(file)) {
+
+        Sheet sheet = workbook.getSheetAt(0);
+        boolean recordUpdated = false;
+
+        // Search for existing outcome record ID
+        for (Row row : sheet) {
+            Cell cell = row.getCell(0); // Assuming Outcome Record ID is in the first column
+            if (cell != null && cell.getStringCellValue().equals(record.getAppointmentOutcomeRecordID())) {
+                // Update existing record
+                row.getCell(1).setCellValue(record.getServiceType());
+                row.getCell(2).setCellValue(record.getPrescribedMedications());
+                row.getCell(3).setCellValue(record.getPrescribedStatus());
+                row.getCell(4).setCellValue(record.getConsultationNotes());
+                recordUpdated = true;
+                break;
+            }
+        }
+
+        if (!recordUpdated) {
+            // Add new record if not found
             int lastRow = sheet.getLastRowNum();
             Row newRow = sheet.createRow(lastRow + 1);
-    
-            // Populate the new row with appointment details
+
             newRow.createCell(0).setCellValue(record.getAppointmentOutcomeRecordID());
             newRow.createCell(1).setCellValue(record.getServiceType());
             newRow.createCell(2).setCellValue(record.getPrescribedMedications());
             newRow.createCell(3).setCellValue(record.getPrescribedStatus());
             newRow.createCell(4).setCellValue(record.getConsultationNotes());
-            
-    
-            try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
-                workbook.write(outFile);
-            }
-    
-            System.out.println("Appointment outcome recorded:");
-    
-        } catch (IOException e) {
-            System.out.println("Error updating the appointment list: " + e.getMessage());
         }
-    }  
+
+        try (FileOutputStream outFile = new FileOutputStream(new File(EXCEL_FILE_PATH))) {
+            workbook.write(outFile);
+        }
+
+        if (recordUpdated) {
+            System.out.println("Appointment outcome updated.");
+        } else {
+            System.out.println("Appointment outcome recorded.");
+        }
+
+    } catch (IOException e) {
+        System.out.println("Error updating the appointment list: " + e.getMessage());
+    }
+}
+
 }

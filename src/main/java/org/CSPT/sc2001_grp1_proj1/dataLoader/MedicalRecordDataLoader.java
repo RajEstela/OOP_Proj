@@ -12,10 +12,21 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * This class handles loading, retrieving, and updating medical record data from an Excel file.
+ */
 public class MedicalRecordDataLoader {
+    /**
+     * Path to the Excel file containing medical record data.
+     */
     private final String EXCEL_FILE_PATH = "./data/MedicalRecordList.xlsx";
-
+    /**
+     * Populates a given list with medical records loaded from the Excel file.
+     * 
+     * @param medicalRecords The list to populate with medical records.
+     */
     public void populateMedicalRecords(List<MedicalRecord> medicalRecords) {
+        medicalRecords.clear();
         try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
             Sheet sheet = workbook.getSheetAt(0);
@@ -45,7 +56,12 @@ public class MedicalRecordDataLoader {
             System.out.println(e);
         }
     }
-
+    /**
+     * Updates the phone number for a specific patient in the medical records Excel file.
+     * 
+     * @param patientID   The ID of the patient whose phone number is to be updated.
+     * @param phoneNumber The new phone number.
+     */
     public void updatePhoneNumber(String patientID, int phoneNumber) {
         try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet
@@ -68,7 +84,12 @@ public class MedicalRecordDataLoader {
             System.out.println(e);
         }
     }
-
+    /**
+     * Updates the email address for a specific patient in the medical records Excel file.
+     * 
+     * @param patientID The ID of the patient whose email address is to be updated.
+     * @param email     The new email address.
+     */
     public void updateEmail(String patientID, String email) {
         try(FileInputStream file = new FileInputStream(new File(EXCEL_FILE_PATH)); Workbook workbook = new XSSFWorkbook(file); ){
             // Get the first sheet

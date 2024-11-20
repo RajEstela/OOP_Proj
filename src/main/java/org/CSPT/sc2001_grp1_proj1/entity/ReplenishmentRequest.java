@@ -2,7 +2,7 @@ package org.CSPT.sc2001_grp1_proj1.entity;
 
 public class ReplenishmentRequest {
 
-    public String requestID;
+    protected String requestID;
     public String medicineName;
     public String requestedBy;
     public String status;
@@ -17,7 +17,8 @@ public class ReplenishmentRequest {
         this.status = status;
     }
 
-    public void setRequestID(String requestID) {
+    public void setRequestID(String requestID) 
+    {
         this.requestID = requestID;
     }
     public String getRequestID()
@@ -30,24 +31,39 @@ public class ReplenishmentRequest {
         return medicineName;
     }
 
-    public int getQuantity() {
+    public int getQuantity() 
+    {
         return quantity;
     }
 
-    public String getRequestedBy() {
+    public String getRequestedBy() 
+    {
         return requestedBy;
     }
 
-    public String getStatus() {
+    public String getStatus() 
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status) 
+    {
         this.status = status;
     }
 
+    public void displayReplenishmentRequestDetails()
+    {
+        System.out.println("Request ID: " + getRequestID());
+        System.out.println("Medicine Name: " + getMedicineName());
+        System.out.println("Quantity: " + getQuantity());
+        System.out.println("Requestd By: " + getRequestedBy());
+        System.out.println("Status: " + getStatus());
+    }
+
+
     @Override
-    public String toString() {
+    public String toString() 
+    {
         return "RequestID: " + requestID + ", Medicine: " + medicineName + ", Quantity: " + quantity +
                 ", Requested By: " + requestedBy + ", Status: " + status;
     }

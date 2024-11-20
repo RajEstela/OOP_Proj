@@ -16,8 +16,16 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
 
 
 /**
+ * The {@code Admin} class represents an administrator in the hospital management system.
+ * It provides functionality for managing hospital staff, appointments, and inventory, 
+ * as well as approving replenishment requests.
+ * <p>
+ * This class extends {@code UserLogin} to leverage the user authentication system.
+ * </p>
  *
  * @author RajEstela
+ * @version 1.0
+ * @since 2024
  */
 
  public class Admin extends UserLogin {
@@ -26,14 +34,25 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     private final InventoryManager medicalInventoryManager;
     private final AppointmentManager appointmentManager;
 
-
+    /**
+     * Constructs a new {@code Admin} instance with the specified managers and user data.
+     *
+     * @param hospitalStaffManager    the manager for hospital staff
+     * @param medicalInventoryManager the manager for medical inventory
+     * @param appointmentManager      the manager for appointments
+     * @param validUsersLogin         a map of valid user logins
+     * @param validUsers              a map of valid user details
+     */
     public Admin(HospitalStaffManager hospitalStaffManager,InventoryManager medicalInventoryManager,AppointmentManager appointmentManager,HashMap<String, String> validUsersLogin, HashMap<String, Users> validUsers ) {
         super(validUsersLogin, validUsers);
         this.hospitalStaffManager = hospitalStaffManager;
         this.medicalInventoryManager = medicalInventoryManager;
         this.appointmentManager = appointmentManager;
     }
-
+    /**
+     * The main administrative interface. Provides a menu for accessing 
+     * various administrative functionalities in a loop until the user logs out.
+     */
     public void main() {
         boolean loggedIn = true;
         while(loggedIn){
@@ -51,7 +70,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     approveRepReq(medicalInventoryManager);
                 }
                 case 5 -> {
-                    HospitalManagementApp.logout();
+                    HospitalManagementApp.logout(null);
                     System.out.printf("Bye!");
                     loggedIn = false;
                     break;
@@ -59,7 +78,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
             }
         }
     }
-
+    /**
+     * Displays the administrator menu and captures the user's choice.
+     *
+     * @return an integer representing the user's choice
+     */
     private static int administratorMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
@@ -82,7 +105,12 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
     
         return choice;
     }
-
+    /**
+     * Provides options to view, add, remove, and update hospital staff details.
+     *
+     * @param staff       the manager for hospital staff
+     * @param validUsers  a map of valid user details
+     */
     private static void hospitalStaff(HospitalStaffManager staff,HashMap<String, Users> validUsers) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
@@ -114,7 +142,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
         }
     }
     
-
+    /**
+     * Allows the administrator to view appointment details.
+     *
+     * @param appointmentManager the manager for appointments
+     */
     private static void appointmentDetails(AppointmentManager appointmentManager) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
@@ -139,7 +171,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
             }
         }
     }
-
+    /**
+     * Provides functionality to view and manage the medical inventory.
+     *
+     * @param medicalInventoryManager the manager for medical inventory
+     */
     private static void medicationInventory(InventoryManager medicalInventoryManager) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
@@ -173,7 +209,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
             }
         }   
      }
-
+    /**
+     * Provides functionality to view and approve replenishment requests.
+     *
+     * @param medicalInventoryManager the manager for medical inventory
+     */
     private static void approveRepReq(InventoryManager medicalInventoryManager) {
         Scanner scanner = new Scanner(System.in);
         boolean inStaffMenu = true;
