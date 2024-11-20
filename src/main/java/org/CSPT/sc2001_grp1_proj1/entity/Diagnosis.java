@@ -63,7 +63,7 @@ public class Diagnosis {
         this.prescription = prescription;
         this.diagnosisDateTime = diagnosedOn;
     }
-
+    
     /**
      * Gets the ID of the patient associated with this diagnosis.
      *
@@ -127,7 +127,7 @@ public class Diagnosis {
      * Prints the details of this diagnosis to the console, 
      * including the doctor and patient names retrieved from the HospitalManagementApp.
      */
-    
+
     public void printDiagnosisDetails() {
         HashMap<String, Users> validUsers = HospitalManagementApp.getValidUsersByID();
         System.out.println("-- Diagnosed On : " + this.diagnosisDateTime +" --");
