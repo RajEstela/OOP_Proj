@@ -76,7 +76,7 @@ public class Patient {
                     break;
                 case 9:
                     loggedIn = false;
-                    HospitalManagementApp.logout();
+                    HospitalManagementApp.logout(null);
                     break;
             }
         }
