@@ -18,7 +18,11 @@ import org.CSPT.sc2001_grp1_proj1.entity.InventoryManager;
 import org.CSPT.sc2001_grp1_proj1.entity.InventoryService;
 import org.CSPT.sc2001_grp1_proj1.entity.RolesEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Users;
-
+/**
+ * Main class for the Hospital Management Application.
+ * Provides functionality for user login, role-specific actions, and management of hospital resources
+ * such as staff, inventory, and appointments.
+ */
 public class HospitalManagementApp {
 
     private static HashMap<String, String> validUsersLogin = new HashMap<>();
@@ -28,12 +32,21 @@ public class HospitalManagementApp {
     private static InventoryManager medicalInventoryManager;
     private static AppointmentManager appointmentManager;
 
+    /**
+     * Refreshes the user data from the data source and repopulates the valid user HashMaps.
+     */
     public static void refreshHashMaps() {
         validUsersLogin.clear();
         validUsers.clear();
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
     }
 
+    /**
+     * Main entry point of the application.
+     * Initializes hospital resources and starts the user login process.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         UserDataLoader.populateUsers(validUsersLogin, validUsers, validUsersByID);
         hospitalStaffManager = loadHospitalStaff(validUsers);
@@ -46,6 +59,11 @@ public class HospitalManagementApp {
         loginProcess(scanner);
     }
 
+    /**
+     * Handles the user login process, including options for login and password recovery.
+     *
+     * @param scanner A Scanner object for user input.
+     */
     private static void loginProcess(Scanner scanner) {
         UserLogin userLogin = new UserLogin(validUsersLogin, validUsers);
 
@@ -87,6 +105,12 @@ public class HospitalManagementApp {
         }
     }
 
+    /**
+     * Handles user actions based on their role in the hospital system.
+     *
+     * @param user    The logged-in user.
+     * @param scanner A Scanner object for user input.
+     */
     private static void handleUserRole(Users user, Scanner scanner) {
         try {
             RolesEnum roleEnum = RolesEnum.valueOf(user.getRole());
@@ -131,17 +155,39 @@ public class HospitalManagementApp {
         }
     }
 
+    /**
+     * Loads hospital staff data from the data source.
+     *
+     * @param validUsers A HashMap of valid users.
+     * @return A HospitalStaffManager object with loaded staff data.
+     */
     private static HospitalStaffManager loadHospitalStaff(HashMap<String, Users> validUsers) {
         return StaffDataLoader.loadHospitalStaff(validUsers);
     }
 
+    /**
+     * Loads medical inventory data from the data source.
+     *
+     * @return An InventoryManager object with loaded inventory data.
+     */
     private static InventoryManager loadMedicalInventory() {
         return MedicineDataLoader.loadMedicalInventory("./data/MedicalInventory_List.xlsx");
     }
 
+    /**
+     * Retrieves a HashMap of valid users by their IDs.
+     *
+     * @return A HashMap containing users indexed by their IDs.
+     */
     public static HashMap<String, Users> getValidUsersByID() {
         return validUsersByID;
     }
+
+    /**
+     * Logs out the current user and redirects to the login process.
+     *
+     * @param scanner A Scanner object for user input.
+     */
     public static void logout(Scanner scanner) {
         System.out.println("Logging out...");
         if (scanner == null) {
@@ -149,6 +195,5 @@ public class HospitalManagementApp {
         }
         loginProcess(scanner);
     }
-    
 }
 
