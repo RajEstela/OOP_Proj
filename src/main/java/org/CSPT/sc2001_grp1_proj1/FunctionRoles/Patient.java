@@ -18,6 +18,7 @@ public class Patient {
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     public void main() {
+        System.out.print("\nPatient's Menu:\n");
         System.out.println("1. View Medical Record");
         System.out.println("2. Update Personal Information");
         System.out.println("3. View Available Appointment Slots");
@@ -26,7 +27,8 @@ public class Patient {
         System.out.println("6. Cancel an Appointment");
         System.out.println("7. View Scheduled Appointments");
         System.out.println("8. View Past Appointment Outcome Records");
-        System.out.println("9. Logout");
+        System.out.println("9. Logout\n");
+        System.out.print("Enter your choice : ");
 
         boolean loggedIn = true;
         while (loggedIn) { 
@@ -99,10 +101,11 @@ public class Patient {
     }
 
     private void updatePersonalInformation() {
-        System.out.println("Please select your choice of contact update.");
+        System.out.println("\nPlease select your choice of contact update.");
         System.out.println("1. Phone Number");
         System.out.println("2. Email");
-        System.out.println("3. Back");
+        System.out.println("3. Back\n");
+        System.out.print("Enter your choice : ");
 
         while (true) {
             Scanner choice_scanner = new Scanner(System.in);
@@ -154,6 +157,7 @@ public class Patient {
             main();
         }
 
+        System.out.println("\nPlease find the available appointments.");
         hashedAppointments.forEach((i, appointment) -> {
             System.out.println("\nIndex : "+i);
             appointment.printAppointmentDetails();
@@ -170,6 +174,7 @@ public class Patient {
             main();
         }
 
+        System.out.println("\nPlease find the available appointments.");
         hashedAppointments.forEach((i, appointment) -> {
             System.out.println("\nIndex : "+i);
             appointment.printAppointmentDetails();
@@ -230,7 +235,7 @@ public class Patient {
             System.out.println("Currently, there are no scheduled appointments.");
             main();
         }
-        
+        System.out.println("\nPlease find the scheduled appointments.");
         hashedScheduledAppointments.forEach((i, appointment) -> {
             System.out.println("\nIndex : "+i);
             appointment.printAppointmentDetails();
