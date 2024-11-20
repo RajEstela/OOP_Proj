@@ -4,13 +4,13 @@ package org.CSPT.sc2001_grp1_proj1.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
+
+
 /**
  * Service class for managing appointment outcome records. 
  * Provides functionality to view, update, and retrieve appointment outcome records.
  */
-
-import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
-
 public class AppointmentOutcomeService {
     
     /**
