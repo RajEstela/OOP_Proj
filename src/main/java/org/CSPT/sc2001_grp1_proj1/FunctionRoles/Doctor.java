@@ -1,5 +1,10 @@
 package org.CSPT.sc2001_grp1_proj1.FunctionRoles;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
 import org.CSPT.sc2001_grp1_proj1.HospitalManagementApp;
 import org.CSPT.sc2001_grp1_proj1.UserLogin;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.AppointmentOutcomeRecordsDataLoader;
@@ -12,11 +17,6 @@ import org.CSPT.sc2001_grp1_proj1.entity.AppointmentStatusEnum;
 import org.CSPT.sc2001_grp1_proj1.entity.Diagnosis;
 import org.CSPT.sc2001_grp1_proj1.entity.HospitalStaff;
 import org.CSPT.sc2001_grp1_proj1.entity.MedicalRecord;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
 
 public class Doctor extends HospitalStaff {
     public static List<MedicalRecord> medicalRecords = new ArrayList<>();
@@ -62,7 +62,7 @@ public class Doctor extends HospitalStaff {
                 }
                 case 8 -> {
                     // logout
-                    HospitalManagementApp.logout();
+                    HospitalManagementApp.logout(scanner);
                     System.out.printf("Bye!");
                     loggedIn = false;
                     break;

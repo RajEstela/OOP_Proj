@@ -51,7 +51,7 @@ import org.CSPT.sc2001_grp1_proj1.entity.Users;
                     approveRepReq(medicalInventoryManager);
                 }
                 case 5 -> {
-                    HospitalManagementApp.logout();
+                    HospitalManagementApp.logout(null);
                     System.out.printf("Bye!");
                     loggedIn = false;
                     break;
