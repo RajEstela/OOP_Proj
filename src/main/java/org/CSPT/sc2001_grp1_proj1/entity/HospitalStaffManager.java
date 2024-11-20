@@ -11,11 +11,39 @@ import java.util.Scanner;
 import org.CSPT.sc2001_grp1_proj1.dataLoader.UserDataLoader;
 import org.CSPT.sc2001_grp1_proj1.interfaces.HospitalStaffManagerInterface;
 
+/**
+ * The HospitalStaffManager class is responsible for managing hospital staff, including adding,
+ * removing, updating, and displaying staff members. It implements the HospitalStaffManagerInterface
+ * to provide concrete implementations of its methods.
+ */
+
 public class HospitalStaffManager implements HospitalStaffManagerInterface {
 
-    public List<HospitalStaff> staffList;
+    /**
+     * A list containing all hospital staff members.
+     */
+    
+     public List<HospitalStaff> staffList;
+    
+    /**
+     * The last time the staff list was updated.
+     */
+
     private LocalDateTime lastUpdatedTime;
+
+    /**
+     * The username of the system or user who last updated the staff list.
+     */
+
     private String lastUpdatedBy;
+
+    /**
+     * Constructs a HospitalStaffManager with the given staff list, last updated time, and updater's name.
+     *
+     * @param staffList1    The initial list of hospital staff.
+     * @param date          The time when the staff list was last updated.
+     * @param system        The system or user responsible for the last update.
+     */
 
     public HospitalStaffManager(List<HospitalStaff> staffList1, LocalDateTime date, String system) {
         this.staffList = staffList1;
@@ -23,6 +51,12 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         this.lastUpdatedBy = system;
     }
 
+    /**
+     * Adds a staff member to the hospital's staff list.
+     * This method allows users to either add an existing user or create a new one.
+     *
+     * @param validUsers A map of valid users where the key is the username and the value is the Users object.
+     */
 
     @Override
     public void addStaffMember(HashMap<String, Users> validUsers) {
@@ -124,6 +158,10 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
     
     }
 
+    /**
+     * Removes a staff member from the hospital's staff list based on their hospital ID.
+     */
+
     @Override
     public void removeStaffMember() {
         boolean removedCondition = true;
@@ -157,6 +195,10 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         }
         
     }
+
+    /**
+     * Updates the details of an existing staff member. Allows updating their role, age, or gender.
+     */
 
     @Override
     public void updateStaffMember() {
@@ -212,6 +254,11 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         
     }
 
+    /**
+     * Displays the list of all staff members, sorted based on the selected criteria.
+     * Sorting options include staff ID, age, gender, and role.
+     */
+
     @Override
     public void displayStaff() {
         Scanner scanner = new Scanner(System.in);
@@ -254,6 +301,12 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         }
     }
 
+    /**
+     * Displays a list of users filtered by specific roles such as "Patient" or "Pending".
+     *
+     * @param validUsers A map of valid users where the key is the username and the value is the Users object.
+     */
+
     public void displayUser(HashMap<String, Users> validUsers) {
         System.out.printf("\n%-20s %-20s %-20s %-20s%n", "Hospital ID","Username","Name","Role");
         System.out.println("------------------------------------------------------------------------------");
@@ -271,6 +324,12 @@ public class HospitalStaffManager implements HospitalStaffManagerInterface {
         }
     }
 
+    /**
+     * Adds a new user to the system and optionally includes them in the hospital's staff list
+     * if their role is not "Patient".
+     *
+     * @param validUsers A map of valid users where the key is the username and the value is the Users object.
+     */
 
     @Override
     public void addUser(HashMap<String, Users> validUsers) {
