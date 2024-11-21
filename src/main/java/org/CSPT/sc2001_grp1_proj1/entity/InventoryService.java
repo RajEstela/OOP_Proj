@@ -65,6 +65,13 @@ public class InventoryService {
 		}
 	}
 
+	public void removeStock() 
+	{
+		inventoryManager.removeStock();
+	}
+
+
+
 	/**
      * Displays detailed information for each replenishment request in the system.
      * This method calls the {@link ReplenishmentRequest#displayReplenishmentRequestDetails()} method 

@@ -45,9 +45,10 @@ public class Pharmacist extends HospitalStaff {
         System.out.println("2. View Pending Appointment Outcome Records");
         System.out.println("3. Update Prescription Status");
         System.out.println("4. View Medication Inventory");
-        System.out.println("5. Submit Replenishment Request");
-        System.out.println("6. View Pending Replenishment Request");
-        System.out.println("7. Logout");
+        System.out.println("5. Dispense Medication");
+        System.out.println("6. Submit Replenishment Request");
+        System.out.println("7. View Pending Replenishment Request");
+        System.out.println("8. Logout");
     }
 
     /**
@@ -72,7 +73,8 @@ public class Pharmacist extends HospitalStaff {
                     main();
                 }
                 case 4 -> displayStock();
-                case 5 -> {
+                case 5 -> removeStock();
+                case 6 -> {
                     System.out.print("Enter medication name: ");
                     String medicineName = scanner.nextLine();
                     System.out.print("Enter quantity: ");
@@ -81,8 +83,8 @@ public class Pharmacist extends HospitalStaff {
                     submitReplenishmentRequest(medicineName, quantity);
                     main();
                 }
-                case 6 -> viewPendingReplenishmentRequests();
-                case 7 -> {
+                case 7 -> viewPendingReplenishmentRequests();
+                case 8 -> {
                     loggedIn = false;
                     HospitalManagementApp.logout(null);
                 }
@@ -145,6 +147,16 @@ public class Pharmacist extends HospitalStaff {
         inventoryService.displayStock();
         System.out.println("============================== END ===================================");
     }
+
+    /**
+     * Remove medication in the inventory.
+     */
+    public void removeStock() {
+        System.out.println("=================== Dispensing Medication View ===================");
+        inventoryService.removeStock();
+        System.out.println("============================== END ===================================");
+    }
+
 
     /**
      * Displays all pending replenishment requests submitted by the pharmacist.
